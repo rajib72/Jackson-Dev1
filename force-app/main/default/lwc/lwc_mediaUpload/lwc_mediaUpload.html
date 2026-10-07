@@ -1,0 +1,122 @@
+<template>
+    <lightning-quick-action-panel header="Add Photos & Videos">
+        
+        <template lwc:if={isRecordDataLoading}>
+            <div class="slds-p-around_xlarge slds-is-relative">
+                <lightning-spinner alternative-text="Checking validation..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template lwc:elseif={showError}>
+            <div class="slds-p-around_large slds-text-align_center">
+                <div class="slds-text-color_error slds-text-heading_small">
+                    <strong>THIS BUTTON IS NOT ACCESSIBLE</strong>
+                </div>
+            </div>
+            <div slot="footer">
+                <lightning-button label="Close" onclick={handleGoToWorkOrder}></lightning-button>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <div class="slds-is-relative">
+                <template if:true={isLoading}>
+                    <lightning-spinner 
+                        alternative-text="Uploading..." 
+                        size="medium" 
+                        variant="brand">
+                    </lightning-spinner>
+                </template>
+
+                <div class="slds-scoped-notification slds-media slds-media_center slds-theme_info slds-m-bottom_medium" role="status">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:info" variant="inverse" size="small"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <p>Maximum 10 files allowed at a time. Click <strong>Save & Next</strong> to upload the current batch. You can upload more batches afterwards.</p>
+                    </div>
+                </div>
+
+                <!-- READ-ONLY SAVED FILES (LOCKED) -->
+                <template if:true={savedFiles.length}>
+                    <div class="slds-text-heading_small slds-m-bottom_x-small slds-text-color_success">
+                        <strong>Successfully Uploaded ({savedFiles.length})</strong>
+                    </div>
+                    <div class="slds-box slds-box_xx-small slds-theme_default slds-m-bottom_medium">
+                        <template for:each={savedFiles} for:item="saved">
+                            <div key={saved.id} class="slds-grid slds-grid_vertical-align-center slds-p-around_x-small">
+                                <lightning-icon icon-name="action:approval" size="xx-small" class="slds-m-right_small"></lightning-icon>
+                                <div class="slds-col slds-truncate">
+                                    <span title={saved.name}>{saved.name}</span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <div class="slds-text-align_center slds-m-vertical_large">
+                    <input 
+                        type="file" 
+                        class="slds-assistive-text" 
+                        accept="image/*,video/*" 
+                        id="file-input"
+                        onchange={handleFileChange}
+                        multiple 
+                        disabled={isUploadInputDisabled} />
+                    <label for="file-input" class={uploadLabelClass}>
+                        <lightning-icon icon-name="utility:add" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        Choose Files ({remainingSlots} remaining in batch)
+                    </label>
+                </div>
+
+                <!-- FILES TO UPLOAD (EDITABLE) -->
+                <template if:true={filesToUpload.length}>
+                    <div class="file-container slds-box slds-box_xx-small">
+                        <template for:each={filesToUpload} for:item="item">
+                            <div key={item.id} class="slds-grid slds-grid_vertical-align-center slds-p-around_x-small file-row">
+                                <lightning-icon icon-name="doctype:image" size="small" class="slds-m-right_small slds-col_bump-right"></lightning-icon>
+                                
+                                <div class="slds-col slds-size_3-of-4 slds-p-right_small">
+                                    <lightning-input 
+                                        type="text" 
+                                        variant="label-hidden" 
+                                        value={item.newName} 
+                                        data-id={item.id} 
+                                        onchange={handleNameChange} 
+                                        disabled={isLoading}>
+                                    </lightning-input>
+                                </div>
+
+                                <lightning-button-icon 
+                                    icon-name="utility:delete" 
+                                    variant="bare" 
+                                    alternative-text="Remove" 
+                                    data-id={item.id}
+                                    onclick={removeFile}
+                                    disabled={isLoading}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <!-- UPDATED FOOTER -->
+            <div slot="footer">
+                <lightning-button 
+                    label="Go to Work Order" 
+                    onclick={handleGoToWorkOrder} 
+                    disabled={isLoading}
+                    class="slds-m-right_x-small">
+                </lightning-button>
+                <lightning-button 
+                    label="Save & Next" 
+                    variant="brand" 
+                    onclick={handleSaveAndNext} 
+                    disabled={isSaveButtonDisabled}>
+                </lightning-button>
+            </div>
+        </template>
+        
+    </lightning-quick-action-panel>
+</template>

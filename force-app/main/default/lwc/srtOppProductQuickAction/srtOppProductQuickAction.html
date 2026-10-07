@@ -1,0 +1,107 @@
+<template>
+    <lightning-quick-action-panel header="Add Opportunity Product">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <div class="slds-p-around_medium">
+            <lightning-layout multiple-rows>
+
+                <lightning-layout-item size="12" padding="around-small">
+                    <lightning-combobox
+                        name="product"
+                        label="Product"
+                        value={productValue}
+                        placeholder="Select Product"
+                        options={productOptions}
+                        onchange={handleProductChange}
+                        required>
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+                <template if:true={isSolar}>
+                    <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                        <lightning-combobox
+                            name="moduleType"
+                            label="Module Type"
+                            value={moduleTypeValue}
+                            placeholder="Select Module Type"
+                            options={moduleTypeOptions}
+                            onchange={handleModuleTypeChange}
+                            required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                        <lightning-combobox
+                            name="moduleTechnology"
+                            label="Module Technology"
+                            value={moduleTechnologyValue}
+                            placeholder="Select Module Technology"
+                            options={moduleTechnologyOptions}
+                            onchange={handleModuleTechnologyChange}
+                            disabled={disableModuleTechnology}
+                            required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <template if:true={showSubModule}>
+                        <lightning-layout-item size="12" padding="around-small">
+                            <lightning-combobox
+                                name="subModule"
+                                label="Sub Module"
+                                value={subModuleValue}
+                                placeholder="Select Sub Module"
+                                options={subModuleOptions}
+                                onchange={handleSubModuleChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </template>
+                </template>
+
+                <template if:true={showCapacitySection}>
+                    <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                        <lightning-input
+                            type="number"
+                            name="projectCapacity"
+                            label="Project Capacity"
+                            value={projectCapacityValue}
+                            min="0.01"
+                            step="0.01"
+                            onchange={handleProjectCapacityChange}
+                            required>
+                        </lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                        <lightning-combobox
+                            name="uom"
+                            label="UOM"
+                            value={uomValue}
+                            placeholder="Select UOM"
+                            options={uomOptions}
+                            onchange={handleUomChange}
+                            required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                </template>
+
+            </lightning-layout>
+        </div>
+
+        <div slot="footer">
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}>
+            </lightning-button>
+
+            <lightning-button
+                class="slds-m-left_small"
+                variant="brand"
+                label="Save"
+                onclick={handleSave}
+                disabled={isLoading}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

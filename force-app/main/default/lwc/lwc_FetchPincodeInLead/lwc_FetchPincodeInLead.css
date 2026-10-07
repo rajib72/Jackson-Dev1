@@ -1,0 +1,136 @@
+:host {
+    display: block;
+}
+
+.content-container {
+    padding: 1rem;
+}
+
+.table-wrap {
+    width: 100%;
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+}
+
+.message-box {
+    padding: 0.75rem;
+    background: #f3f3f3;
+    border-radius: 0.25rem;
+    word-break: break-word;
+}
+
+.mobile-view {
+    display: none;
+}
+
+.update-button-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.update-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Mobile responsive layout */
+@media screen and (max-width: 767px) {
+    .content-container {
+        padding: 0.75rem;
+    }
+
+    .desktop-view {
+        display: none;
+    }
+
+    .mobile-view {
+        display: block;
+    }
+
+    .mobile-card {
+        margin-bottom: 0.75rem;
+        background: #ffffff;
+        border: 1px solid #dddbda;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .mobile-card_selected {
+        border: 2px solid #0176d3;
+        box-shadow: 0 0 0 1px rgba(1, 118, 211, 0.15);
+    }
+
+    .mobile-card-header {
+        padding: 0.75rem;
+        background: #f3f3f3;
+        border-bottom: 1px solid #dddbda;
+    }
+
+    .mobile-card_selected .mobile-card-header {
+        background: #eef4ff;
+    }
+
+    .mobile-card-body {
+        padding: 0.75rem;
+    }
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: minmax(90px, 35%) minmax(0, 65%);
+        column-gap: 0.75rem;
+        padding: 0.45rem 0;
+        border-bottom: 1px solid #f3f3f3;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: #444444;
+        font-size: 0.75rem;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    .detail-value {
+        color: #181818;
+        font-size: 0.8125rem;
+        text-align: right;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .update-button-container {
+        display: block;
+        width: 100%;
+    }
+
+    .update-button {
+        display: block;
+        width: 100%;
+        min-height: 44px;
+    }
+}
+
+/* Extra-small mobile devices */
+@media screen and (max-width: 380px) {
+    .content-container {
+        padding: 0.5rem;
+    }
+
+    .detail-row {
+        grid-template-columns: 1fr;
+        row-gap: 0.2rem;
+    }
+
+    .detail-value {
+        text-align: left;
+    }
+}

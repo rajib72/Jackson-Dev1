@@ -1,0 +1,351 @@
+<template>
+    <lightning-quick-action-panel>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={isFirstStep}>
+            <div class="sheet-wrapper">
+                <div class="brand-strip">
+                    <div class="brand-left"></div>
+                    <div class="brand-title">Termsheet Creation Form</div>
+                    <div class="brand-right">
+                        <img src={jaksonLogo} alt="Jakson Logo" class="brand-logo" />
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="term-sheet-table top-summary-table">
+                        <tr class="top-info-row">
+                            <td class="company-name" colspan="8">{accountName}</td>
+
+                            <td class="doc-info" colspan="4">
+                                <div class="doc-line">
+                                    <span class="doc-label">Doc No:</span>
+                                    <div class="doc-value">{docNo}</div>
+                                </div>
+
+                                <div class="doc-line">
+                                    <span class="doc-label">Rev No:</span>
+                                    <div class="doc-value">{revNo}</div>
+                                </div>
+
+                                <div class="doc-line">
+                                    <span class="doc-label">Issue Date:</span>
+                                    <div class="doc-value">{issueDateDisplay}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="section-banner section-customer">Details</div>
+
+                <div class="table-wrap">
+                    <table class="term-sheet-table">
+                        <tr class="header-row">
+                            <th class="sr-col" colspan="2">Sr. No</th>
+                            <th class="detail-col" colspan="4">Order Detail</th>
+                            <th class="value-col" colspan="6">Details</th>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">1</td>
+                            <td class="label-cell green-cell" colspan="4">Tender Name</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={tenderName} data-field="tenderName"
+                                    disabled>
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">2</td>
+                            <td class="label-cell green-cell" colspan="4">Project Capacity</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={projectCapacity}
+                                    onchange={handleInputChange} data-field="projectCapacity" required>
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">3</td>
+                            <td class="label-cell green-cell" colspan="4">Agreed Price</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={agreedPrice} onchange={handleInputChange}
+                                    data-field="agreedPrice" required>
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">4</td>
+                            <td class="label-cell green-cell" colspan="4">Delivery Schedule</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={deliverySchedule}
+                                    onchange={handleInputChange} data-field="deliverySchedule" required>
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">5</td>
+                            <td class="label-cell yellow-cell" colspan="4">Payment Term</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={paymentTerm} onchange={handleInputChange}
+                                    data-field="paymentTerm" required>
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">6</td>
+                            <td class="label-cell" colspan="4">LD Clause</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={ldClause} onchange={handleInputChange}
+                                    data-field="ldClause" required>
+                                </lightning-input>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="section-banner section-product">Product Details</div>
+
+                <div class="product-section">
+                    <div class="product-header">
+                        <div class="product-title">Latest Quote Line Items</div>
+                        <div class="selected-count">Selected: {selectedCount}</div>
+                    </div>
+
+                    <div class="desktop-product-table">
+                        <table class="product-entry-table">
+                            <thead>
+                                <tr>
+                                    <!--<th>Select</th>-->
+                                    <th>Material Description</th>
+                                    <th>Nos</th>
+                                    <th>Project Capacity</th>
+                                    <th>UOM</th>
+                                    <th>Price/Wp</th>
+                                    <th>Total</th>
+                                    <th>GST</th>
+                                    <th>Grand Total</th>
+                                    <th>Bin Percentage Applicable</th>
+                                    <th>Module Efficiency as per Tender</th>
+                                    <th>System Voltage</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <template for:each={productRows} for:item="row">
+                                    <tr key={row.quoteLineItemId}>
+                                      <!--  <td>
+                                           <lightning-input type="checkbox" variant="label-hidden"
+                                                checked={row.isSelected} data-id={row.quoteLineItemId}
+                                                onchange={handleProductSelect}>
+                                            </lightning-input>
+                                        </td>-->
+
+                                        <td class="material-cell">
+                                            <div class="material-description">
+                                                {row.materialDescription}
+                                            </div>
+
+
+                                        </td>
+
+                                        <td>
+                                            <lightning-input variant="label-hidden" value={row.nos} disabled>
+                                            </lightning-input>
+                                        </td>
+
+                                        <td>
+                                            <lightning-input variant="label-hidden" value={row.projectCapacity}
+                                                disabled>
+                                            </lightning-input>
+                                        </td>
+
+                                        <td>
+                                            <div class="plain-value">{row.uom}</div>
+                                        </td>
+
+                                        <td>
+                                            <lightning-input variant="label-hidden" value={row.priceWp} disabled>
+                                            </lightning-input>
+                                        </td>
+
+                                        <td>
+                                            <lightning-input variant="label-hidden" value={row.total} disabled>
+                                            </lightning-input>
+                                        </td>
+
+                                        <td>
+                                            <lightning-input variant="label-hidden" value={row.gst} disabled>
+                                            </lightning-input>
+                                        </td>
+
+                                        <td>
+                                            <lightning-input variant="label-hidden" value={row.grandTotal} disabled>
+                                            </lightning-input>
+                                        </td>
+
+                                        <td>
+                                            <lightning-combobox variant="label-hidden" value={row.binPercentageInput}
+                                                options={yesNoOptions} data-id={row.quoteLineItemId}
+                                                data-field="binPercentageInput" onchange={handleProductRowChange}>
+                                            </lightning-combobox>
+
+                                            <template if:true={row.showBinPercentageValue}>
+                                                <div class="bin-help">
+                                                    * Enter Bin Percentage
+                                                </div>
+
+                                                <div class="bin-value-box">
+                                                    <lightning-input type="number" variant="label-hidden"
+                                                        placeholder="Enter Percentage"
+                                                        value={row.binPercentageValueInput}
+                                                        data-id={row.quoteLineItemId}
+                                                        data-field="binPercentageValueInput"
+                                                        onchange={handleProductRowChange}>
+                                                    </lightning-input>
+                                                </div>
+                                            </template>
+                                        </td>
+
+                                        <td>
+                                            <lightning-input variant="label-hidden"
+                                                value={row.moduleEfficiencyCriteriaInput} data-id={row.quoteLineItemId}
+                                                data-field="moduleEfficiencyCriteriaInput"
+                                                onchange={handleProductRowChange}>
+                                            </lightning-input>
+                                        </td>
+
+                                        <td>
+                                            <lightning-input variant="label-hidden" value={row.systemVoltageInput}
+                                                data-id={row.quoteLineItemId} data-field="systemVoltageInput"
+                                                onchange={handleProductRowChange}>
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mobile-product-stack">
+                        <template for:each={productRows} for:item="row">
+                            <div key={row.quoteLineItemId} class="product-card">
+                                <div class="product-card-top">
+                                    <div class="product-card-title">Quote Line Item</div>
+
+                                    <lightning-input type="checkbox" variant="label-hidden" checked={row.isSelected}
+                                        data-id={row.quoteLineItemId} onchange={handleProductSelect}>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">Material Description</div>
+                                    <div class="stack-value">{row.materialDescription}</div>
+
+
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">Nos</div>
+                                    <lightning-input variant="label-hidden" value={row.nos} disabled>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">Project Capacity</div>
+                                    <lightning-input variant="label-hidden" value={row.projectCapacity} disabled>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">UOM</div>
+                                    <div class="stack-value">{row.uom}</div>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">Price/Wp</div>
+                                    <lightning-input variant="label-hidden" value={row.priceWp} disabled>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">Total</div>
+                                    <lightning-input variant="label-hidden" value={row.total} disabled>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">GST</div>
+                                    <lightning-input variant="label-hidden" value={row.gst} disabled>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">Grand Total</div>
+                                    <lightning-input variant="label-hidden" value={row.grandTotal} disabled>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">Bin Percentage Applicable</div>
+                                    <lightning-combobox variant="label-hidden" value={row.binPercentageInput}
+                                        options={yesNoOptions} data-id={row.quoteLineItemId}
+                                        data-field="binPercentageInput" onchange={handleProductRowChange}>
+                                    </lightning-combobox>
+
+                                    <template if:true={row.showBinPercentageValue}>
+                                        <div class="bin-help">
+                                            * Enter Bin Percentage
+                                        </div>
+
+                                        <div class="bin-value-box">
+                                            <lightning-input type="number" variant="label-hidden"
+                                                placeholder="Enter Percentage" value={row.binPercentageValueInput}
+                                                data-id={row.quoteLineItemId} data-field="binPercentageValueInput"
+                                                onchange={handleProductRowChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">Module Efficiency as per Tender</div>
+                                    <lightning-input variant="label-hidden" value={row.moduleEfficiencyCriteriaInput}
+                                        data-id={row.quoteLineItemId} data-field="moduleEfficiencyCriteriaInput"
+                                        onchange={handleProductRowChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="stack-field">
+                                    <div class="stack-label">System Voltage</div>
+                                    <lightning-input variant="label-hidden" value={row.systemVoltageInput}
+                                        data-id={row.quoteLineItemId} data-field="systemVoltageInput"
+                                        onchange={handleProductRowChange}>
+                                    </lightning-input>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div slot="footer">
+            <template if:true={isFirstStep}>
+                <lightning-button label="Cancel" onclick={handleCancel}>
+                </lightning-button>
+
+                <lightning-button variant="brand" label="Save" class="slds-m-left_small" onclick={handleSave}
+                    disabled={isLoading}>
+                </lightning-button>
+            </template>
+        </div>
+    </lightning-quick-action-panel>
+</template>

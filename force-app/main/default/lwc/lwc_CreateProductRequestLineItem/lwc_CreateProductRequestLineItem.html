@@ -1,0 +1,311 @@
+<template>
+    <lightning-quick-action-panel header="Create Product Request Line Items">
+
+        <div class="required-note">
+            <span class="required-star">*</span> = Required Information
+        </div>
+
+        <!-- ===================================================== -->
+        <!-- INFORMATION -->
+        <!-- ===================================================== -->
+        <section class="section-card">
+            <div class="section-header">
+                <span>Information</span>
+                <span class="section-subtitle">Applied to all line items</span>
+            </div>
+            <div class="section-body">
+                <div class="shared-grid">
+                    <div class="field">
+                        <lightning-record-picker
+                            label="Parent"
+                            placeholder="Parent Product Request"
+                            object-api-name="ProductRequest"
+                            value={defaults.parentId}
+                            disabled
+                            required>
+                        </lightning-record-picker>
+                    </div>
+
+                    <div class="field">
+                        <lightning-input
+                            type="datetime"
+                            label="Expected Delivery Date"
+                            value={defaults.expectedDeliveryDate}
+                            disabled>
+                        </lightning-input>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- SHIPPING INFORMATION -->
+        <!-- ===================================================== -->
+        <section class="section-card">
+            <div class="section-header">
+                <span>Shipping Information</span>
+                <span class="section-subtitle">Destination details</span>
+            </div>
+            <div class="section-body">
+                <div class="shared-grid">
+                    <div class="field">
+                        <lightning-record-picker
+                            label="Destination Location"
+                            placeholder="Destination Location"
+                            object-api-name="Location"
+                            value={defaults.destinationLocationId}
+                            disabled>
+                        </lightning-record-picker>
+                    </div>
+
+                    <div class="field address-field">
+                        <lightning-input-address
+                            label="Ship To Address"
+                            street={defaults.shipToStreet}
+                            city={defaults.shipToCity}
+                            province={defaults.shipToState}
+                            postal-code={defaults.shipToPostalCode}
+                            country={defaults.shipToCountry}
+                            disabled>
+                        </lightning-input-address>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- LINE ITEMS -->
+        <!-- ===================================================== -->
+        <section class="section-card line-items-section">
+            <div class="section-header line-header">
+                <div>
+                    <span>Line Items</span>
+                    <span class="section-subtitle">Add multiple items</span>
+                </div>
+                <lightning-button
+                    label="Add Row"
+                    icon-name="utility:add"
+                    icon-position="left"
+                    variant="brand-outline"
+                    onclick={handleAddRow}>
+                </lightning-button>
+            </div>
+
+            <div class="table-container">
+                <table class="line-item-table">
+                    <thead>
+                        <tr>
+                            <th class="number-column">#</th>
+                            <th class="material-column"><span class="required-star">*</span> Material Master</th>
+                            <th class="description-column">Material Description</th>
+                            <th class="quantity-column"><span class="required-star">*</span> Quantity Requested</th>
+                            <th class="uom-column"><span class="required-star">*</span> Quantity Unit Of Measure</th>
+                            <th class="price-column">Price</th>
+                            <th class="source-column">Source Location</th>
+                            <th class="shipment-column">Shipment Type</th>
+                            <th class="action-column">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={rows} for:item="row">
+                            <tr key={row.id}>
+                                <td class="number-cell">{row.displayNumber}</td>
+
+                                <!-- Material Master Search Cell -->
+                                <td class="material-cell">
+                                    <div class="search-box-container">
+                                        <lightning-input
+                                            type="search"
+                                            variant="label-hidden"
+                                            placeholder="Search Material Code or Plant..."
+                                            value={row.materialSearchTerm}
+                                            data-row-id={row.id}
+                                            data-field="material"
+                                            onchange={handleMaterialSearch}
+                                            onclick={handleMaterialInputClick}
+                                            onblur={handleSearchBlur}>
+                                        </lightning-input>
+
+                                        <template if:true={row.showMaterialOptions}>
+                                            <div class="search-dropdown" onmousedown={handleDropdownMouseDown}>
+                                                <template if:true={row.isSearchingMaterial}>
+                                                    <div class="search-status">Searching Material Masters...</div>
+                                                </template>
+                                                <template if:false={row.isSearchingMaterial}>
+                                                    <template if:true={row.materialOptions.length}>
+                                                        <template for:each={row.materialOptions} for:item="material">
+                                                            <div
+                                                                key={material.id}
+                                                                class="search-option"
+                                                                data-row-id={row.id}
+                                                                data-material-id={material.id}
+                                                                onclick={handleMaterialSelect}>
+                                                                <div class="option-primary">
+                                                                    {material.materialCode} - {material.plant}
+                                                                </div>
+                                                                <div class="option-secondary">
+                                                                    {material.distributionChannel} - {material.division} - {material.materialType}
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <template if:false={row.materialOptions.length}>
+                                                        <div class="no-results">No Material Masters found</div>
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </template>
+
+                                        <template if:true={row.materialError}>
+                                            <div class="field-error">{row.materialError}</div>
+                                        </template>
+                                    </div>
+                                </td>
+
+                                <!-- Material Description -->
+                                <td class="description-cell">
+                                    <template if:true={row.materialDescription}>
+                                        <span>{row.materialDescription}</span>
+                                    </template>
+                                    <template if:false={row.materialDescription}>
+                                        <span class="calculated-text">—</span>
+                                    </template>
+                                </td>
+
+                                <!-- Quantity Requested -->
+                                <td>
+                                    <lightning-input
+                                        type="number"
+                                        variant="label-hidden"
+                                        min="0.01"
+                                        step="0.01"
+                                        required
+                                        value={row.quantityRequested}
+                                        data-row-id={row.id}
+                                        data-field="quantity"
+                                        message-when-value-missing="Complete this field."
+                                        onchange={handleRowChange}>
+                                    </lightning-input>
+                                </td>
+
+                                <!-- Quantity Unit Of Measure -->
+                                <td>
+                                    <lightning-combobox
+                                        variant="label-hidden"
+                                        placeholder="--None--"
+                                        required
+                                        value={row.quantityUnitOfMeasure}
+                                        options={uomOptions}
+                                        data-row-id={row.id}
+                                        data-field="uom"
+                                        onchange={handleRowChange}>
+                                    </lightning-combobox>
+                                </td>
+
+                                <!-- Price -->
+                                <td>
+                                    <lightning-input
+                                        type="number"
+                                        variant="label-hidden"
+                                        min="0"
+                                        step="0.01"
+                                        value={row.price}
+                                        data-row-id={row.id}
+                                        data-field="price"
+                                        onchange={handleRowChange}>
+                                    </lightning-input>
+                                </td>
+
+                                <!-- Source Location Search Cell -->
+                                <td class="source-cell">
+                                    <div class="search-box-container">
+                                        <lightning-input
+                                            type="search"
+                                            variant="label-hidden"
+                                            placeholder="Search Locations..."
+                                            value={row.sourceSearchTerm}
+                                            data-row-id={row.id}
+                                            data-field="source"
+                                            onchange={handleSourceSearch}
+                                            onclick={handleSourceInputClick}
+                                            onblur={handleSearchBlur}>
+                                        </lightning-input>
+
+                                        <template if:true={row.showSourceOptions}>
+                                            <div class="search-dropdown" onmousedown={handleDropdownMouseDown}>
+                                                <template if:true={row.isSearchingSource}>
+                                                    <div class="search-status">Searching Locations...</div>
+                                                </template>
+                                                <template if:false={row.isSearchingSource}>
+                                                    <template if:true={row.sourceOptions.length}>
+                                                        <template for:each={row.sourceOptions} for:item="location">
+                                                            <div
+                                                                key={location.id}
+                                                                class="search-option"
+                                                                data-row-id={row.id}
+                                                                data-location-id={location.id}
+                                                                onclick={handleSourceSelect}>
+                                                                <div class="option-primary">{location.name}</div>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <template if:false={row.sourceOptions.length}>
+                                                        <div class="no-results">No Locations found</div>
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </td>
+
+                                <!-- Shipment Type -->
+                                <td>
+                                    <lightning-combobox
+                                        variant="label-hidden"
+                                        placeholder="--None--"
+                                        value={row.shipmentType}
+                                        options={shipmentTypeOptions}
+                                        data-row-id={row.id}
+                                        data-field="shipmentType"
+                                        onchange={handleRowChange}>
+                                    </lightning-combobox>
+                                </td>
+
+                                <!-- Delete -->
+                                <td class="action-cell">
+                                    <lightning-button-icon
+                                        icon-name="utility:delete"
+                                        alternative-text="Remove Row"
+                                        title="Remove Row"
+                                        data-row-id={row.id}
+                                        onclick={handleDeleteRow}
+                                        disabled={disableDelete}>
+                                    </lightning-button-icon>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="loading-container">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Footer -->
+        <div slot="footer" class="footer">
+            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button
+                variant="brand"
+                label={saveButtonLabel}
+                onclick={handleSave}
+                disabled={disableSave}>
+            </lightning-button>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

@@ -1,0 +1,212 @@
+.leadCard {
+    width: 100%;
+}
+
+:host {
+    --lwc-formLabelFontSize: 0.8125rem;
+    --lwc-formLabelWidth: 110px;
+}
+
+:host .slds-card__header-title,
+:host .slds-card__header-title .slds-truncate {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+.card-title-text {
+    font-weight: 600;
+    font-size: 1.50rem;
+    color: #000;
+}
+
+.step1Center {
+    display: flex;
+    justify-content: center;
+}
+
+.step1Inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.step1Inner :global(.slds-form-element__label) {
+    font-size: 1.05rem;
+}
+
+.step1Inner :global(.slds-radio__label) {
+    font-size: 1rem;
+}
+
+.step1Buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.required-note {
+    display: flex;
+    justify-content: flex-end;
+    color: #706e6b;
+    font-size: 0.75rem;
+    margin-top: -0.25rem;
+}
+
+.req-star {
+    color: #c23934;
+    font-weight: 700;
+    margin-right: 0.25rem;
+}
+
+.form-root {
+    padding-top: 0.25rem;
+}
+
+.sectionTitle {
+    background: #f3f2f2;
+    border-radius: 0.25rem;
+    padding: 0.35rem 0.75rem;
+    color: #032d60;
+    font-weight: 600;
+    margin-top: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.sectionBody {
+    padding: 0 0.25rem 0.25rem 0.25rem;
+}
+
+.step1Radio {
+    font-size: 1.25rem;
+}
+
+.ownerInline {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+    align-items: center;
+    padding: 0 0.25rem 0.25rem 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.ownerInlineLabel {
+    width: var(--lwc-formLabelWidth, 130px);
+    font-weight: 600;
+    color: #3e3e3c;
+    box-sizing: border-box;
+}
+
+.ownerInlineValue {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-right: 10%;
+}
+
+.ownerName {
+    color: #3e3e3c;
+    font-weight: 600;
+}
+
+.nameBlock {
+    display: grid;
+    grid-template-columns: 1fr 2.37fr;
+    column-gap: 1rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    align-items: start;
+}
+
+.nameLabel {
+    padding-top: 0.35rem;
+    font-weight: 600;
+    color: #3e3e3c;
+}
+
+.nameFields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    min-width: 0;
+}
+
+.name-field {
+    min-width: 0;
+}
+
+.name-field > :first-child,
+.name-field :global(.slds-combobox__form-element),
+.name-field :global(.slds-form-element__control) {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.nameLabel,
+.nameFields .name-field label {
+    line-height: 1.15;
+}
+
+.backRow {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}
+
+.buttonRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 5px;
+}
+
+.sectionBody > lightning-layout {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.sectionBody > lightning-textarea,
+.sectionBody > lightning-input,
+.sectionBody > lightning-combobox {
+    display: inline-block;
+    width: 50%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .nameBlock {
+        grid-template-columns: 1fr;
+    }
+
+    .nameFields {
+        margin-top: 0.25rem;
+    }
+
+    .name-field {
+        margin-bottom: 0.25rem;
+    }
+
+    .sectionBody > lightning-input,
+    .sectionBody > lightning-combobox,
+    .sectionBody > lightning-textarea {
+        width: 100%;
+        padding: 0 0.25rem;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .sectionBody lightning-layout-item {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .sectionBody lightning-textarea,
+    .sectionBody lightning-input,
+    .sectionBody lightning-combobox {
+        width: 100% !important;
+    }
+}

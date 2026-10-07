@@ -1,0 +1,215 @@
+<template>
+    <div class="slds-card form-container">
+        <div class="slds-card__body slds-p-around_medium">
+            <template if:true={showThankYouMessage}>
+                <div class="thank-you-message slds-alert slds-alert_success slds-m-around_medium">
+                    <span class="slds-assistive-text">Success</span>
+                    <h2 class="slds-text-heading_medium slds-m-bottom_medium">Thank you for sharing your valuable
+                        feedback.</h2>
+                </div>
+            </template>
+            <lightning-record-edit-form object-api-name="Case">
+            <template if:false={showThankYouMessage}>
+                <h1 class="slds-text-heading_medium slds-m-bottom_medium">Help Us Improve</h1>
+                <p>Your feedback helps us serve you better</p>
+
+                <!-- Case Number (read-only) -->
+                <div class="slds-form slds-form_stacked slds-m-bottom_medium">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="case-number">Service Request Number</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input
+                                data-id="case-number"
+                                name="CaseNumber"
+                                value={SRT_Case_No__c}
+                                type="text"
+                                label="SRT Case No"
+                                variant="label-hidden"
+                                disabled
+                                read-only>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                   <!-- Error Message Display -->
+                <template if:true={errorMessage}>
+                    <div class="slds-notify slds-notify_alert slds-theme_error" role="alert">
+                        <span class="slds-assistive-text">error</span>
+                        <p>{errorMessage}</p>
+                    </div>
+                </template>
+
+               <!-- Contact Phone -->
+                <div class="slds-form slds-form_stacked slds-m-bottom_medium">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Contact Phone</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input
+                                type="tel"
+                                value={ContactPhone}
+                                onchange={handleMobileChange}
+                                oninput={handleMobileChange}>
+                                variant="label-hidden">
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Contact Name -->
+                <div class="slds-form slds-form_stacked slds-m-bottom_medium">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Contact Name</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input
+                                value={ContactName}
+                                onchange={handleContactNameChange}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--Service completion date-->
+                <div class="slds-form slds-form_stacked slds-m-bottom_medium">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">
+                            Service Completion Date
+                        </label>
+                        <div class="slds-form-element__control">
+                            <lightning-input
+                                type="date"
+                                name="ServiceCompletionDate"
+                                value={Service_Completion_Date__c}
+                                onchange={handleServiceCompletionDate}
+                                variant="label-hidden">
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Overall Satisfaction -->
+                <div class="question slds-m-top_large">
+                    <p class="slds-text-title_caps">Are You Satisfied by our Service? </p>
+                    <div class="star-rating">
+                         <template for:each={stars} for:item="star">
+                                <span
+                                    key={star.value}
+                                    class={star.class}
+                                    data-field="Overall_Satisfaction_CSAT__c"
+                                    data-value={star.value}
+                                    onclick={handleStarClick}>
+                                    ★
+                                </span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Recommendation -->
+                <div class="question slds-m-top_large">
+                    <p class="slds-text-title_caps">Would you recommend Jakson?</p>
+                        <div class="star-rating">
+                            <template for:each={recommendationStars} for:item="star">
+                                <span
+                                    key={star.value}
+                                    class={star.class}
+                                    data-field="Would_you_recommend_Jakson_NPS__c"
+                                    data-value={star.value}
+                                    onclick={handleStarClick}>
+                                    ★
+                                </span>
+                            </template>
+                        </div>
+                </div>
+               <!-- Issue Resolved -->
+                    <div class="slds-form slds-form_stacked slds-m-top_large">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">
+                                Is your issue resolved?
+                            </label>
+
+                            <div class="slds-form-element__control">
+                                <lightning-combobox
+                                    value={issueResolved}
+                                    options={issueResolvedOptions}
+                                    onchange={handleIssueResolvedChange}
+                                    placeholder="Select">
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Engineer behaviour -->
+                <div class="question slds-m-top_large">
+                    <p class="slds-text-title_caps">How was Engineer Behaviour?</p>
+
+                    <div class="star-rating">
+                        <template for:each={engineerStars} for:item="star">
+                            <span
+                                key={star.value}
+                                class={star.class}
+                                data-field="Engineer_behaviour_professionalism__c"
+                                data-value={star.value}
+                                onclick={handleStarClick}>
+                                ★
+                            </span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="question slds-m-top_large">
+                    <p class="slds-text-title_caps">How was your experience? </p>
+
+                    <div class="star-rating">
+                        <template for:each={experienceStars} for:item="star">
+                            <span
+                                key={star.value}
+                                class={star.class}
+                                data-field="Response_turnaround_experience__c"
+                                data-value={star.value}
+                                onclick={handleStarClick}>
+                                ★
+                            </span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Comments -->
+                    <div class="slds-form slds-form_stacked slds-m-top_large">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">
+                            Comments
+                            <template if:true={isCommentRequired}>
+                                <span style="color:red">*</span>
+                            </template>
+                        </label>
+
+                        <div class="slds-form-element__control">
+                            <lightning-textarea
+                                value={comments}
+                                onchange={handleComments}
+                                required={isCommentRequired}
+                                placeholder="Please share your feedback..."
+                                maxlength="1000"
+                                variant="label-hidden">
+                            </lightning-textarea>
+                        </div>
+                    </div>
+</div>
+                
+                <div class="submit-section slds-m-top_large">
+                    <lightning-button 
+                        label="Submit" 
+                        variant="brand" 
+                        onclick={handleSubmit} 
+                        disabled={isSubmitting}>
+                    </lightning-button>
+                </div>
+            </template>
+            </lightning-record-edit-form>
+        </div>
+    </div>
+</template>

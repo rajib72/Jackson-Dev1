@@ -1,0 +1,32 @@
+<template>
+
+    <template if:true={showComponent}>
+        <div class="timerContainer">
+
+            <div class="header">
+                {headerText}
+            </div>
+
+            <div class="timerBoxes">
+
+                <div class="box hours">
+                    <span>HRS</span>
+                    <div class="value">{hours}</div>
+                </div>
+
+                <div class="box mins">
+                    <span>MIN</span>
+                    <div class="value">{minutes}</div>
+                </div>
+
+                <div class="box secs">
+                    <span>SEC</span>
+                    <div class="value">{seconds}</div>
+                </div>
+
+            </div>
+
+        </div>
+    </template>
+
+</template>

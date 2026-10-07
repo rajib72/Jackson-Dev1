@@ -1,0 +1,718 @@
+:host {
+
+    --border-color: #d8dde6;
+    --background-light: #f7f9fb;
+    --text-primary: #181818;
+    --text-secondary: #5f6b7a;
+    --brand-color: #0176d3;
+    --success-color: #2e844a;
+
+    display: block;
+    width: 100%;
+}
+
+
+
+/* =========================================================
+   SECTION BOX
+   ========================================================= */
+
+.section-box {
+
+    padding: 0;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 0.6rem;
+
+    overflow: visible;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 1px 4px
+        rgba(0,0,0,0.06);
+
+}
+
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.section-header {
+
+    padding:
+        0.85rem
+        1rem;
+
+    background:
+        var(--background-light);
+
+    border-bottom:
+        1px solid
+        var(--border-color);
+
+    border-radius:
+        0.6rem
+        0.6rem
+        0
+        0;
+
+}
+
+
+
+.section-header-content {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:0.65rem;
+
+}
+
+
+
+.section-header-text {
+
+    min-width:0;
+
+}
+
+
+
+.section-title {
+
+    font-size:0.92rem;
+
+    font-weight:700;
+
+    color:var(--text-primary);
+
+}
+
+
+
+.section-subtitle {
+
+    margin-top:0.15rem;
+
+    font-size:0.72rem;
+
+    color:var(--text-secondary);
+
+}
+
+
+
+/* =========================================================
+   SECTION BODY
+   ========================================================= */
+
+.section-body {
+
+    padding:
+
+        1.15rem
+        1rem
+        1.25rem;
+
+}
+
+
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+.dealer-label,
+.remarks-label {
+
+    margin-bottom:0.35rem;
+
+    font-size:0.75rem;
+
+    font-weight:600;
+
+    color:var(--text-primary);
+
+}
+
+
+
+/* =========================================================
+   SEARCH RESULT CONTAINER
+   ========================================================= */
+
+.search-results {
+
+    position:relative;
+
+    z-index:10;
+
+    width:100%;
+
+    max-height:240px;
+
+    overflow-y:auto;
+
+    border:
+
+        1px solid
+        var(--border-color);
+
+    border-radius:0.5rem;
+
+    background:#ffffff;
+
+    box-shadow:
+
+        0 5px 15px
+        rgba(0,0,0,0.12);
+
+}
+
+
+
+/* =========================================================
+   SUPPLIER RESULT ROW
+   ========================================================= */
+
+.dealer-result {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    width:100%;
+
+    min-height:68px;
+
+    padding:
+
+        0.8rem
+        1rem;
+
+
+    background:#ffffff;
+
+    border:0;
+
+    border-bottom:
+
+        1px solid
+        #edf0f4;
+
+
+    cursor:pointer;
+
+    text-align:left;
+
+    transition:
+        background 0.15s ease;
+
+}
+
+
+
+.dealer-result:last-child {
+
+    border-bottom:none;
+
+}
+
+
+
+.dealer-result:hover {
+
+    background:#f2f7fc;
+
+}
+
+
+
+/* =========================================================
+   SUPPLIER DETAILS
+   ========================================================= */
+
+
+.dealer-main {
+
+    display:flex;
+
+    align-items:center;
+
+    flex:1;
+
+    min-width:0;
+
+    gap:0.8rem;
+
+}
+
+
+
+.dealer-icon {
+
+    display:flex;
+
+    flex-shrink:0;
+
+}
+
+
+
+.dealer-content {
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+
+
+.dealer-name {
+
+    font-size:0.86rem;
+
+    font-weight:700;
+
+    color:var(--brand-color);
+
+}
+
+
+
+.dealer-meta {
+
+    display:flex;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:0.35rem;
+
+    margin-top:0.2rem;
+
+    font-size:0.72rem;
+
+    color:var(--text-secondary);
+
+}
+
+
+
+.separator {
+
+    color:#a8b0bb;
+
+}
+
+
+
+/* =========================================================
+   SELECTED SUPPLIER CARD
+   ========================================================= */
+
+
+.selected-dealer {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:1rem;
+
+    width:100%;
+
+
+    padding:
+
+        1rem;
+
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #edf9f1,
+            #f8fcf9
+        );
+
+
+    border:
+
+        1px solid
+        #91d9a8;
+
+
+    border-left:
+
+        4px solid
+        var(--success-color);
+
+
+    border-radius:0.55rem;
+
+    box-sizing:border-box;
+
+}
+
+
+
+.selected-dealer-main {
+
+    display:flex;
+
+    align-items:center;
+
+    flex:1;
+
+    min-width:0;
+
+    gap:0.8rem;
+
+}
+
+
+
+.selected-check {
+
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+
+    width:2.1rem;
+
+    height:2.1rem;
+
+    min-width:2.1rem;
+
+
+    border-radius:50%;
+
+
+    background:
+
+        var(--success-color);
+
+
+    --slds-c-icon-color-foreground-default:#ffffff;
+
+
+}
+
+
+
+.selected-content {
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+
+
+.selected-label {
+
+    font-size:0.65rem;
+
+    font-weight:700;
+
+    letter-spacing:0.04rem;
+
+    color:#53675a;
+
+}
+
+
+
+.selected-name {
+
+    margin-top:0.15rem;
+
+    font-size:0.9rem;
+
+    font-weight:700;
+
+    color:#1f3b2d;
+
+}
+
+
+
+.selected-email {
+
+    margin-top:0.2rem;
+
+    font-size:0.75rem;
+
+    color:#53675a;
+
+}
+
+
+
+/* =========================================================
+   CHANGE SUPPLIER BUTTON
+   ========================================================= */
+
+.selected-action {
+
+    flex-shrink:0;
+
+    margin-left:1rem;
+
+}
+
+
+
+/* =========================================================
+   REMARKS SECTION
+   ========================================================= */
+
+
+.remarks-label {
+
+    display:block;
+
+}
+
+
+
+.remarks-help {
+
+
+    display:flex;
+
+    align-items:center;
+
+    gap:0.45rem;
+
+
+    margin-top:0.75rem;
+
+
+    padding:
+
+        0.55rem
+        0.7rem;
+
+
+    background:#f7f9fb;
+
+
+    border-radius:0.4rem;
+
+
+    color:var(--text-secondary);
+
+
+    font-size:0.7rem;
+
+}
+
+
+
+/* =========================================================
+   SEARCH LOADING
+   ========================================================= */
+
+.search-loading {
+
+    position:relative;
+
+    min-height:65px;
+
+
+    margin-top:0.5rem;
+
+
+    background:#fafbfc;
+
+
+    border:
+
+        1px solid
+        #edf0f4;
+
+
+    border-radius:0.45rem;
+
+}
+
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+
+.footer-actions {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+
+    gap:0.9rem;
+
+
+    width:100%;
+
+}
+
+
+
+.footer-actions lightning-button {
+
+    margin-left:0.5rem;
+
+}
+
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.spinner-container {
+
+
+    position:fixed;
+
+
+    inset:0;
+
+
+    z-index:9999;
+
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+
+}
+
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+
+.search-results::-webkit-scrollbar {
+
+    width:6px;
+
+}
+
+
+
+.search-results::-webkit-scrollbar-track {
+
+    background:#f4f5f7;
+
+}
+
+
+
+.search-results::-webkit-scrollbar-thumb {
+
+    background:#b9c0c9;
+
+    border-radius:10px;
+
+}
+
+.search-results {
+    position: relative;
+    z-index: 9999;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+
+.dealer-result {
+    width:100%;
+    border:none;
+    background:white;
+    padding:10px;
+    cursor:pointer;
+}
+
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+
+@media only screen and (max-width:768px){
+
+
+    .section-subtitle{
+
+        display:none;
+
+    }
+
+
+
+    .selected-dealer{
+
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+
+
+    .selected-dealer-main{
+
+        width:100%;
+
+    }
+
+
+
+    .selected-action{
+
+        margin-left:2.8rem;
+
+    }
+
+
+
+    .footer-actions{
+
+        gap:0.5rem;
+
+    }
+
+
+}

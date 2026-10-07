@@ -1,0 +1,126 @@
+.header-container{
+    display:flex;
+    align-items:center;
+    border:1px solid #000;
+}
+
+.logo-section{
+    width:25%;
+    padding:10px;
+}
+
+.title-section{
+    width:50%;
+    text-align:center;
+}
+
+.main-title{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.sub-title{
+    font-size:13px;
+}
+
+.doc-section{
+    width:25%;
+    text-align:right;
+    padding-right:10px;
+}
+
+.note{
+    border:0.5px solid #000;
+    border-top:none;
+    padding:4px;
+    font-size:12px;
+}
+
+/* Fix table width */
+.slds-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Prevent column expansion */
+.slds-table td {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    vertical-align: middle;
+}
+
+/* Prevent inputs from overflowing */
+lightning-input-field {
+    width: 100%;
+    display: block;
+}
+
+/* Prevent combobox from expanding table */
+.slds-table lightning-base-combobox,
+.slds-table lightning-input {
+    width: 100%;
+}
+
+/* Prevent long text overflow */
+.slds-form-element__control {
+    width: 100%;
+}
+
+/* Fix dropdown width */
+.slds-combobox_container {
+    width: 100%;
+}
+
+/* Make text wrap properly */
+.slds-table td,
+.slds-table th {
+    max-width: 0;
+}
+
+/* Section title */
+.section {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+.section-box{
+    border:1px solid #dde5ef;
+    border-radius:6px;
+    padding:12px 16px;
+    margin-bottom:2rem;
+}
+
+.section-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.section-table td{
+    border:none; /* remove row borders */
+    padding:0.65rem 0.75rem;
+}
+
+.label-cell{
+    font-weight:600;
+    width:20%;
+}
+
+.value-cell{
+    width:30%;
+}
+
+.section-title{
+    font-size:1.25rem;
+    font-weight:600;
+    margin-bottom:0.5rem;
+}
+
+.submit-container{
+    position: sticky;
+    bottom: 10px;
+    text-align:center;
+    padding:10px;
+}

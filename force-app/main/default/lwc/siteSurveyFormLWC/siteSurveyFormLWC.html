@@ -1,0 +1,1323 @@
+<template>
+
+    <div class="header-container">
+
+        <!--<div class="logo-section">
+            <img src={logoUrl} alt="Company Logo"/>
+        </div>-->
+
+        <div class="title-section">
+            <div class="main-title">Site Survey Report</div>
+            <div class="sub-title">(Grid tied Rooftop & Small Ground Mounting Solar PV System)</div>
+        </div>
+
+        <div class="doc-section">
+            <b>Doc No:</b> {docNumber}
+        </div>
+
+    </div>
+
+    <div class="note">
+        <b>Note:</b> Please fill the mandatory<span style="color: red;">*</span> fields carefully.
+    </div>
+
+    <div class="slds-p-around_medium">
+
+        <lightning-record-edit-form object-api-name="Site_Survey__c" onsuccess={handleSuccess} onsubmit={handleSubmit}>
+
+            <lightning-input-field field-name="Customer_Name__c" value={accountId} class="slds-hide">
+            </lightning-input-field>
+            <!-- Form Errors -->
+            <lightning-messages></lightning-messages>
+
+            <template if:true={isLoading}>
+                <div style="margin-top:1rem;">
+                    <lightning-spinner alternative-text="Submitting Survey..." size="medium">
+                    </lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Link Site Survey to Opportunity -->
+            <lightning-input-field field-name="Opportunity__c" value={recordId} class="slds-hide">
+            </lightning-input-field>
+
+            <!-- 1. CUSTOMER DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Customer Details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover "
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; ">
+
+                <tbody>
+
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef;">
+                            Customer Name</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef;" colspan="3">
+                            {accountName}</td>
+                    </tr>
+
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef;">
+                            Address</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef;" colspan="3">
+                            <div class="slds-wrap">{address}</div>
+                            <lightning-input type="checkbox" label="Location same as Address"
+                                onchange={handleAddressCheckbox}>
+                            </lightning-input>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef;">
+                            Location<span style="color: red;">*</span></td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef;" colspan="3">
+                            <lightning-input-field field-name="Location__c" variant="label-hidden"
+                                data-id="locationField" required>
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; white-space: normal; word-wrap: break-word;">
+                            Nearest Airport / Railway Station</td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; border-right: none;">
+                            <lightning-input-field field-name="Nearest_Airport_Railway_station__c"
+                                variant="label-hidden"></lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; border-left: none; border-right: none;">
+                            Contact Person Name</td>
+                        <td style="padding: 0.75rem 1rem; border:1px solid #dde5ef;">
+
+                            <div style="width:100%;">
+                                <lightning-combobox placeholder="Select Contact" options={contactOptions}
+                                    value={selectedContactId} onchange={handleContactChange} variant="label-hidden">
+                                </lightning-combobox>
+                            </div>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <!-- 2. SITE DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Site
+                Details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                            Longitude<span style="color: red;">*</span></td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Longitude_deg__c" variant="label-hidden" required>
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            Latitude<span style="color: red;">*</span></td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Latitude_deg__c" variant="label-hidden" required>
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 3. PROJECT DETAILS -->
+            <h2 class="section slds-m-top_large">Project details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                            Project segment<span style="color: red;">*</span></td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field 
+            field-name="Project_segment__c" 
+            variant="label-hidden" 
+            onchange={handleProjectSegmentChange}
+            required>
+        </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                            Net Metering<span style="color: red;">*</span></td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Net_Metering__c" variant="label-hidden"
+                                onchange={handleNetMeteringChange} required>
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <template if:true={isRooftop}>
+                        <tr>
+                            <td style="padding: 0.75rem 1rem; font-weight: 600; border: 1px solid #dde5ef;">
+                                Rooftop Type<span style="color: red;">*</span>
+                            </td>
+                            <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                                <lightning-input-field field-name="Rooftop_Type__c" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+
+            <!-- 4. GRID DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Grid
+                details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+                <tbody>
+
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; normal; word-wrap: break-word;">
+                            Existing Metering / billing
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Existing_Metering_billing__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; normal; word-wrap: break-word;">
+                            Mail Breaker Size and Make
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Mail_Breaker_Size_and_Make_In_Amps__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Solar
+                            Termination Voltage level
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Solar_Termination_Voltage_level__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Existing
+                            Electrical load
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Existing_Electrical_load__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">I/P Existing
+                            Electricity Load
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="I_P_Ext_Elec_Load__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Power quality of
+                            grid
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Power_quality_of_grid__c" variant="label-hidden"
+                                onchange={handlePowerQualityChange}>
+                            </lightning-input-field>
+
+                        </td>
+                        <template if:true={isPoorQuality}>
+                            <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Reason for
+                                Poor Quality
+                            </td>
+                            <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+
+                                <lightning-input-field field-name="Power_quality_of_grid_If_Poor__c"
+                                    variant="label-hidden">
+                                </lightning-input-field>
+                            </td>
+                        </template>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Distance between
+                            Grid MFM to ACDB
+                            <br>
+
+                            <span class="slds-text-body_small">in case of 0 export provision</span>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Distance_between_the_Grid_MFM_to_ACDB__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 5. DG DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">DG
+                details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; white-space: normal; word-wrap: break-word;">
+                            DG Synchronization with Solar system<span style="color: red;">*</span>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="DG_Synchronization_with_Solar_system__c"
+                                variant="label-hidden" required>
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; white-space: normal; word-wrap: break-word;">
+                            Total no of DG Sets
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Total_no_of_Gensets__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; white-space: normal; word-wrap: break-word;">
+                            Capacity of each DG Set
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Capacity_of_each_Gensets__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">DG Make
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="DG_Make__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Genset operation
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Genset_operation__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Distance between
+                            the MFM of DG</td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Distance_between_the_MFM_of_DGs__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Last DG MFM to
+                            ACDB distance
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Last_DG_MFM_to_ACDB_distance__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">DG output
+                            voltage
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="DG_output_voltage_in_Volts__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 6. TRANSFORMER DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Transformer Details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Qty & rating of
+                            each Transformer
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Qty_rating_of_each_Transformer__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Impedance of
+                            existing Transformer
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Impedance_of_existing_Transformer__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Grid main
+                            breaker Capacity
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Grid_main_Breaker_Capacity__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 7. LOAD DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Load
+                details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; vertical-align: top; white-space: normal; word-wrap: break-word;">
+                            Min. Load during day Weekdays
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Min_Load_during_day_Weekdays__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; vertical-align: top; white-space: normal; word-wrap: break-word;">
+                            Min. Load during day Holidays & Weekends
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Min_Load_during_day_Holidays_Weekends__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; vertical-align: top; white-space: normal; word-wrap: break-word;">
+                            Max. Load During Day Weekdays
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Max_Load_During_Day_Weekdays__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; vertical-align: top; white-space: normal; word-wrap: break-word;">
+                            Max. Load During
+                            Day Holidays & Weekends
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Max_Load_During_Day_Holidays_Weekends__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 8. OTHER ELECTRICAL INFRASTRUCTURE -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Other Electrical Infrastructure (LT Panel, Protection & Termination point)</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+                <tbody>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; vertical-align: top; white-space: normal; word-wrap: break-word;">
+                            Availability of Spare Feeder(s) in Existing LT Panel
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Availability_of_Spare_Feeder_s__c" variant="label-hidden"
+                                onchange={handleFeederChange}>
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <template if:true={showRating}>
+                        <tr>
+                            <td
+                                style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; vertical-align: top; white-space: normal; word-wrap: break-word;">
+                                Rating of Spare Feeder(s)
+                            </td>
+                            <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                                <lightning-input-field field-name="Rating_of_Spare_Feeder_s__c" variant="label-hidden">
+                                </lightning-input-field>
+                            </td>
+                        </tr>
+                    </template>
+                    <template if:true={showBusbarSection}>
+                        <tr>
+                            <td
+                                style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; vertical-align: top; white-space: normal; word-wrap: break-word;">
+                                Existing LT Panel Bus Bar (Possibility of termination) & Bus Bar Material
+                            </td>
+                            <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                                <lightning-input-field field-name="Existing_LT_Panel_Bus_Bar__c" variant="label-hidden">
+                                </lightning-input-field>
+                            </td>
+                            <td
+                                style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef; vertical-align: top; white-space: normal; word-wrap: break-word;">
+                                Is the Cubical Space available for additional LT Panel
+                            </td>
+                            <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                                <lightning-input-field field-name="Cubical_Space_available_LT_Panel__c"
+                                    variant="label-hidden">
+                                </lightning-input-field>
+                            </td>
+                        </tr>
+                    </template>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Lightning
+                            Arrester available at Site
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Lightning_Arrester_available_at_Site__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 9. BUILDING DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Building details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Age of
+                            Building
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Age_of_Building_In_Years__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Height of the
+                            Building & No. of floors
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Height_of_the_Building_No_of_floors__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Appearance of
+                            Roof
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Appearance_of_Roof__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Accessibility
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Accessibility__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Other shadow
+                            causing objects
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Others_shadow_Rising_objects__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Others
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Others_Building_details__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <!-- 10. RCC ROOF DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                RCC Roof details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Roof top
+                            finishing material
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Roof_top_finishing_material__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Parapet wall
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Parapet_wall__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Roof Penetration
+                            for Anchoring
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Roof_Penetration_for_Anchoring__c" variant="label-hidden"
+                                onchange={handleRoofPenetrationChange}>
+                            </lightning-input-field>
+
+                        </td>
+                        <template if:true={showRoofReason}>
+                            <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Reason for
+                                Roof Penetration
+                            </td>
+                            <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                                <lightning-input-field field-name="Reason_for_Roof_Penetration__c"
+                                    variant="label-hidden">
+                                </lightning-input-field>
+                            </td>
+                        </template>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 11. METAL SHED DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Metal Shed details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td style="padding:0.75rem 1rem; font-weight:500; border:1px solid #dde5ef;">
+                            Roof tilt angle
+                        </td>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Roof_tilt_angle__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+
+                        <td style="padding:0.75rem 1rem; font-weight:500; border:1px solid #dde5ef;">
+                            Purlin Member
+                        </td>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Purlin_Member__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.75rem 1rem; font-weight:500; border:1px solid #dde5ef;">
+                            Gap between two consecutive purlins
+                        </td>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Gap_between_two_consecutive_purlins__c"
+                                variant="label-hidden"></lightning-input-field>
+                        </td>
+
+                        <td style="padding:0.75rem 1rem; font-weight:500; border:1px solid #dde5ef;">
+                            Distance b/w Ridge cover sheet edge to adjacent purlin
+                        </td>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Distance_b_w_Ridge_cover_sheet_edge__c"
+                                variant="label-hidden"></lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.75rem 1rem; font-weight:500; border:1px solid #dde5ef;">
+                            Type of Roofing profile
+                        </td>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Type_of_Roofing_profile__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="border:1px solid #dde5ef;"></td>
+                        <td style="border:1px solid #dde5ef;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding:1rem; border:1px solid #dde5ef;">
+                            <img src={roofImage} style="max-width:100%; height:auto;" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4" style="padding:1rem; border:1px solid #dde5ef;">
+
+                            <table class="slds-table slds-table_bordered" style="width:100%; text-align:center;">
+
+                                <tr style="color:red; font-weight:600;">
+                                    <td>a (mm)</td>
+                                    <td>b (mm)</td>
+                                    <td>c (mm)</td>
+                                    <td>d (mm)</td>
+                                    <td>e (mm)</td>
+                                    <td>f (mm)</td>
+                                    <td>g (mm)</td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <lightning-input-field field-name="a__c" variant="label-hidden">
+                                        </lightning-input-field>
+                                    </td>
+                                    <td>
+                                        <lightning-input-field field-name="b__c" variant="label-hidden">
+                                        </lightning-input-field>
+                                    </td>
+                                    <td>
+                                        <lightning-input-field field-name="c__c" variant="label-hidden">
+                                        </lightning-input-field>
+                                    </td>
+                                    <td>
+                                        <lightning-input-field field-name="d__c" variant="label-hidden">
+                                        </lightning-input-field>
+                                    </td>
+                                    <td>
+                                        <lightning-input-field field-name="e__c" variant="label-hidden">
+                                        </lightning-input-field>
+                                    </td>
+                                    <td>
+                                        <lightning-input-field field-name="f__c" variant="label-hidden">
+                                        </lightning-input-field>
+                                    </td>
+                                    <td>
+                                        <lightning-input-field field-name="g__c" variant="label-hidden">
+                                        </lightning-input-field>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4" style="padding:1rem; border:1px solid #dde5ef;">
+
+                            <p style="font-style: italic;">
+                                Note: Provide above details with hand sketch in a separate sheet if sheet profile is
+                                different from the above mentioned
+                            </p>
+
+                            <label>Upload Sheet Profile (Optional)</label>
+                            <input type="file"
+            multiple
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+            onchange={handleSheetFile} />
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <!-- 12. GROUND MOUNTING DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Ground Mounting Detail</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Area of
+                            Land/Dimensions
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Area_of_Land_Dimensions__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Is the Land
+                            Available in the Premise
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Is_the_Land_Available_in_the_Premise__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Boundary wall
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Boundary_wall__c" variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Land finishing
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Land_finishing__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Soil type
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Soil_type__c" variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Others
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Others_Ground_Mounting__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 13. POWER EVACUATION DETAILS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Power Evacuation Details</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                            Inverter location</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Inverter_location__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                            Cable route Length from PV Array Area to Inverter Location </td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="CRL_PV_to_Inverter_Location__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            ACDB location</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="ACDB_location__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            Cable route Length from Inverter Location to ACDB location </td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="CRL_Inverter_Location_to_ACDB_Location__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <template if:true={isNetMeteringRequired}>
+                        <tr>
+                            <td
+                                style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                                Solar Metering Panel Location</td>
+                            <td
+                                style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                                <lightning-input-field field-name="Solar_Metering_Panel_Location__c"
+                                    variant="label-hidden">
+                                </lightning-input-field>
+                            </td>
+                            <td
+                                style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                                Cable route Length from ACDB to Solar Metering Panel</td>
+                            <td
+                                style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                                <lightning-input-field field-name="CRL_ACDB_to_Solar_Meter_Location__c"
+                                    variant="label-hidden">
+                                </lightning-input-field>
+                            </td>
+                        </tr>
+                    </template>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            Earth Pit</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Earth_Pit_Location__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                            Termination Point</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Termination_Point_Location__c" variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+                        <template if:true={isNetMeteringRequired}>
+                            <td
+                                style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                                Cable route Length from Solar Metering panel to Termination point/Spare feeder<span style="color: red;">*</span></td>
+                            <td
+                                style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                                <lightning-input-field field-name="CRL_SMP_to_Termination_point__c"
+                                    variant="label-hidden">
+                                </lightning-input-field>
+
+                            </td>
+                        </template>
+                        <template if:false={isNetMeteringRequired}>
+                            <td
+                                style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600;  border: 1px solid #dde5ef; width: 15%;">
+                                Cable route Length from ACDB to Termination point/Spare feeder</td>
+                            <td
+                                style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                                <lightning-input-field field-name="CRL_ACDB_to_Termination_point_Spare_Feed__c"
+                                    variant="label-hidden" required>
+                                </lightning-input-field>
+                            </td>
+                        </template>
+                    </tr>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            Availability of Existing cable tray for Solar system AC cable laying</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Availability_of_Existing_AC_cable_laying__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            Is There any Trench required?</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Is_There_any_Trench_required__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            Is There any road crossing required?</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Is_There_any_road_crossing_required__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            Inverter Mounting Provision</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Inverter_Mounting_Provision__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            Inverter Mounting Location</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="Inverter_Mounting_Location__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            ACBD Mounting Provision</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="ACBD_Mounting_Provision__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td
+                            style="padding: 0.75rem 1rem; vertical-align: top; font-weight: 600; border: 1px solid #dde5ef; width: 15%;">
+                            ACBD Mounting Location</td>
+                        <td style="padding: 0.75rem 1rem; vertical-align: top; border: 1px solid #dde5ef; width: 35%;">
+                            <lightning-input-field field-name="ACBD_Mounting_Location__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <!-- 14. WATER SOURCE -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Water Source</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Availability of
+                            Water
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Availability_of_Water__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Water Source for
+                            Module cleaning
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Water_Source_for_Module_cleaning__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Availability of
+                            Water Tank(s)
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Availability_of_Water_Tank_s__c" variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Water
+                            Quality/Water treatment plant availability
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Water_Quality_Water_treatment_plant__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 15. LOGISTICS AND I&C RISK ASSESSMENT -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Logistics and I&C risk assessment</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Site Access for
+                            Material Delivery via Truck
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Material_Delivery_via_Truck__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Roof Access for
+                            Material lifting at Roof
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Roof_Access_for_Material_lifting_at_Roof__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Material Lifting
+                            Option- please mention if Crain to be used or additional ladder to be made
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Material_Lifting_Option__c" variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Material
+                            Security (Space & Scope)
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Material_Security_Space_Scope__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Water
+                            availability at Site for I&C and O&M
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Water_availability_at_Site_for_I_C_O_M__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 16. MONITORING AND COMMUNICATION -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Monitoring & Communication</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Data Logger
+                            system for Monitering purpose
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Data_Logger_system_Monitering_purpose__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Zero Export
+                            Device
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Zero_Export_Device__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">DG Sync.
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="DG_Sync__c" variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 17. SPECIFIC REQUIREMENTS -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                Specific Requirements</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Walkway
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Walkway__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Module Cleaning
+                            System
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Module_Cleaning_System__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Additional
+                            Ladder
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Additional_Ladder__c" variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Hand rail
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Hand_rail__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Life line
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Life_line__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Sky Mash
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Sky_Mash__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 18. HR /EHS COMPLIANCES -->
+            <h2 class="section slds-m-top_large" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                HR /EHS Compliances</h2>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+                style="width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 2rem; border: 1px solid #dde5ef;">
+
+                <tbody>
+                    <tr>
+
+                        <td rowspan="2" style="padding:0.75rem 1rem; font-weight:500; border:1px solid #dde5ef;">Safety
+                            Measures
+                        </td>
+                        <td style="padding:0.75rem 1rem; font-weight:500; border:1px solid #dde5ef;">
+                            Safety items required
+                        </td>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Safety_items_required__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding:0.75rem 1rem; font-weight:500; border:1px solid #dde5ef;">
+                            Company guidelines
+                        </td>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Safety_Measures_Company_guidelines__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">HR Compliances
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="HR_Compliances__c" variant="label-hidden">
+                            </lightning-input-field>
+
+                        </td>
+
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Site working Hrs
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Site_working_Hrs__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Store Location &
+                            distance from site
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Store_Location_distance_from_site__c"
+                                variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Gate pass
+                            procedure
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Gate_pass_procedure__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; font-weight: 500; border: 1px solid #dde5ef;">Store area
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border: 1px solid #dde5ef;">
+                            <lightning-input-field field-name="Store_area__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <!-- Details -->
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="border:1px solid #dde5ef;"></td>
+                        <td colspan="2" style="text-align:center; font-weight:600; border:1px solid #dde5ef;">
+                            Jakson Representative
+                        </td>
+                        <td colspan="2" style="text-align:center; font-weight:600; border:1px solid #dde5ef;">
+                            Client Representative
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">Name:</td>
+
+                        <td colspan="2" style="border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Jakson_Name__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+
+                        <td colspan="2" style="border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Client_Name__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>Signature</td>
+
+                        <td colspan="2">
+
+                            <label>Upload Jakson Signature</label>
+                            <input type="file" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" onchange={handleJaksonFile} />
+
+                        </td>
+
+                        <td colspan="2">
+
+                            <label>Upload Client Signature</label>
+                            <input type="file" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" onchange={handleClientFile} />
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td style="padding:0.75rem 1rem; border:1px solid #dde5ef;">Date:</td>
+
+                        <td colspan="4" style="border:1px solid #dde5ef;">
+                            <lightning-input-field field-name="Form_Submitted_Date__c" variant="label-hidden">
+                            </lightning-input-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top:1.5rem;">
+
+                <lightning-button variant="brand" type="submit" label="Submit Survey" disabled={isLoading}>
+                </lightning-button>
+
+            </div>
+
+        </lightning-record-edit-form>
+
+    </div>
+
+</template>

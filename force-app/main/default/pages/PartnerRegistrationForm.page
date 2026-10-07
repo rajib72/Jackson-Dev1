@@ -1,0 +1,137 @@
+<apex:page controller="PartnerRegistrationController"
+           showHeader="false"
+           sidebar="false"
+           cache="false">
+
+    <apex:form enctype="multipart/form-data">
+
+        <apex:pageMessages />
+
+        <apex:pageBlock title="Jakson SRT Value Plus Partners - Registration Form">
+
+            <!-- Applicant Details -->
+            <apex:pageBlockSection title="Applicant Details" columns="2">
+
+                <apex:inputText value="{!reg.Full_Name__c}"
+                                label="Full Name"
+                                required="true"/>
+
+                <apex:inputText value="{!reg.Designation__c}"
+                                label="Designation / Role"/>
+
+                <apex:inputText value="{!reg.Organization_Name__c}"
+                                label="Organization / Firm Name"
+                                required="true"/>
+
+                <apex:inputText value="{!reg.Mobile_Number__c}"
+                                label="Mobile Number"
+                                required="true"/>
+
+                <apex:inputText value="{!reg.Email_ID__c}"
+                                label="Email ID"
+                                required="true"/>
+
+                <apex:inputTextarea value="{!reg.Address__c}"
+                                    label="Address"/>
+
+            </apex:pageBlockSection>
+
+            <!-- Business & Identification Details -->
+            <apex:pageBlockSection title="Business & Identification Details" columns="2">
+
+                <apex:inputText value="{!reg.PAN_Number__c}"
+                                label="PAN Number"
+                                required="true"/>
+
+                <apex:inputText value="{!reg.GST_Number__c}"
+                                label="GST Number"/>
+
+                <apex:inputField value="{!reg.Type_Of_Entity__c}" />
+
+                <apex:inputField value="{!reg.MSME_Status__c}" />
+
+                <apex:inputTextarea value="{!reg.Experience__c}"
+                                    label="Experience in Solar / Infrastructure / Consulting"/>
+
+            </apex:pageBlockSection>
+
+            <!-- Bank Details -->
+            <apex:pageBlockSection title="Bank Details (For Commission Payments)" columns="2">
+
+                <apex:inputText value="{!reg.Bank_Account_Name__c}"
+                                label="Account Holder Name"
+                                required="true"/>
+
+                <apex:inputText value="{!reg.Bank_Name__c}"
+                                label="Bank Name"
+                                required="true"/>
+
+                <apex:inputText value="{!reg.Account_Number__c}"
+                                label="Account Number"
+                                required="true"/>
+
+                <apex:inputText value="{!reg.IFSC_Code__c}"
+                                label="IFSC Code"
+                                required="true"/>
+
+            </apex:pageBlockSection>
+
+            <!-- Mandatory Document Upload -->
+            <apex:pageBlockSection title="Mandatory Document Submission">
+
+                <apex:outputText value="Attach PAN, Aadhaar, GST, MSME, Cancelled Cheque, and relevant entity proof documents."/>
+
+                <br/><br/>
+
+                <apex:inputFile value="{!uploadedFile}"
+                                filename="{!fileName}"
+                                required="true"/>
+
+            </apex:pageBlockSection>
+
+            <!-- Declaration -->
+            <apex:pageBlockSection title="Declaration on Conflict of Interest" columns="1">
+
+                <apex:outputText value="I confirm that there is no conflict of interest and I am not related to the customer's organization."/>
+
+                <br/><br/>
+
+                <apex:inputTextarea value="{!reg.Form_Details__c}"
+                                    label="Signature (Type Full Name)"
+                                    required="true"/>
+
+            </apex:pageBlockSection>
+
+            <!-- Program Terms -->
+            <apex:pageBlockSection title="Program Terms Acknowledgement" columns="1">
+
+                <apex:outputText value="I agree to register all leads in Salesforce CRM, follow commission structure, and adhere to program policies."/>
+
+                <br/><br/>
+
+                <apex:inputCheckbox label="I Agree to the Program Terms" required="true"/>
+
+            </apex:pageBlockSection>
+
+            <!-- Submit Button -->
+            <apex:pageBlockSection columns="1">
+
+    			<div style="text-align:center;margin-top:20px;">
+       				 <apex:commandButton value="Submit Registration"
+                            action="{!saveRegistration}"
+                            style="background:#2E844A;
+                                   color:white;
+                                   font-size:16px;
+                                   font-weight:bold;
+                                   padding:10px 25px;
+                                   border:none;
+                                   border-radius:5px;" />
+    			</div>
+
+			</apex:pageBlockSection>
+
+        </apex:pageBlock>
+
+    </apex:form>
+
+</apex:page>

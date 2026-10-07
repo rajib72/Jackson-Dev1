@@ -1,0 +1,322 @@
+<template>
+
+    <lightning-quick-action-panel header="Assign to Supplier / L3">
+
+
+        <!-- LOADING -->
+
+        <template if:true={isLoading}>
+
+            <div class="spinner-container">
+
+                <lightning-spinner alternative-text="Submitting L3 Assignment" size="medium">
+                </lightning-spinner>
+
+            </div>
+
+        </template>
+
+
+
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+
+            <!-- =====================================================
+                 SUPPLIER ASSIGNMENT
+                 ===================================================== -->
+
+            <section class="slds-box slds-box_x-small section-box">
+
+
+                <!-- HEADER -->
+
+                <div class="section-header">
+
+                    <div class="section-header-content">
+
+
+                        <lightning-icon icon-name="standard:partner_fund_request" size="small"
+                            alternative-text="Supplier">
+                        </lightning-icon>
+
+
+
+                        <div class="section-header-text">
+
+
+                            <div class="section-title">
+                                Supplier Assignment
+                            </div>
+
+
+                            <div class="section-subtitle">
+                                Select Supplier for L3 escalation.
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- BODY -->
+
+                <div class="section-body">
+
+
+
+                    <label class="slds-form-element__label dealer-label">
+
+                        <abbr class="slds-required" title="required">
+                            *
+                        </abbr>
+
+                        Supplier
+
+                    </label>
+
+
+
+
+                    <lightning-combobox
+    name="supplier"
+    label="Supplier"
+    variant="label-hidden"
+    placeholder="Select Supplier"
+    value={selectedSupplierId}
+    options={supplierOptions}
+    onchange={handleSupplierChange}
+    disabled={isSupplierLoading}
+    required>
+</lightning-combobox>
+
+
+
+
+
+                    <!-- SEARCH LOADER -->
+
+
+                    <template if:true={isSupplierLoading}>
+
+
+                        <div class="search-loading slds-m-top_small">
+
+
+                            <lightning-spinner alternative-text="Searching Supplier" size="small">
+                            </lightning-spinner>
+
+
+                        </div>
+
+
+                    </template>
+
+
+
+
+
+
+
+
+
+                    <!-- SELECTED SUPPLIER -->
+
+
+                    <template if:true={selectedSupplier}>
+
+
+                        <div class="selected-dealer slds-m-top_medium">
+
+
+                            <div class="selected-dealer-main">
+
+
+                                <div class="selected-check">
+
+
+                                    <lightning-icon icon-name="utility:check" size="x-small">
+
+                                    </lightning-icon>
+
+
+                                </div>
+
+
+
+
+                                <div class="selected-content">
+
+
+                                    <div class="selected-label">
+                                        SELECTED SUPPLIER
+                                    </div>
+
+
+
+                                    <div class="selected-name">
+
+                                        {selectedSupplier.name}
+
+                                    </div>
+
+
+
+
+                                    <template if:true={selectedSupplier.email}>
+
+
+                                        <div class="selected-email">
+
+                                            {selectedSupplier.email}
+
+                                        </div>
+
+
+                                    </template>
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+
+                            <div class="selected-action">
+
+
+                                <lightning-button label="Change Supplier" variant="neutral"
+                                    onclick={handleChangeSupplier}>
+
+                                </lightning-button>
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </template>
+
+
+
+                </div>
+
+
+
+            </section>
+
+
+
+
+
+            <!-- =====================================================
+                 REMARKS
+                 ===================================================== -->
+
+
+            <section class="slds-box slds-box_x-small section-box slds-m-top_large">
+
+
+                <div class="section-header">
+
+
+                    <div class="section-header-content">
+
+
+                        <lightning-icon icon-name="utility:edit" size="small">
+
+                        </lightning-icon>
+
+
+
+                        <div class="section-title">
+
+                            Assignment Details
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+                <div class="section-body">
+
+
+                    <label class="remarks-label">
+
+                        <abbr class="slds-required">*</abbr>
+
+                        Remarks
+
+                    </label>
+
+
+
+
+                    <lightning-textarea value={remarks} onchange={handleRemarksChange}
+                        placeholder="Enter escalation details...">
+
+                    </lightning-textarea>
+
+
+                </div>
+
+
+
+            </section>
+
+
+
+
+        </div>
+
+
+
+
+
+        <!-- FOOTER -->
+
+
+        <div slot="footer" class="footer-actions">
+
+
+            <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}>
+
+            </lightning-button>
+
+
+
+
+            <lightning-button label="Submit Assignment" variant="brand" icon-name="utility:forward"
+                onclick={handleSubmit} disabled={isSubmitDisabled}>
+
+            </lightning-button>
+
+
+
+        </div>
+
+
+
+    </lightning-quick-action-panel>
+
+
+</template>

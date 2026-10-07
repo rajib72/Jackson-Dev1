@@ -1,0 +1,72 @@
+.path-container {
+    display: flex;
+    width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f3f3f3;
+}
+
+/* Base step */
+.step {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    font-weight: 600;
+    background: #d8dde6;
+    color: #080707;
+    position: relative;
+}
+
+/* Arrow effect */
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: -12px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 22px solid transparent;
+    border-bottom: 22px solid transparent;
+    border-left: 12px solid #d8dde6;
+    z-index: 1;
+}
+
+/* Completed */
+.step.complete {
+    background: #e3fcef;
+    color: #1b5e20;
+}
+
+.step.complete::after {
+    border-left-color: #e3fcef;
+}
+
+/* 🟠 Pending */
+.step.active.pending {
+    background: #ff9f40;
+    color: #fff;
+}
+
+.step.active.pending::after {
+    border-left-color: #ff9f40;
+}
+
+/* 🟢 Approved */
+.step.active.approved {
+    background: #2e844a;
+    color: #fff;
+}
+
+.step.active.approved::after {
+    border-left-color: #2e844a;
+}
+
+/* 🔴 Rejected */
+.step.active.rejected {
+    background: #ba0517;
+    color: #fff;
+}
+
+.step.active.rejected::after {
+    border-left-color: #ba0517;
+}

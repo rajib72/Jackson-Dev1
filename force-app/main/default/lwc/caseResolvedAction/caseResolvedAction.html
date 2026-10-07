@@ -1,0 +1,49 @@
+<template>
+    <lightning-quick-action-panel header="Resolve Case">
+
+        <div class="slds-p-around_medium">
+
+            <p class="slds-m-bottom_medium">
+                Enter Resolved Remarks before changing
+                the Case status to Resolved.
+            </p>
+
+            <lightning-textarea
+                data-id="resolvedRemarks"
+                label="Resolved Remarks"
+                value={resolvedRemarks}
+                onchange={handleRemarksChange}
+                required
+                max-length="32768"
+                disabled={isSaving}>
+            </lightning-textarea>
+
+        </div>
+
+        <template if:true={isSaving}>
+            <lightning-spinner
+                alternative-text="Updating Case..."
+                size="small">
+            </lightning-spinner>
+        </template>
+
+        <div slot="footer">
+
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}
+                disabled={isSaving}
+                class="slds-m-right_small">
+            </lightning-button>
+
+            <lightning-button
+                variant="brand"
+                label="Mark Resolved"
+                onclick={handleSave}
+                disabled={isSaving}>
+            </lightning-button>
+
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

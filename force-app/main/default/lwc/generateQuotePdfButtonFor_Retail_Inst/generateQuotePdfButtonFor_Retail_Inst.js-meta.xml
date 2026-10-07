@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<isExposed>true</isExposed>
+	<apiVersion>66.0</apiVersion>
+	<masterLabel>generateQuotePdfButtonFor_Retail_Inst</masterLabel>
+	 
+    <targets>
+     
+        <target>lightning__RecordAction</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordAction">
+            <actionType>ScreenAction</actionType>
+            <objects>
+                <object>Quote</object>
+            </objects>
+        </targetConfig>
+       
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,212 @@
+<template>
+    <lightning-card title="Approval Dashboard" icon-name="standard:approval">
+        <div class="dashboard-container">
+
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-icon">
+                        <lightning-icon
+                            icon-name="standard:approval"
+                            size="medium"
+                            alternative-text="Approval">
+                        </lightning-icon>
+                    </div>
+
+                    <div>
+                        <h2 class="title">Pending Opportunity Approvals</h2>
+                        <p class="subtitle">
+                            KAM and Institutional Opportunities submitted for approval.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="hero-actions">
+                    <template if:true={hasRows}>
+                        <div class="pending-pill">
+                            <span class="pending-number">{recordCount}</span>
+                            <span>Pending</span>
+                        </div>
+                    </template>
+
+                    <button
+    class="refresh-round-button"
+    onclick={handleRefresh}
+    title="Refresh">
+    <lightning-icon
+        icon-name="utility:refresh"
+        size="x-small"
+        alternative-text="Refresh"
+        class="refresh-icon">
+    </lightning-icon>
+    <span class="slds-assistive-text">Refresh</span>
+</button>
+                </div>
+            </div>
+
+            <template if:true={isLoading}>
+                <div class="spinner-wrapper">
+                    <lightning-spinner alternative-text="Loading approval dashboard"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:true={error}>
+                <div class="error-box">
+                    {error}
+                </div>
+            </template>
+
+            <template if:true={hasRows}>
+                <div class="table-card">
+                    <div class="table-header">
+                        <div>
+                            <h3 class="table-title">Approval Queue</h3>
+                            <p class="table-subtitle">
+                                Showing {showingFrom} - {showingTo} of {recordCount} records
+                            </p>
+                        </div>
+
+                        <div class="table-chips">
+                            <span class="chip chip-blue">15 Per Page</span>
+                            <span class="chip chip-red">Action Required</span>
+                        </div>
+                    </div>
+
+                    <div class="html-table-wrapper">
+                        <table class="approval-table">
+                            <thead>
+                                <tr>
+                                    <template for:each={tableColumns} for:item="column">
+                                        <th key={column.fieldName} scope="col">
+                                            <button
+                                                class={column.headerClass}
+                                                data-field={column.fieldName}
+                                                onclick={handleHeaderSort}>
+                                                <span>{column.label}</span>
+
+                                                <template if:true={column.isSorted}>
+                                                    <lightning-icon
+                                                        icon-name={column.sortIcon}
+                                                        size="xx-small"
+                                                        class="sort-icon">
+                                                    </lightning-icon>
+                                                </template>
+                                            </button>
+                                        </th>
+                                    </template>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <template for:each={paginatedRows} for:item="row">
+                                    <tr key={row.rowKey}>
+                                        <td data-label="Opportunity Name">
+                                            <a href={row.opportunityUrl} target="_blank" class="opp-link">
+                                                {row.opportunityName}
+                                            </a>
+                                        </td>
+
+                                        <td data-label="Approval Status">
+                                            <span class={row.approvalStatusBadgeClass}>
+                                                {row.approvalStatus}
+                                            </span>
+                                        </td>
+
+                                        <td data-label="Submitted By">
+                                            <div class="user-cell">
+                                                <span class="avatar-circle">{row.submittedByInitial}</span>
+                                                <span>{row.submittedBy}</span>
+                                            </div>
+                                        </td>
+
+                                        <td data-label="Submitted To">
+                                            <div class="submitted-to-text">
+                                                {row.submittedTo}
+                                            </div>
+                                        </td>
+
+                                        <td data-label="Submitted Date">
+                                            <template if:true={row.submittedDate}>
+                                                <lightning-formatted-date-time
+                                                    value={row.submittedDate}
+                                                    year="numeric"
+                                                    month="short"
+                                                    day="2-digit"
+                                                    hour="2-digit"
+                                                    minute="2-digit"
+                                                    hour12="true">
+                                                </lightning-formatted-date-time>
+                                            </template>
+
+                                            <template if:false={row.submittedDate}>
+                                                <span class="no-date">Not Available</span>
+                                            </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination-section">
+                        <div class="pagination-info">
+                            Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+                        </div>
+
+                        <div class="pagination-buttons">
+                            <lightning-button-icon
+                                icon-name="utility:jump_to_left"
+                                alternative-text="First Page"
+                                title="First Page"
+                                onclick={handleFirstPage}
+                                disabled={isFirstPage}>
+                            </lightning-button-icon>
+
+                            <lightning-button-icon
+                                icon-name="utility:chevronleft"
+                                alternative-text="Previous Page"
+                                title="Previous Page"
+                                onclick={handlePreviousPage}
+                                disabled={isFirstPage}>
+                            </lightning-button-icon>
+
+                            <lightning-button-icon
+                                icon-name="utility:chevronright"
+                                alternative-text="Next Page"
+                                title="Next Page"
+                                onclick={handleNextPage}
+                                disabled={isLastPage}>
+                            </lightning-button-icon>
+
+                            <lightning-button-icon
+                                icon-name="utility:jump_to_right"
+                                alternative-text="Last Page"
+                                title="Last Page"
+                                onclick={handleLastPage}
+                                disabled={isLastPage}>
+                            </lightning-button-icon>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={hasRows}>
+                <template if:false={isLoading}>
+                    <template if:false={error}>
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <lightning-icon
+                                    icon-name="utility:success"
+                                    size="small"
+                                    alternative-text="No approvals">
+                                </lightning-icon>
+                            </div>
+                            <h3>No Pending Approvals</h3>
+                            <p>No Opportunity is currently submitted for approval.</p>
+                        </div>
+                    </template>
+                </template>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,50 @@
+.wrapper {
+    padding: 1rem;
+    background: #ffffff;
+}
+
+.top-section {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.input-box {
+    flex: 1 1 320px;
+    min-width: 280px;
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.info-strip {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: #f3f6f9;
+    border: 1px solid #d8dde6;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.table-box {
+    border: 1px solid #d8dde6;
+    border-radius: 0.5rem;
+    overflow: auto;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 1rem;
+    color: #5c5c5c;
+    background: #fafafa;
+    border: 1px dashed #d8dde6;
+    border-radius: 0.5rem;
+}

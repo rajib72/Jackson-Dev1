@@ -1,0 +1,244 @@
+:host {
+    display: block;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.capacity-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 110px;
+    gap: 8px;
+    width: 100%;
+}
+
+.sheet {
+    background: #ffffff;
+    border: 1px solid #b8c1cc;
+    border-radius: 14px;
+    overflow: hidden;
+    max-width: 1600px;
+    margin: 0 auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 120px;
+    border-bottom: 1px solid #b8c1cc;
+    background: linear-gradient(180deg, #f9fbff 0%, #eef4fb 100%);
+}
+
+.title-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    border-right: 1px solid #b8c1cc;
+    color: #1f2937;
+    text-transform: uppercase;
+}
+
+.logo-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    gap: 4px;
+}
+
+.logo-main {
+    font-size: 38px;
+    color: #1976d2;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.logo-sub {
+    font-size: 19px;
+    color: #1b8f5a;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #b8c1cc;
+    background: #fff;
+}
+
+.info-field {
+    border-right: 1px solid #d7dee8;
+    border-bottom: 1px solid #d7dee8;
+    padding: 12px 14px;
+    min-height: 56px;
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 6px;
+    align-items: center;
+    background: #ffffff;
+}
+
+.info-field:nth-child(2n) {
+    border-right: none;
+}
+
+.info-label {
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 1.15;
+    text-align: left;
+    color: #1f2937;
+}
+
+.table-wrap {
+    overflow: visible;
+    background: #fff;
+}
+
+.checklist-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.checklist-table th,
+.checklist-table td {
+    border: 1px solid #b8c1cc;
+    padding: 10px 10px;
+    vertical-align: middle;
+}
+
+.checklist-table thead th {
+    background: linear-gradient(180deg, #dfeaf8 0%, #c9daef 100%);
+    text-align: center;
+    font-weight: 800;
+    font-size: 15px;
+    color: #1f2937;
+}
+
+.section-row td {
+    background: linear-gradient(180deg, #19b865 0%, #10a957 100%);
+    font-weight: 800;
+    font-size: 18px;
+    text-align: center;
+    padding: 10px 0;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+.sn-col {
+    width: 70px;
+    text-align: center;
+    font-weight: 800;
+}
+
+.particulars-col {
+    width: 38%;
+}
+
+.status-col {
+    width: 18%;
+}
+
+.remark-col {
+    width: 20%;
+}
+
+.file-col {
+    width: 24%;
+}
+
+.particulars-cell {
+    padding: 10px 12px;
+}
+
+.particulars-inner {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.particulars-text {
+    font-size: 14px;
+    line-height: 1.45;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    color: #1f2937;
+}
+
+.center-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.field-fit {
+    width: 100%;
+}
+
+.remark-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+}
+
+.file-names {
+    font-size: 12px;
+    word-break: break-word;
+    color: #374151;
+}
+
+.footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 14px 16px;
+    border-top: 1px solid #b8c1cc;
+    background: #f8fafc;
+}
+
+lightning-combobox,
+lightning-textarea,
+lightning-input {
+    width: 100%;
+}
+
+/* Makes the component feel larger on wider screens */
+@media (min-width: 1200px) {
+    :host {
+        padding: 24px;
+    }
+
+    .title-cell {
+        font-size: 38px;
+    }
+
+    .logo-main {
+        font-size: 42px;
+    }
+
+    .logo-sub {
+        font-size: 20px;
+    }
+
+    .info-label {
+        font-size: 17px;
+    }
+
+    .checklist-table thead th,
+    .particulars-text {
+        font-size: 15px;
+    }
+}

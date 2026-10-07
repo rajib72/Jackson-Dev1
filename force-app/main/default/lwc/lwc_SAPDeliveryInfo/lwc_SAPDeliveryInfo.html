@@ -1,0 +1,113 @@
+<template>
+    <div class="page-shell">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <!-- Top Banner -->
+        <div class="banner">
+            <div class="banner-title">SAP Delivery Information</div>
+            <div class="banner-subtitle">
+                Fetch delivery information from SAP based on date range or sales order number
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-box">
+            <div class="section-heading">Filter Criteria</div>
+
+            <div class="filter-grid">
+                <!-- Filter Type -->
+                <div class="field-wrap filter-type">
+                    <lightning-combobox
+                        name="filterType"
+                        label="Filter Type"
+                        value={filterType}
+                        placeholder="Select Filter Type"
+                        options={filterTypeOptions}
+                        onchange={handleFilterTypeChange}>
+                    </lightning-combobox>
+                </div>
+
+                <!-- Date Filter -->
+                <template if:true={isDateFilter}>
+                    <div class="field-wrap">
+                        <lightning-input
+                            type="date"
+                            label="From Date"
+                            value={fromDate}
+                            onchange={handleFromDateChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="field-wrap">
+                        <lightning-input
+                            type="date"
+                            label="To Date"
+                            value={toDate}
+                            onchange={handleToDateChange}>
+                        </lightning-input>
+                    </div>
+                </template>
+
+                <!-- Sales Order Filter -->
+                <template if:true={isSalesOrderFilter}>
+                    <div class="field-wrap sales-order-field">
+                        <lightning-input
+                            type="text"
+                            label="Sales Order Number"
+                            value={salesOrderNumber}
+                            onchange={handleSalesOrderChange}>
+                        </lightning-input>
+                    </div>
+                </template>
+
+                <!-- Buttons -->
+                <template if:true={showActionButtons}>
+                    <div class="button-wrap">
+                        <lightning-button
+                            label="Fetch Data"
+                            variant="brand"
+                            onclick={handleFetch}>
+                        </lightning-button>
+
+                        <lightning-button
+                            label="Refresh"
+                            variant="neutral"
+                            onclick={handleRefresh}>
+                        </lightning-button>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <template if:true={showTable}>
+            <div class="result-box">
+                <div class="result-header">
+                    <div class="result-title">Delivery Records</div>
+                    <template if:true={hasData}>
+                        <div class="record-count">Total Records: {deliveryData.length}</div>
+                    </template>
+                </div>
+
+                <template if:true={hasData}>
+                    <div class="datatable-wrapper">
+                        <lightning-datatable
+                            key-field="uniqueKey"
+                            data={deliveryData}
+                            columns={columns}
+                            hide-checkbox-column>
+                        </lightning-datatable>
+                    </div>
+                </template>
+
+                <template if:false={hasData}>
+                    <div class="no-data-box">
+                        No records found.
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,27 @@
+.container {
+    padding: 0.5rem 0.25rem;
+}
+
+.info-box {
+    background: #f3f8fe;
+    border: 1px solid #d8e6fe;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.info-text {
+    margin: 0;
+    color: #16325c;
+    font-size: 0.95rem;
+}
+
+.dt-field {
+    margin-top: 0.5rem;
+}
+
+.footer-btns {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

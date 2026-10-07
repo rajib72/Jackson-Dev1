@@ -1,0 +1,94 @@
+<template>
+    <lightning-quick-action-panel>
+        
+        <div class="slds-page-header slds-m-bottom_medium slds-theme_default">
+            <div class="slds-align_absolute-center">
+                <div class="slds-media slds-media_center">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:billing" size="medium" alternative-text="Billing"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body slds-text-align_left">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Billing Information">Billing Information</span>
+                                </h1>
+                            </div>
+                        </div>
+                        <p class="slds-page-header__name-meta">Fetch and Save SAP Billing Records</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-box slds-theme_default slds-m-bottom_medium slds-text-align_center">
+            
+            <div class="slds-align_absolute-center slds-m-bottom_medium">
+                <lightning-input 
+                    type="toggle" 
+                    label="Fetch Billing Information against All Delivery" 
+                    message-toggle-active="Yes" 
+                    message-toggle-inactive="No"
+                    checked={isAllDeliveries} 
+                    onchange={handleCheckboxChange}>
+                </lightning-input>
+            </div>
+
+            <template if:false={isAllDeliveries}>
+                <div class="slds-align_absolute-center slds-m-bottom_medium">
+                    <div class="checkbox-scroll-area slds-text-align_left" style="min-width: 250px;">
+                        <lightning-checkbox-group 
+                            name="Delivery Selection"
+                            label="Select Deliveries"
+                            options={deliveryOptions}
+                            value={selectedDeliveries}
+                            onchange={handleDeliverySelection}>
+                        </lightning-checkbox-group>
+                    </div>
+                </div>
+            </template>
+            
+            <div class="slds-m-top_small">
+                <lightning-button 
+                    label="Fetch Details" 
+                    variant="brand" 
+                    icon-name="utility:download"
+                    onclick={fetchDetails}
+                    disabled={isFetchDisabled}>
+                </lightning-button>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="slds-is-relative slds-m-around_large">
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={showTable}>
+            <lightning-card title="Fetched Records" icon-name="standard:record">
+                
+                <div class="slds-p-horizontal_medium table-container">
+                    <lightning-datatable
+                        key-field="billingDocument"
+                        data={billingData}
+                        columns={columns}
+                        hide-checkbox-column="true"
+                        show-row-number-column="true"
+                        class="custom-datatable">
+                    </lightning-datatable>
+                </div>
+                
+                <div slot="footer">
+                    <lightning-button 
+                        label="Save Billing Information" 
+                        variant="success" 
+                        icon-name="utility:save"
+                        onclick={handleSave}>
+                    </lightning-button>
+                </div>
+            </lightning-card>
+        </template>
+
+    </lightning-quick-action-panel>
+</template>

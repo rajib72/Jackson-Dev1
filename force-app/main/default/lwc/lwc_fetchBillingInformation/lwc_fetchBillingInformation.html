@@ -1,0 +1,120 @@
+<template>
+    <lightning-card>
+        <div class="page-wrap">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <div class="hero-banner">
+                <div class="hero-title">SAP Billing Information</div>
+                <div class="hero-subtitle">
+                    Fetch billing information from SAP based on date range or delivery number
+                </div>
+            </div>
+
+            <div class="filter-card">
+                <div class="section-title">Filter Criteria</div>
+
+                <div class="filter-row">
+                    <div class="field-box filter-type-box">
+                        <lightning-combobox
+                            name="filterType"
+                            label="Filter Type"
+                            value={filterType}
+                            placeholder="Select Filter Type"
+                            options={filterTypeOptions}
+                            onchange={handleFilterTypeChange}
+                        >
+                        </lightning-combobox>
+                    </div>
+
+                    <template if:true={showDateFilters}>
+                        <div class="field-box">
+                            <lightning-input
+                                type="date"
+                                label="From Date"
+                                value={fromDate}
+                                onchange={handleFromDateChange}
+                            >
+                            </lightning-input>
+                        </div>
+
+                        <div class="field-box">
+                            <lightning-input
+                                type="date"
+                                label="To Date"
+                                value={toDate}
+                                onchange={handleToDateChange}
+                            >
+                            </lightning-input>
+                        </div>
+                    </template>
+
+                    <template if:true={showDeliveryFilter}>
+                        <div class="field-box delivery-box">
+                            <lightning-input
+                                type="text"
+                                label="Delivery Number"
+                                value={deliveryNumber}
+                                onchange={handleDeliveryNumberChange}
+                            >
+                            </lightning-input>
+                        </div>
+                    </template>
+
+                    <template if:true={showActionButtons}>
+                        <div class="button-box">
+                            <lightning-button
+                                label="Fetch Data"
+                                variant="brand"
+                                onclick={handleFetch}
+                                class="fetch-btn"
+                            >
+                            </lightning-button>
+
+                            <lightning-button
+                                label="Refresh"
+                                variant="neutral"
+                                onclick={handleReset}
+                            >
+                            </lightning-button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <template if:true={showResultSummary}>
+                <div class="summary-card">
+                    <div class="summary-item">
+                        <span class="summary-label">Status:</span>
+                        <span>{statusMessage}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Record Count:</span>
+                        <span>{recordCount}</span>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={hasRecords}>
+                <div class="table-card">
+                    <lightning-datatable
+                        key-field="uniqueKey"
+                        data={records}
+                        columns={columns}
+                        hide-checkbox-column
+                        show-row-number-column
+                        resize-column-disabled
+                    >
+                    </lightning-datatable>
+                </div>
+            </template>
+
+            <template if:true={showNoData}>
+                <div class="no-data-card">
+                    No records found.
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

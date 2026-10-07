@@ -1,0 +1,32 @@
+<template>
+    <!-- lightning-quick-action-panel provides standard modal styling with header and footer slots -->
+    <lightning-quick-action-panel header="SAP Actions: Fetch Serial Number">
+        
+        <div class="slds-p-around_medium slds-text-align_center slds-text-heading_small slds-m-bottom_large">
+            Click below to fetch the latest Asset Serial Number from SAP using the Invoice Number.
+        </div>
+        
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        </template>
+
+        <!-- Footer section for buttons -->
+        <div slot="footer">
+            <lightning-button 
+                variant="neutral" 
+                label="Cancel" 
+                onclick={handleCancel}>
+            </lightning-button>
+            <lightning-button 
+                variant="brand" 
+                label="Fetch Serial No" 
+                onclick={handleFetchClick} 
+                disabled={isLoading} 
+                class="slds-m-left_x-small"
+                icon-name="utility:sync">
+            </lightning-button>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

@@ -1,0 +1,170 @@
+<template>
+    <div class="slds-card form-container">
+        <div class="slds-card__body slds-p-around_medium">
+            <template if:true={showThankYouMessage}>
+                <div class="thank-you-message slds-alert slds-alert_success slds-m-around_medium">
+                    <span class="slds-assistive-text">Success</span>
+                    <h2 class="slds-text-heading_medium slds-m-bottom_medium">Thank you for sharing your valuable
+                        feedback.</h2>
+                </div>
+            </template>
+
+            <template if:false={showThankYouMessage}>
+                <h1 class="slds-text-heading_medium slds-m-bottom_medium">Help Us Improve</h1>
+
+                <!-- Case Number (read-only) -->
+                <div class="slds-form slds-form_stacked slds-m-bottom_medium">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="case-number">Case Number</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input
+                                data-id="case-number"
+                                name="CaseNumber"
+                                value={caseNumber}
+                                type="text"
+                                label="Case Number"
+                                variant="label-hidden"
+                                disabled
+                                read-only>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message Display -->
+                <template if:true={errorMessage}>
+                    <div class="slds-notify slds-notify_alert slds-theme_error" role="alert">
+                        <span class="slds-assistive-text">error</span>
+                        <p>{errorMessage}</p>
+                    </div>
+                </template>
+
+                <!-- Installation Type -->
+                <lightning-combobox label="Installation Type" name="Installation_Type__c"
+                    value={feedbackRecord.Installation_Type__c} options={installationOptions} onchange={handleChange}
+                    required>
+                </lightning-combobox>
+
+                <!-- Show textbox only when Installation Type = Other -->
+                <template if:true={showOtherInstallation}>
+                    <lightning-input class="slds-m-top_medium" label="Please specify other installation type"
+                        name="Other__c" value={feedbackRecord.Other__c} onchange={handleChange}>
+                    </lightning-input>
+                </template>
+
+
+                <!-- Name -->
+                <lightning-input class="slds-m-top_medium" label="2. Please Enter Your Name"
+                    name="Please_Enter_Your_Name__c" value={feedbackRecord.Please_Enter_Your_Name__c}
+                    onchange={handleChange} required disabled={isSubmitting}>
+                </lightning-input>
+
+                <!-- State -->
+                <lightning-input class="slds-m-top_medium" label="3. State" name="State__c"
+                    value={feedbackRecord.State__c} onchange={handleChange} required>
+                </lightning-input>
+
+                <!-- Mobile 
+                <lightning-input class="slds-m-top_medium" label="4. Mobile Number" type="tel" name="Mobile_Number__c"
+                    value={feedbackRecord.Mobile_Number__c}
+                    message-when-pattern-mismatch="Enter a valid 10-digit mobile number" pattern="^[0-9]{10}$"
+                    onchange={handleChange} required disabled={isSubmitting}>
+                </lightning-input>-->
+
+                <!-- Mobile -->
+<lightning-input 
+    class="slds-m-top_medium"
+    label="4. Mobile Number"
+    type="tel"
+    name="Mobile_Number__c"
+    value={feedbackRecord.Mobile_Number__c}
+    onchange={handleChange}
+    onkeypress={handleKeyPress}
+    maxlength="10"
+    pattern="[0-9]{10}"
+    message-when-pattern-mismatch="Enter a valid 10-digit mobile number"
+    required
+    disabled={isSubmitting}>
+</lightning-input>
+
+                <!-- Engineer Help -->
+                <div class="question slds-m-top_large"
+                    aria-label="Did our Service Engineer help resolve your issues? 0 to 10 scale">
+                    <p class="slds-text-title_caps">5. Did our Service Engineer help resolve your issues?</p>
+                    <div class="rating slds-button-group" role="group" aria-label="Engineer help rating">
+                        <template for:each={scaleNumbers} for:item="num">
+                            <button key={num} class="rate-btn slds-button slds-button_neutral"
+                                data-field="Did_our_Service_Engineer_help_resolve_yo__c" 
+                                data-value={num}
+                                onclick={handleRating}>
+                                {num}
+                            </button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Speed -->
+                <div class="question slds-m-top_large">
+                    <p class="slds-text-title_caps">6. How would you rate the speed of issue resolution?</p>
+
+                    <div class="rating slds-button-group">
+
+                        <template for:each={scaleNumbers} for:item="num">
+
+                            <button key={num} class="rate-btn slds-button slds-button_neutral"
+                                data-field="How_would_you_rate_the_speed_of_issue_re__c" data-value={num}
+                                onclick={handleRating}>
+
+                                {num}
+
+                            </button>
+
+                        </template>
+
+                    </div>
+                </div>
+
+                <!-- Improvement -->
+                <lightning-textarea class="slds-m-top_large" label="7. How can we enhance our product or service?"
+                    name="How_can_we_enhance_our_product_or_servic__c"
+                    value={feedbackRecord.How_can_we_enhance_our_product_or_servic__c} onchange={handleChange}
+                    disabled={isSubmitting}>
+                </lightning-textarea>
+
+                <!-- Recommendation -->
+                <div class="question slds-m-top_large">
+
+                    <p class="slds-text-title_caps">
+                        8. How likely are you to recommend us?
+                    </p>
+
+                    <div class="rating slds-button-group">
+
+                        <template for:each={scaleNumbers} for:item="num">
+
+                            <button key={num} class="rate-btn slds-button slds-button_neutral"
+                                data-field="How_likely_are_you_to_recommend_us_to_a__c" data-value={num}
+                                onclick={handleRating}>
+
+                                {num}
+
+                            </button>
+
+                        </template>
+
+                    </div>
+
+                </div>
+
+                <div class="submit-section slds-m-top_large">
+                    <lightning-button 
+                        label="Submit" 
+                        variant="brand" 
+                        onclick={handleSubmit} 
+                        disabled={isSubmitting}>
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,3 @@
+<aura:component access="global" implements="lightning:actionOverride,flexipage:availableForAllPageTypes,force:appHostable">   
+    <c:createNewLeadComponent onclose="{!c.handleClose}"/>
+</aura:component>

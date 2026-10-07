@@ -1,0 +1,61 @@
+/* projectPathDynamic.css */
+
+/* base: allow wrap and small gaps (desktop & tablet) */
+.custom-path .slds-path__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto; /* allow horizontal scroll if needed */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* spacing between rows */
+.custom-path .slds-path__item {
+    margin-bottom: 8px;
+    /* make items shrink nicely */
+    flex: 0 0 auto;
+}
+
+/* Make clickable area larger */
+.custom-path .slds-path__link {
+    padding: 0.35rem 0.5rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Make title wrap normally (avoid truncation) */
+.custom-path .slds-path__title {
+    white-space: normal;
+    line-height: 1.1;
+}
+
+/* ---------- MOBILE (narrow screens) ---------- */
+/* When screen is narrow, stack milestones vertically for good mobile UX */
+@media (max-width: 600px) {
+
+    /* stack items vertically */
+    .custom-path .slds-path__nav {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0;
+    }
+
+    /* make each path item take full width */
+    .custom-path .slds-path__item {
+        width: 100%;
+        margin-bottom: 6px;
+    }
+
+    /* make the link full width and touch-friendly */
+    .custom-path .slds-path__link {
+        width: 100%;
+        padding: 0.6rem 0.75rem;
+        border-radius: 6px;
+    }
+
+    /* slightly larger text on mobile (optional) */
+    .custom-path .slds-path__title {
+        font-size: 0.95rem;
+    }
+}

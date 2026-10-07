@@ -1,0 +1,118 @@
+<template>
+    <lightning-card>
+        <div class="main-wrapper">
+
+            <div class="header-box">
+                <div class="title">SAP Spare Request</div>
+                <div class="subtitle">
+                    Fetch SAP details using Material Code and Plant, and update selected Standard Price into Salesforce.
+                </div>
+            </div>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <div class="search-card">
+                <div class="field-area">
+                    <lightning-input
+                        type="text"
+                        label="Material Code"
+                        value={materialCode}
+                        onchange={handleMaterialCodeChange}
+                        required>
+                    </lightning-input>
+                </div>
+
+                <div class="field-area">
+                    <lightning-input
+                        type="text"
+                        label="Plant"
+                        value={plant}
+                        onchange={handlePlantChange}
+                        required>
+                    </lightning-input>
+                </div>
+
+                <div class="button-area">
+                    <lightning-button
+                        label="Fetch"
+                        variant="brand"
+                        onclick={handleFetch}
+                        disabled={disableFetch}>
+                    </lightning-button>
+
+                    <lightning-button
+                        label="Update Price"
+                        variant="success"
+                        onclick={handleUpdatePrice}
+                        disabled={disableUpdate}>
+                    </lightning-button>
+
+                    <lightning-button
+                        label="Refresh"
+                        variant="neutral"
+                        onclick={handleRefresh}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-label">Current Salesforce Price</div>
+                    <div class="info-value">{currentPriceDisplay}</div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-label">Selected Price to Apply</div>
+                    <div class="info-value">{selectedPriceDisplay}</div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-label">Total Records Retrieved</div>
+                    <div class="info-value">{totalRecordCount}</div>
+                </div>
+            </div>
+
+            <template if:true={showTable}>
+                <div class="table-card">
+                    <div class="table-header-flex">
+                        <div class="table-title">
+                            Loaded {displayedData.length} of {filteredRecordCount} items
+                        </div>
+                        <div class="filter-input">
+                            <lightning-input
+                                type="search"
+                                placeholder="Search Plant, Batch, Location..."
+                                variant="label-hidden"
+                                onchange={handleFilterChange}>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <lightning-datatable
+                            key-field="rowId"
+                            data={displayedData}
+                            columns={columns}
+                            selected-rows={selectedRowIds}
+                            onrowselection={handleRowSelection}
+                            max-row-selection="1"
+                            enable-infinite-loading={enableInfiniteLoading}
+                            onloadmore={handleLoadMore}
+                            load-more-offset="20"
+                            show-row-number-column>
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={noDataFound}>
+                <div class="empty-state">
+                    No records found for this Material Code and Plant.
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

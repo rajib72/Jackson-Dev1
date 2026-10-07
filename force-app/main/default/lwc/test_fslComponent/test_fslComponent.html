@@ -1,0 +1,39 @@
+<template>
+<lightning-card title="Customer Details Form">
+    <div class="slds-p-around_medium">
+
+        <lightning-record-edit-form
+            object-api-name="Case"
+            onsuccess={handleSuccess}
+            onerror={handleError}>
+
+            <!-- Serial Number -->
+            <lightning-input-field field-name="Serial_number__c">
+            </lightning-input-field>
+
+            <!-- Account Lookup -->
+            <lightning-input-field field-name="AccountId">
+            </lightning-input-field>
+
+            <!-- Contact Number Lookup -->
+            <lightning-input-field field-name="ContactId">
+            </lightning-input-field>
+
+
+            <!-- Case Type -->
+            <lightning-input-field field-name="Type">
+            </lightning-input-field>
+
+            <div class="slds-m-top_medium">
+                <lightning-button
+                    type="submit"
+                    label="Submit"
+                    variant="brand">
+                </lightning-button>
+            </div>
+
+        </lightning-record-edit-form>
+
+    </div>
+</lightning-card>
+</template>

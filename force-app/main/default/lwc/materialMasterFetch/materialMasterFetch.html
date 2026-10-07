@@ -1,0 +1,67 @@
+<template>
+    <lightning-card title="Material Master Manager">
+
+        <div class="slds-p-around_medium">
+
+            <lightning-combobox
+                label="Create Material Code Using"
+                value={requestType}
+                options={options}
+                onchange={handleTypeChange}>
+            </lightning-combobox>
+
+            <lightning-input
+                type="date"
+                label="From Date"
+                value={fromDate}
+                onchange={handleFromDate}>
+            </lightning-input>
+
+            <lightning-input
+                type="date"
+                label="To Date"
+                value={toDate}
+                onchange={handleToDate}>
+            </lightning-input>
+
+            <lightning-button
+                label="Fetch Data"
+                variant="brand"
+                onclick={fetchData}
+                class="slds-m-top_medium">
+            </lightning-button>
+
+        </div>
+
+        <template if:true={showSaveButton}>
+            <lightning-datatable
+                key-field="MATERIAL_CODE"
+                data={materialData}
+                columns={columns}>
+            </lightning-datatable>
+
+            <div class="slds-p-around_medium">
+                <lightning-button
+                    label="Save"
+                    variant="success"
+                    onclick={saveData}>
+                </lightning-button>
+            </div>
+        </template>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+        <template if:true={showEmptyMessage}>
+            <div class="slds-text-align_center">
+                <p>No data found</p>
+            </div>
+        </template>
+        <template if:true={showMessage}>
+            <div class="slds-text-align_center">
+                <p>Material processing started. You will receive an email after completion. Please Refresh the Screen to Load data from another Date Range</p>
+            </div>
+        </template>
+
+
+    </lightning-card>
+</template>

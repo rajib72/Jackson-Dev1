@@ -1,0 +1,92 @@
+<template>
+    <lightning-card>
+            <!-- Full-width centered custom header -->
+        <div style="
+            width: 100%;
+            background: linear-gradient(to right, #f57272, #ff3e3b);
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+        ">
+            Add Product to Lead Product
+        </div>
+         <!-- Note Section -->
+        <div style="
+            background: linear-gradient(to right, #a1c7e4, #26a4f8);
+            color: #5c4400;
+            border-left: 6px solid #fd0f0f;
+            padding: 1rem 1.25rem;
+            margin: 1rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        ">
+        <lightning-icon
+            icon-name="utility:warning"
+            alternative-text="Warning"
+            size="small"
+            class="slds-m-right_small"
+            style="flex-shrink: 0;">
+        </lightning-icon>
+        <span>*** Note: Please review the Lead Currency before adding Lead Products.</span>
+        </div>
+
+        <div class="slds-p-horizontal_medium">
+
+          
+
+            <!-- Module Type -->
+            <lightning-combobox
+                label="Product / Module Type"
+                value={moduleType}
+                options={moduleTypeOptions}
+                onchange={handleModuleTypeChange}
+                placeholder="Select Module Type">
+            </lightning-combobox>
+
+            <!-- Sub Type -->
+            <lightning-combobox
+                label="Product / Module Sub Type"
+                value={subType}
+                options={subTypeOptions}
+                onchange={handleSubTypeChange}
+                placeholder="Select Sub Type"
+                disabled={disableSubType}>
+            </lightning-combobox>
+
+            <!-- Watt Peak -->
+            <lightning-combobox
+                label="Watt Peak"
+                value={wattPeak}
+                options={wattPeakOptions}
+                onchange={handleWattPeakChange}
+                placeholder="Select Watt Peak"
+                disabled={disableWattPeak}>
+            </lightning-combobox>
+
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="slds-p-around_medium slds-align_absolute-center">
+            <lightning-button
+                variant="brand"
+                label="Save"
+                onclick={handleSave}>
+            </lightning-button>
+
+            <lightning-button
+                class="slds-m-left_small"
+                label="Cancel"
+                onclick={handleCancel}>
+            </lightning-button>
+        </div>
+
+    </lightning-card>
+</template>

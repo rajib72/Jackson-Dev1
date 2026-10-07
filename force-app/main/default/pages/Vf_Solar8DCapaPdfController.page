@@ -1,0 +1,11 @@
+<apex:page standardController="Solar_CAPA__c"
+           extensions="ctrl_Solar8DCapaPdfController"
+           renderAs="pdf"
+           applyBodyTag="false"
+           showHeader="false"
+           sidebar="false"
+           standardStylesheets="false"
+           cache="false">
+
+    
+</apex:page>

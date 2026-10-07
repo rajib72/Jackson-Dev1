@@ -1,0 +1,141 @@
+<template>
+    <lightning-quick-action-panel>
+        <div class="custom-container">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+
+            <!-- Custom Header -->
+            <div class="custom-header">
+                <h2 class="header-title">Create Lead Product</h2>
+                <img src={jaksonLogo} alt="Jakson Logo" class="header-logo" />
+            </div>
+
+            <!-- Warning Note 
+            <div class="note-inline">
+                <span class="note-label">Warning:</span>
+                <span>Please review the Currency before adding Lead Products.</span>
+            </div>-->
+
+            <!-- Form -->
+            <div class="form-grid">
+                <div class="form-col">
+                    <lightning-combobox
+                        label="Module Type"
+                        value={moduleType}
+                        options={moduleTypeOptions}
+                        onchange={handleChange}
+                        data-field="moduleType"
+                        required>
+                    </lightning-combobox>
+                </div>
+
+                <div class="form-col">
+                    <lightning-combobox
+                        label="Cell Type"
+                        value={cellType}
+                        options={cellTypeOptions}
+                        onchange={handleChange}
+                        data-field="cellType"
+                        required
+                        disabled={isCellTypeDisabled}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="form-col">
+                    <lightning-combobox
+                        label="Module Technology"
+                        value={moduleTechnology}
+                        options={moduleTechnologyOptions}
+                        onchange={handleChange}
+                        data-field="moduleTechnology"
+                        required
+                        disabled={isModuleTechnologyDisabled}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="form-col">
+                    <lightning-combobox
+                        label="Product Rating BIN"
+                        value={productRatingBin}
+                        options={productRatingOptions}
+                        onchange={handleChange}
+                        data-field="productRatingBin"
+                        required
+                        disabled={isProductRatingDisabled}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="form-col">
+                    <lightning-combobox
+                        label="Product Sub Type"
+                        value={productSubType}
+                        options={productSubTypeOptions}
+                        onchange={handleChange}
+                        data-field="productSubType"
+                        required
+                        disabled={isProductSubTypeDisabled}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="form-col">
+                    <lightning-combobox
+                        label="Warranty"
+                        value={warranty}
+                        options={warrantyOptions}
+                        onchange={handleChange}
+                        data-field="warranty">
+                    </lightning-combobox>
+                </div>
+
+                <div class="form-col">
+                    <lightning-combobox
+                        label="Cable Length"
+                        value={cableLength}
+                        options={cableLengthOptions}
+                        onchange={handleChange}
+                        data-field="cableLength">
+                    </lightning-combobox>
+                </div>
+
+                <!-- NEW FIELD -->
+                <div class="form-col">
+                    <lightning-input
+    type="number"
+    label="Project Capacity"
+    value={projectCapacity}
+    onchange={handleChange}
+    data-field="projectCapacity"
+    step="0.001"
+    required>
+</lightning-input>
+                </div>
+
+                <!-- NEW FIELD -->
+                <div class="form-col">
+                    <lightning-combobox
+                        label="UOM"
+                        value={uom}
+                        options={uomOptions}
+                        onchange={handleChange}
+                        data-field="uom"
+                        required>
+                    </lightning-combobox>
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer">
+            <lightning-button label="Cancel" onclick={handleCancel}>
+            </lightning-button>
+
+            <lightning-button
+                variant="brand"
+                label="Save"
+                class="slds-m-left_small"
+                onclick={handleSave}
+                disabled={isLoading}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

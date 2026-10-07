@@ -1,0 +1,47 @@
+<template>
+
+
+    <lightning-quick-action-panel header="Validate OTP">
+
+
+        <template if:true={isLoading}>
+
+            <lightning-spinner alternative-text="Validating OTP" size="medium">
+            </lightning-spinner>
+
+        </template>
+
+
+
+        <div class="slds-p-around_medium">
+
+
+            <lightning-input type="text" label="Enter OTP" maxlength="4" value={enteredOtp} onchange={handleOtpChange}>
+
+            </lightning-input>
+
+
+        </div>
+
+
+
+        <div slot="footer">
+
+            <lightning-button label="Cancel" onclick={handleCancel}>
+            </lightning-button>
+
+            <lightning-button variant="neutral" label="Authorized OTP" onclick={handleAuthorizedOtp}
+                disabled={isLoading} class="slds-m-left_small">
+            </lightning-button>
+
+            <lightning-button variant="brand" label="Verify OTP" onclick={handleVerifyOtp} disabled={isLoading}
+                class="slds-m-left_small">
+            </lightning-button>
+
+        </div>
+
+
+    </lightning-quick-action-panel>
+
+
+</template>

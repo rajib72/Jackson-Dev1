@@ -1,0 +1,302 @@
+<template>
+
+    <lightning-quick-action-panel header="Assign to Dealer / L2">
+
+        <!-- =========================================================
+             LOADING
+             ========================================================= -->
+
+        <template if:true={isLoading}>
+
+            <div class="spinner-container">
+
+                <lightning-spinner alternative-text="Submitting L2 Escalation" size="medium">
+                </lightning-spinner>
+
+            </div>
+
+        </template>
+
+
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+
+            <!-- =====================================================
+                 DEALER ASSIGNMENT
+                 ===================================================== -->
+
+            <section class="slds-box slds-box_x-small slds-m-bottom_large section-box">
+
+                <!-- HEADER -->
+
+                <div class="section-header">
+
+                    <div class="section-header-content">
+
+                        <lightning-icon icon-name="standard:partner_fund_request" size="small"
+                            alternative-text="Dealer Assignment">
+                        </lightning-icon>
+
+
+                        <div class="section-header-text">
+
+                            <div class="section-title">
+                                Dealer Assignment
+                            </div>
+
+                            <div class="section-subtitle">
+                                Select the Dealer for L2 Assignment.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BODY -->
+
+                <div class="section-body">
+
+                    <div class="slds-form-element">
+
+                        <label class="slds-form-element__label dealer-label">
+
+                            <abbr class="slds-required" title="required">
+                                *
+                            </abbr>
+
+                            Dealer
+
+                        </label>
+
+
+                        <div class="slds-form-element__control">
+
+                            <lightning-combobox name="dealer" label="Dealer" variant="label-hidden"
+                                placeholder="Select Dealer" value={selectedDealerId} options={dealerOptions}
+                                onchange={handleDealerChange} disabled={isDealerLoading} required>
+                            </lightning-combobox>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         SEARCHING
+                         ================================================= -->
+
+                    <template if:true={isDealerLoading}>
+
+                        <div class="search-loading slds-m-top_small">
+
+                            <lightning-spinner alternative-text="Searching Dealers" size="small">
+                            </lightning-spinner>
+
+                        </div>
+
+                    </template>
+
+
+                    <!-- =================================================
+                         NO RESULTS
+                         ================================================= -->
+
+                    <template if:true={showNoResults}>
+
+                        <div class="slds-notify slds-notify_alert
+                                   slds-theme_info slds-m-top_small" role="alert">
+
+                            <lightning-icon icon-name="utility:info" size="x-small" class="slds-m-right_x-small">
+                            </lightning-icon>
+
+                            No Dealer found.
+
+                        </div>
+
+                    </template>
+
+
+                    <!-- =================================================
+                         SELECTED DEALER
+                         ================================================= -->
+
+                    <template if:true={selectedDealer}>
+
+                        <div class="selected-dealer slds-m-top_medium">
+
+                            <div class="selected-dealer-main">
+
+                                <div class="selected-check">
+
+                                    <lightning-icon icon-name="utility:check" size="x-small"
+                                        alternative-text="Selected">
+                                    </lightning-icon>
+
+                                </div>
+
+
+                                <div class="selected-content">
+
+                                    <div class="selected-label">
+                                        SELECTED DEALER
+                                    </div>
+
+                                    <div class="selected-name">
+                                        {selectedDealer.name}
+                                    </div>
+
+
+                                    <template if:true={selectedDealer.email}>
+
+                                        <div class="selected-email">
+                                            {selectedDealer.email}
+                                        </div>
+
+                                    </template>
+
+
+                                    <div class="selected-location">
+
+                                        <template if:true={selectedDealer.city}>
+                                            {selectedDealer.city}
+                                        </template>
+
+                                        <template if:true={selectedDealer.state}>
+                                            &nbsp;{selectedDealer.state}
+                                        </template>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="selected-action">
+
+                                <lightning-button label="Change Dealer" variant="neutral" icon-name="utility:edit"
+                                    onclick={handleChangeDealer}>
+                                </lightning-button>
+
+                            </div>
+
+                        </div>
+
+                    </template>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 ESCALATION DETAILS
+                 ===================================================== -->
+
+            <section class="slds-box slds-box_x-small section-box">
+
+                <!-- HEADER -->
+
+                <div class="section-header">
+
+                    <div class="section-header-content">
+
+                        <lightning-icon icon-name="utility:edit" size="small" alternative-text="Assignment Details">
+                        </lightning-icon>
+
+
+                        <div class="section-header-text">
+
+                            <div class="section-title">
+                                Assignment Details
+                            </div>
+
+                            <div class="section-subtitle">
+                                Enter the information to be shared with the Dealer.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BODY -->
+
+                <div class="section-body">
+
+                    <div class="slds-form-element">
+
+                        <label class="slds-form-element__label remarks-label">
+
+                            <abbr class="slds-required" title="required">
+                                *
+                            </abbr>
+
+                            Remarks
+
+                        </label>
+
+
+                        <div class="slds-form-element__control">
+
+                            <lightning-textarea data-remarks variant="label-hidden" label="Escalation Details"
+                                value={escalationRemarks} onchange={handleRemarksChange}
+                                placeholder="Enter escalation details..." maxlength="32768" required>
+                            </lightning-textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="remarks-help slds-m-top_small">
+
+                        <lightning-icon icon-name="utility:info" size="xx-small">
+                        </lightning-icon>
+
+                        <span>
+                            Include observations, troubleshooting performed,
+                            and any instructions required for the Dealer.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =========================================================
+             FOOTER
+             ========================================================= -->
+
+        <div slot="footer" class="footer-actions">
+
+            <div class="footer-cancel">
+
+                <lightning-button label="Cancel" variant="neutral" onclick={handleCancel} disabled={isLoading}>
+                </lightning-button>
+
+            </div>
+
+
+            <div>
+
+                <lightning-button label="Submit Assignment" variant="brand" icon-name="utility:forward"
+                    icon-position="right" onclick={handleSubmit} disabled={isSubmitDisabled}>
+                </lightning-button>
+
+            </div>
+
+        </div>
+
+    </lightning-quick-action-panel>
+
+</template>

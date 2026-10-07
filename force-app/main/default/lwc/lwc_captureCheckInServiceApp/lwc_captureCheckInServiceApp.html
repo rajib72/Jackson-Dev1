@@ -1,0 +1,52 @@
+<template>
+    <lightning-card>
+        <div class="location-container">
+
+            <div class="location-header">
+                <lightning-icon
+                    icon-name="utility:location"
+                    size="small"
+                    class="location-icon">
+                </lightning-icon>
+
+                <div>
+                    <div class="location-title">Capture Current Location</div>
+                    <div class="location-subtitle">
+                        Click the button below to capture and save your current latitude and longitude.
+                    </div>
+                </div>
+            </div>
+
+            <template if:true={latitude}>
+                <div class="location-box">
+                    <div class="location-row">
+                        <span class="location-label">Latitude</span>
+                        <span class="location-value">{latitude}</span>
+                    </div>
+
+                    <div class="location-row">
+                        <span class="location-label">Longitude</span>
+                        <span class="location-value">{longitude}</span>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={message}>
+                <div class="message-box">
+                    {message}
+                </div>
+            </template>
+
+            <div class="button-section">
+                <lightning-button
+                    class="capture-button"
+                    variant="brand"
+                    label={buttonLabel}
+                    disabled={isButtonDisabled}
+                    onclick={handleCaptureLocation}>
+                </lightning-button>
+            </div>
+
+        </div>
+    </lightning-card>
+</template>

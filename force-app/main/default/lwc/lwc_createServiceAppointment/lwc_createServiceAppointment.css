@@ -1,0 +1,169 @@
+.main-card {
+    background: #f7f9fc;
+    border-radius: 16px;
+    padding: 0;
+    overflow: hidden;
+    min-width: 720px;
+}
+
+.header {
+    background: linear-gradient(135deg, #0b5cab, #0176d3);
+    color: white;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 4px 0;
+}
+
+.header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.85;
+}
+
+.wo-badge {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    padding: 12px 16px;
+    border-radius: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    min-width: 170px;
+}
+
+.wo-badge span {
+    font-size: 11px;
+    opacity: 0.85;
+    display: block;
+}
+
+.wo-badge strong {
+    font-size: 15px;
+}
+
+.loader {
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section {
+    background: white;
+    margin: 16px 20px;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f2d3d;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.grid {
+    display: grid;
+    gap: 14px;
+}
+
+.grid.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lookup-box {
+    position: relative;
+}
+
+.lookup-dropdown {
+    position: absolute;
+    z-index: 99;
+    background: white;
+    width: 100%;
+    margin-top: 4px;
+    border-radius: 12px;
+    border: 1px solid #d8dde6;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    max-height: 230px;
+    overflow-y: auto;
+}
+
+.lookup-item {
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.lookup-item:hover {
+    background: #f3f8ff;
+}
+
+.lookup-empty {
+    padding: 14px;
+    color: #6b7280;
+}
+
+.selected-pill {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #eef5ff;
+    border: 1px solid #c9ddff;
+    color: #0b5cab;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.selected-pill button {
+    border: none;
+    background: transparent;
+    color: #0b5cab;
+    font-size: 18px;
+    line-height: 14px;
+    cursor: pointer;
+}
+
+.footer {
+    padding: 16px 20px 22px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+@media only screen and (max-width: 768px) {
+    .main-card {
+        min-width: unset;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .grid.two {
+        grid-template-columns: 1fr;
+    }
+}

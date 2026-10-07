@@ -1,0 +1,22 @@
+<apex:page standardController="QuoteLineItem" extensions="ctrl_QuoteItemDeleteRestriction" lightningStylesheets="True">
+    
+    <apex:form >
+        <apex:pageBlock title="Delete Not Allowed">
+            
+            <apex:pageMessages />
+
+            <apex:pageBlockSection columns="1">
+                <div style="font-size:16px; color:#c23934; font-weight:bold; padding:10px;">
+                    You do not have permission to delete this Quote Line Item.
+                </div>
+                
+            </apex:pageBlockSection>
+
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Back" action="{!goBack}" />
+            </apex:pageBlockButtons>
+
+        </apex:pageBlock>
+    </apex:form>
+
+</apex:page>

@@ -1,0 +1,80 @@
+<template>
+    <lightning-quick-action-panel>
+        
+        <div class="slds-page-header slds-m-bottom_medium slds-theme_default">
+            <div class="slds-align_absolute-center">
+                <div class="slds-media slds-media_center">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:shipment" size="medium" alternative-text="Delivery"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body slds-text-align_left">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Delivery Information">Delivery Information</span>
+                                </h1>
+                            </div>
+                        </div>
+                        <p class="slds-page-header__name-meta">Fetch and Save SAP Delivery Records</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="slds-is-relative slds-m-around_large">
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+
+        <div>
+            <template if:true={hasData}>
+                
+                <div class="slds-grid slds-grid_align-end slds-p-bottom_small">
+                    <span class="slds-badge slds-theme_success slds-p-horizontal_medium slds-p-vertical_xx-small slds-text-title_bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                        Total Records: {totalRecordsCount}
+                    </span>
+                </div>
+
+                <div class="slds-box slds-theme_default slds-p-around_none">
+                    <div style="height: 300px;">
+                        <lightning-datatable
+                            key-field="deliveryNo"
+                            data={deliveryData}
+                            columns={columns}
+                            hide-checkbox-column="true"
+                            show-row-number-column="true"
+                            class="slds-table_header-fixed_container">
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </template>
+            
+            <template if:false={hasData}>
+                <template if:false={isLoading}>
+                    <div class="slds-text-align_center slds-p-around_x-large slds-box slds-theme_default">
+                        <lightning-icon icon-name="utility:info_alt" size="medium" class="slds-m-bottom_small"></lightning-icon>
+                        <p class="slds-text-heading_small slds-text-color_weak">No delivery items found for this Order.</p>
+                    </div>
+                </template>
+            </template>
+        </div>
+
+        <div slot="footer" class="slds-grid slds-grid_align-center">
+            <lightning-button 
+                label="Close" 
+                onclick={handleClose} 
+                icon-name="utility:close"
+                class="slds-m-right_x-small">
+            </lightning-button>
+            <lightning-button 
+                label="Save Delivery Informations" 
+                variant="brand" 
+                icon-name="utility:save"
+                onclick={handleSave} 
+                disabled={isSaveDisabled}>
+            </lightning-button>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

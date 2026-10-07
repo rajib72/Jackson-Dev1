@@ -1,0 +1,18 @@
+/* Scrollable area for checkboxes if there are many deliveries */
+.checkbox-scroll-area {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #fafaf9;
+}
+
+/* Restrict table height and allow internal scrolling */
+.table-container {
+    height: 250px; 
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 0;
+}

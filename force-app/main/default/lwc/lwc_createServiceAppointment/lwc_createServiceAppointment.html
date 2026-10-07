@@ -1,0 +1,162 @@
+<template>
+    <section class="main-card">
+        <div class="header">
+            <div>
+                <div class="eyebrow">Field Service Lightning</div>
+                <h1>Create Service Appointment</h1>
+                <p>Create a new appointment directly from Work Order.</p>
+            </div>
+
+            <div class="wo-badge">
+                <lightning-icon icon-name="standard:work_order" size="small"></lightning-icon>
+                <div>
+                    <span>Work Order</span>
+                    <strong>{workOrderNumber}</strong>
+                </div>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="loader">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            
+            <template if:true={showError}>
+                <div class="slds-p-around_large slds-text-align_center">
+                    <div class="slds-text-color_error slds-text-heading_small slds-m-bottom_medium">
+                        <strong>{errorMessage}</strong>
+                    </div>
+                    <lightning-button
+                        variant="neutral"
+                        label="Close"
+                        onclick={handleCancel}>
+                    </lightning-button>
+                </div>
+            </template>
+
+            <template if:false={showError}>
+                <div class="section">
+                    <div class="section-title">
+                        <lightning-icon icon-name="utility:event" size="x-small"></lightning-icon>
+                        <span>Appointment Details</span>
+                    </div>
+
+                    <div class="grid two">
+                        <lightning-input
+                            label="Subject"
+                            value={form.subject}
+                            data-field="subject"
+                            onchange={handleInputChange}
+                            required>
+                        </lightning-input>
+
+                        <lightning-combobox
+                            label="Status"
+                            value={form.status}
+                            options={statusOptions}
+                            data-field="status"
+                            onchange={handleInputChange}
+                            disabled>
+                        </lightning-combobox>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">
+                        <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                        <span>Account Details</span>
+                    </div>
+
+                    <div class="lookup-box">
+                        <lightning-input
+                            label="Account Name"
+                            placeholder="Search Account..."
+                            value={shipToSearchText}
+                            onchange={handleShipToSearch}
+                            onfocus={showShipToResults}>
+                        </lightning-input>
+
+                        <template if:true={showAccountDropdown}>
+                            <div class="lookup-dropdown">
+                                <template if:true={accountOptions.length}>
+                                    <template for:each={accountOptions} for:item="acc">
+                                        <div
+                                            key={acc.id}
+                                            class="lookup-item"
+                                            data-id={acc.id}
+                                            data-name={acc.name}
+                                            onclick={selectShipTo}>
+                                            <lightning-icon icon-name="standard:account" size="small"></lightning-icon>
+                                            <span>{acc.name}</span>
+                                        </div>
+                                    </template>
+                                </template>
+                                <template if:false={accountOptions.length}>
+                                    <div class="lookup-empty">No account found</div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:true={selectedShipToName}>
+                            <div class="selected-pill">
+                                <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                                <span>{selectedShipToName}</span>
+                                <button onclick={clearShipTo} title="Remove">×</button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">
+                        <lightning-icon icon-name="utility:location" size="x-small"></lightning-icon>
+                        <span>Service Address</span>
+                    </div>
+                    
+                    <!-- Single Combobox taking full width -->
+                    <div>
+                        <lightning-combobox
+                            label="Service Address"
+                            value={selectedAddressValue}
+                            options={addressOptions}
+                            placeholder="Select Service Address"
+                            onchange={handleAddressChange}
+                            required>
+                        </lightning-combobox>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">
+                        <lightning-icon icon-name="utility:description" size="x-small"></lightning-icon>
+                        <span>Additional Information</span>
+                    </div>
+
+                    <lightning-textarea
+                        label="Description"
+                        value={form.description}
+                        data-field="description"
+                        onchange={handleInputChange}>
+                    </lightning-textarea>
+                </div>
+
+                <div class="footer">
+                    <lightning-button
+                        label="Cancel"
+                        onclick={handleCancel}>
+                    </lightning-button>
+
+                    <lightning-button
+                        variant="brand"
+                        label="Create Service Appointment"
+                        onclick={handleSave}
+                        disabled={isSaving}>
+                    </lightning-button>
+                </div>
+            </template>
+        </template>
+    </section>
+</template>

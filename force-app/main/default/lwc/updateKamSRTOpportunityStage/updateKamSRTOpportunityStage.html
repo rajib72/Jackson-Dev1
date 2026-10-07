@@ -1,0 +1,139 @@
+<template>
+
+    <!-- ========= HEADER (Quick Action Modal Header Area) ========= -->
+    <div class="qa-header">
+        <h2 class="slds-text-heading_medium">Update KAM SRT Opportunity Stage</h2>
+    </div>
+
+    <!-- ========= BODY ========= -->
+    <div class="qa-body">
+
+        <!-- ================= STEP 1 ================= -->
+        <template if:true={isStepOne}>
+            <lightning-input label="Current Stage" value={selectedStageLabel} disabled></lightning-input>
+
+            <!-- CLICKABLE PICKLIST (opens modal) -->
+            <label class="slds-form-element__label">Change Stage To</label>
+            <div class="combobox-like" data-picklist="stage" role="button" tabindex="0" onclick={openPicklistModal} onkeydown={handleComboboxKey}>
+                <span class="combobox-text">{selectedStageLabel}</span>
+                <span class="combobox-arrow">▾</span>
+            </div>
+        </template>
+
+        <!-- ================= STEP 2 ================= -->
+        <template if:true={isStepTwo}>
+            <lightning-input label="Selected Stage" value={selectedStageLabel} disabled></lightning-input>
+
+            <p class="mandatory-text">Please update all mandatory fields before proceeding.</p>
+
+            <!-- Qualification -->
+            <template if:true={showQualificationCheckbox}>
+                <lightning-input type="checkbox" label="Qualification To SalesTeam"
+                    checked={qualificationChecked} onchange={handleQualificationChange}>
+                </lightning-input>
+
+                <template if:true={showQualificationUpload}>
+                    <p class="upload-label">Upload Qualification Files</p>
+                    <div class="upload-box">
+                        <lightning-file-upload record-id={recordId} multiple
+                            onuploadfinished={handleUploadFinished}>
+                        </lightning-file-upload>
+                    </div>
+
+                    <template if:true={uploadedFiles}>
+                        <div class="uploaded-file-list">
+                            <template for:each={uploadedFiles} for:item="file">
+                                <p key={file.documentId}>📄 {file.name}</p>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </template>
+
+            <!-- Test1 -->
+            <template if:true={showTest1Checkbox}>
+                <lightning-input type="checkbox" label="Pre Design Confirmation (Test1)"
+                    checked={test1Checked} onchange={handleTest1Change}>
+                </lightning-input>
+
+                <template if:true={showTest1Upload}>
+                    <p class="upload-label">Upload Pre Design Files</p>
+                    <div class="upload-box">
+                        <lightning-file-upload record-id={recordId} multiple
+                            onuploadfinished={handleUploadFinished}>
+                        </lightning-file-upload>
+                    </div>
+
+                    <template if:true={uploadedFiles}>
+                        <div class="uploaded-file-list">
+                            <template for:each={uploadedFiles} for:item="file">
+                                <p key={file.documentId}>📄 {file.name}</p>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </template>
+
+            <!-- Offer Process -->
+            <template if:true={showOfferProcessPicklist}>
+                <label class="slds-form-element__label">Offer Management Process</label>
+                <div class="combobox-like" data-picklist="offer" role="button" tabindex="0" onclick={openPicklistModal} onkeydown={handleComboboxKey}>
+                    <span class="combobox-text">{offerProcessLabel}</span>
+                    <span class="combobox-arrow">▾</span>
+                </div>
+            </template>
+
+            <!-- PO Section -->
+            <template if:true={showPOSection}>
+                <lightning-input type="checkbox" label="PO Received"
+                    checked={poReceivedChecked} onchange={handlePOChange}>
+                </lightning-input>
+
+                <template if:true={poReceivedChecked}>
+                    <p class="upload-label">Upload PO Files</p>
+                    <div class="upload-box">
+                        <lightning-file-upload record-id={recordId} multiple
+                            onuploadfinished={handleUploadFinished}>
+                        </lightning-file-upload>
+                    </div>
+
+                    <template if:true={uploadedFiles}>
+                        <div class="uploaded-file-list">
+                            <template for:each={uploadedFiles} for:item="file">
+                                <p key={file.documentId}>📄 {file.name}</p>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </template>
+
+            <lightning-textarea label="Remarks" value={remarks} onchange={handleRemarksChange} required>
+            </lightning-textarea>
+        </template>
+
+    </div>
+
+    <!-- ========= FOOTER ========= -->
+    <div class="qa-footer">
+        <template if:true={isStepOne}>
+            <lightning-button variant="brand" label="Next" onclick={goToStepTwo}></lightning-button>
+        </template>
+
+        <template if:true={isStepTwo}>
+            <lightning-button label="Previous" onclick={goToStepOne} class="slds-m-right_small"></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={saveStage}></lightning-button>
+        </template>
+    </div>
+
+    <!-- CUSTOM PICKLIST MODAL (reusable) -->
+    <template if:true={isPicklistOpen}>
+        <c-custom-picklist-modal
+            options={modalOptions}
+            selected={modalSelected}
+            label={modalLabel}
+            onsave={handlePicklistSave}
+            onclose={closePicklistModal}>
+        </c-custom-picklist-modal>
+    </template>
+
+</template>

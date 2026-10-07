@@ -1,0 +1,331 @@
+<template>
+    <lightning-quick-action-panel header={panelTitle}>
+        
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Processing..." size="medium" variant="brand"></lightning-spinner>
+        </template>
+
+        <template if:true={requestData}>
+            
+            <template if:true={hasValidationErrors}>
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_medium slds-box" role="alert">
+                    <h2>Cannot Proceed: Please resolve the following errors first.</h2>
+                </div>
+                <div class="slds-box slds-theme_default">
+                    <ul class="slds-list_dotted slds-text-color_error slds-p-left_medium">
+                        <template for:each={initialErrors} for:item="err">
+                            <li key={err}>{err}</li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+
+            <template if:false={hasValidationErrors}>
+                <template if:false={isPageTwo}>
+                    <div class="slds-page-header slds-m-bottom_small" style="background-color: #f3f3f3; border: 1px solid #c9c9c9; border-left: 5px solid #0176d3; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <div class="slds-page-header__row">
+                            <div class="slds-page-header__col-title">
+                                <div class="slds-media">
+                                    <div class="slds-media__body">
+                                        <div class="slds-page-header__name">
+                                            <div class="slds-page-header__name-title">
+                                                <h1>
+                                                    <span class="slds-page-header__title slds-truncate" title="Product Request Details" style="font-weight: 900; color: #0b5cab; font-size: 1.25rem;">Product Request Details</span>
+                                                </h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-box slds-theme_default slds-m-bottom_small slds-p-around_small">
+                        <h3 class="slds-section-title--divider slds-m-bottom_small" style="background-color: #e0e5ee; color: #0176d3; font-weight: 800; border-radius: 4px;">INFORMATION</h3>
+                        <div class="slds-form" role="list">
+                            <div class="slds-form__row">
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Product Request Number</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static" style="font-weight: 600;">{requestData.ProductRequestNumber}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Status</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{requestData.Status}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-form__row">
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Shipment Type</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{requestData.ShipmentType}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Final Expected Delivery Date</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                <lightning-formatted-date-time value={requestData.NeedByDate} year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-form__row">
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Account Name</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{accountName}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Contact Name</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{contactName}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-box slds-theme_default slds-m-bottom_small slds-p-around_small">
+                        <h3 class="slds-section-title--divider slds-m-bottom_small" style="background-color: #e0e5ee; color: #0176d3; font-weight: 800; border-radius: 4px;">SHIPPING DETAILS</h3>
+                        <div class="slds-form" role="list">
+                            <div class="slds-form__row">
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Ship To Party</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{shipToPartyName}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Ship To Party (Code)</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{shipToPartyCode}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-form__row">
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Shipping Address</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{shippingAddress}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-box slds-theme_default slds-m-bottom_small slds-p-around_small">
+                        <h3 class="slds-section-title--divider slds-m-bottom_small" style="background-color: #e0e5ee; color: #0176d3; font-weight: 800; border-radius: 4px;">AMOUNT DETAILS</h3>
+                        <div class="slds-form" role="list">
+                            <div class="slds-form__row">
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Total Amount</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                <lightning-formatted-number value={requestData.Total_Amount__c} format-style="currency"></lightning-formatted-number>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-form__item" role="listitem">
+                                    <div class="slds-form-element slds-form-element_readonly slds-form-element_stacked">
+                                        <span class="slds-form-element__label">Final Amount to be paid</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                <lightning-formatted-number value={requestData.Final_Amount_to_be_paid__c} format-style="currency"></lightning-formatted-number>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="slds-section-title--divider slds-m-bottom_small slds-m-top_small" style="background-color: #0176d3; color: white; font-weight: 800; border-radius: 4px; letter-spacing: 0.5px;">
+                        RELATED PRODUCT REQUEST LINE ITEMS
+                    </h3>
+                    
+                    <div class="slds-scrollable_x slds-box slds-p-around_none">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col" rowspan="2" style="background-color: #fafaf9;"><div class="slds-truncate" title="Line Item Number">Line Item Number</div></th>
+                                    <th scope="col" colspan="2" class="slds-text-align_center" style="background-color: #fafaf9;"><div class="slds-truncate" title="Material Master">Material Master</div></th>
+                                    <th scope="col" rowspan="2" style="background-color: #fafaf9;"><div class="slds-truncate" title="Quantity Requested">Quantity Requested</div></th>
+                                    <th scope="col" rowspan="2" style="background-color: #fafaf9;"><div class="slds-truncate" title="UOM">UOM</div></th>
+                                    <th scope="col" rowspan="2" style="background-color: #fafaf9;"><div class="slds-truncate" title="Expected Delivery Date">Expected Delivery Date</div></th>
+                                    <th scope="col" rowspan="2" style="background-color: #fafaf9;"><div class="slds-truncate" title="Price">Price</div></th>
+                                    <th scope="col" rowspan="2" style="background-color: #fafaf9;"><div class="slds-truncate" title="Product Warranty (Years)">Product Warranty (Years)</div></th>
+                                    <th scope="col" rowspan="2" style="background-color: #fafaf9;"><div class="slds-truncate" title="Performance Warranty (Years)">Performance Warranty (Years)</div></th>
+                                </tr>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col" style="border-left: 1px solid #dddbda; border-top: 1px solid #dddbda; background-color: #fafaf9;"><div class="slds-truncate" title="Material Code">Material Code</div></th>
+                                    <th scope="col" style="border-left: 1px solid #dddbda; border-top: 1px solid #dddbda; background-color: #fafaf9;"><div class="slds-truncate" title="Description">Description</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={lineItems} for:item="item">
+                                    <tr key={item.Id} class="slds-hint-parent">
+                                        <td data-label="Line Item Number"><div class="slds-truncate" style="font-weight: 600;">{item.ProductRequestLineItemNumber}</div></td>
+                                        <td data-label="Material Code"><div class="slds-truncate">{item.MaterialCode}</div></td>
+                                        <td data-label="Description"><div class="slds-truncate">{item.MaterialDescription}</div></td>
+                                        <td data-label="Quantity Requested"><div class="slds-truncate">{item.QuantityRequested}</div></td>
+                                        <td data-label="UOM"><div class="slds-truncate">{item.QuantityUnitOfMeasure}</div></td>
+                                        <td data-label="Expected Delivery Date">
+                                            <div class="slds-truncate">
+                                                <lightning-formatted-date-time value={item.NeedByDate} year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                            </div>
+                                        </td>
+                                        <td data-label="Price">
+                                            <div class="slds-truncate">
+                                                <lightning-formatted-number value={item.Price__c} format-style="currency"></lightning-formatted-number>
+                                            </div>
+                                        </td>
+                                        <td data-label="Product Warranty">
+                                            <lightning-input type="number" required value={item.productWarranty} data-id={item.Id} data-field="productWarranty" onchange={handleLineItemChange} variant="label-hidden" message-when-value-missing="Required"></lightning-input>
+                                        </td>
+                                        <td data-label="Performance Warranty">
+                                            <lightning-input type="number" required value={item.performanceWarranty} data-id={item.Id} data-field="performanceWarranty" onchange={handleLineItemChange} variant="label-hidden" message-when-value-missing="Required"></lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template if:true={isPageTwo}>
+                    <div class="slds-box slds-theme_default slds-m-bottom_small slds-p-around_none slds-overflow-hidden" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        
+                        <div class="slds-p-around_medium" style="background-color: #f3f5f6; border-bottom: 1px solid #c9c9c9; border-left: 5px solid #0176d3;">
+                            <h3 class="slds-text-heading_small" style="color: #014486; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <lightning-icon icon-name="standard:orders" size="small" class="slds-m-right_small"></lightning-icon>
+                                Finalize Order Details
+                            </h3>
+                        </div>
+
+                        <div class="slds-p-around_medium">
+                            
+                            <div class="slds-form-element__label slds-text-title_caps slds-m-bottom_x-small" style="font-weight: 700; color: #0176d3;">Classification & Plant</div>
+                            <lightning-layout multiple-rows class="slds-m-bottom_large">
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-combobox label="Order Type" value={formData.orderType} options={orderTypeOptions} onchange={handleInputChange} data-field="orderType" required></lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input type="text" label="Order Reason" value={formData.orderReason} onchange={handleInputChange} data-field="orderReason" required></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" padding="horizontal-small" class="slds-m-top_small">
+                                    <lightning-combobox label="Delivery Plant" value={formData.deliveryPlant} options={plantOptions} onchange={handleInputChange} data-field="deliveryPlant" required></lightning-combobox>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-form-element__label slds-text-title_caps slds-m-bottom_x-small" style="font-weight: 700; color: #0176d3;">Organization Data</div>
+                            <lightning-layout multiple-rows class="slds-m-bottom_large slds-box slds-box_x-small" style="background-color: #fafaf9; border-color: #e5e5e5; border-radius: 6px;">
+                                <lightning-layout-item size="4" padding="horizontal-small">
+                                    <lightning-input type="text" label="Sales Org" value={formData.salesOrg} disabled></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="4" padding="horizontal-small">
+                                    <lightning-input type="text" label="Distribution Channel" value={formData.distChannel} disabled></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="4" padding="horizontal-small">
+                                    <lightning-input type="text" label="Division" value={formData.division} disabled></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-form-element__label slds-text-title_caps slds-m-bottom_x-small" style="font-weight: 700; color: #0176d3;">Customer Reference</div>
+                            <lightning-layout multiple-rows class="slds-m-bottom_large">
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input type="text" label="Customer Reference (PO No.)" value={formData.poNumber} onchange={handleInputChange} data-field="poNumber" required></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input type="date" label="Customer Reference Date (PO Date)" value={formData.poDate} onchange={handleInputChange} data-field="poDate" required></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-form-element__label slds-text-title_caps slds-m-bottom_x-small" style="font-weight: 700; color: #0176d3;">Terms & Clauses</div>
+                            <lightning-layout multiple-rows class="slds-m-bottom_large">
+                                <lightning-layout-item size="6" padding="horizontal-small" class="slds-m-bottom_small">
+                                    <lightning-input type="text" label="Payment Terms" value={formData.paymentTerms} disabled style="background-color: #fafaf9; border-radius: 4px;"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" padding="horizontal-small"></lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="horizontal-small">
+                                    <lightning-combobox label="BG Required" value={formData.bgRequired} options={yesNoOptions} onchange={handleInputChange} data-field="bgRequired" required></lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="4" padding="horizontal-small">
+                                    <lightning-combobox label="LD Clause" value={formData.ldClause} options={yesNoOptions} onchange={handleInputChange} data-field="ldClause" required></lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="4" padding="horizontal-small">
+                                    <lightning-combobox label="TPC" value={formData.tpc} options={yesNoOptions} onchange={handleInputChange} data-field="tpc" required></lightning-combobox>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-form-element__label slds-text-title_caps slds-m-bottom_x-small" style="font-weight: 700; color: #0176d3;">Logistics & Scope</div>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" padding="horizontal-small">
+                                    <lightning-input type="text" label="Freight Terms" value={formData.freightTerms} onchange={handleInputChange} data-field="freightTerms" required></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="horizontal-small" class="slds-m-top_small">
+                                    <lightning-input type="text" label="Insurance Terms" value={formData.insuranceTerms} onchange={handleInputChange} data-field="insuranceTerms" required></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="horizontal-small" class="slds-m-top_small">
+                                    <lightning-input type="text" label="Scope Of OA" value={formData.scopeOfOA} onchange={handleInputChange} data-field="scopeOfOA" required></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <template if:false={requestData}>
+            <template if:true={error}>
+                <p class="slds-text-color_error slds-p-around_medium" style="font-weight: bold;">Error loading data: {error}</p>
+            </template>
+            <template if:false={error}>
+                <template if:false={isLoading}>
+                    <div style="height: 100px; position: relative;">
+                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <div slot="footer">
+            <template if:false={hasValidationErrors}>
+                <template if:false={isPageTwo}>
+                    <lightning-button variant="brand" label="Next" onclick={handleNext} disabled={isLoading}></lightning-button>
+                </template>
+                <template if:true={isPageTwo}>
+                    <lightning-button label="Back" onclick={handleBack} class="slds-m-right_x-small" disabled={isLoading}></lightning-button>
+                    <lightning-button variant="brand" label="Create Service Order" onclick={handleCreateOrder} disabled={isLoading}></lightning-button>
+                </template>
+            </template>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

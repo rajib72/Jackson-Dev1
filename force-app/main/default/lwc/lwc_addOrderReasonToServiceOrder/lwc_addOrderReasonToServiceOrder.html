@@ -1,0 +1,86 @@
+<template>
+    <!-- Standard Quick Action Panel handles Header, Body, and Footer layout automatically -->
+    <lightning-quick-action-panel header="Add Order Reason">
+        
+        <!-- Custom padded body -->
+        <div class="custom-modal-body">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">*</abbr> Select Order Reason
+                    <lightning-helptext class="slds-m-left_xx-small" content="If You Dont Find Any Order Reason You Want To Add, Please Contact To Your IT Support And Tell Them To Fetch The Latest Records."></lightning-helptext>
+                </label>
+                
+                <div class="slds-form-element__control">
+                    <div class="slds-combobox_container custom-combobox">
+                        <div class={comboboxClass} aria-expanded={isExpanded} aria-haspopup="listbox" role="combobox">
+                            
+                            <!-- Search Box State -->
+                            <template if:false={selectedValue}>
+                                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                    <input type="text" 
+                                           class="slds-input slds-combobox__input" 
+                                           placeholder="Search Order Reason..." 
+                                           value={searchTerm} 
+                                           oninput={handleSearch} 
+                                           onfocus={handleFocus} 
+                                           onblur={handleBlur} 
+                                           role="textbox" />
+                                    <lightning-icon icon-name="utility:search" size="x-small" class="slds-input__icon slds-input__icon_right slds-icon-text-default"></lightning-icon>
+                                </div>
+                            </template>
+
+                            <!-- Selected Pill State -->
+                            <template if:true={selectedValue}>
+                                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                                    <lightning-icon icon-name="standard:orders" size="small" class="slds-icon_container slds-combobox__input-entity-icon"></lightning-icon>
+                                    <input type="text" class="slds-input slds-combobox__input slds-combobox__input-value" value={selectedLabel} readonly />
+                                    <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove selected option" onclick={handleRemove}>
+                                        <lightning-icon icon-name="utility:close" size="x-small" class="slds-button__icon"></lightning-icon>
+                                        <span class="slds-assistive-text">Remove selected option</span>
+                                    </button>
+                                </div>
+                            </template>
+
+                            <!-- Dropdown List -->
+                            <template if:true={showDropdown}>
+                                <div class="slds-dropdown slds-dropdown_fluid custom-dropdown" role="listbox">
+                                    <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                        <template for:each={filteredOptions} for:item="option">
+                                            <li key={option.value} role="presentation" class="slds-listbox__item" onmousedown={handleSelect} data-value={option.value} data-label={option.label}>
+                                                <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                    <span class="slds-media__figure slds-listbox__option-icon">
+                                                        <lightning-icon icon-name="standard:orders" size="small"></lightning-icon>
+                                                    </span>
+                                                    <span class="slds-media__body">
+                                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity" title={option.label}>{option.label}</span>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </template>
+                                        
+                                        <!-- No Results Found -->
+                                        <template if:false={hasOptions}>
+                                            <li role="presentation" class="slds-listbox__item">
+                                                <div class="slds-p-around_small slds-text-color_weak slds-text-align_center">
+                                                    No matching order reason found.
+                                                </div>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proper Modal Footer Pinning -->
+        <div slot="footer">
+            <lightning-button label="Cancel" variant="neutral" onclick={handleCancel} class="slds-m-right_small"></lightning-button>
+            <lightning-button label="Save" variant="brand" onclick={handleSave} disabled={isSaveDisabled}></lightning-button>
+        </div>
+        
+    </lightning-quick-action-panel>
+</template>

@@ -1,0 +1,82 @@
+<template>
+    <lightning-quick-action-panel header="Add Testing & Commissioning For Each Materials">
+        
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template for:each={rows} for:item="row" for:index="index">
+            <div key={row.id} class="slds-box slds-box_x-small slds-m-bottom_small slds-theme_default">
+                <lightning-layout multiple-rows>
+                    
+                    <lightning-layout-item size="4" padding="horizontal-small">
+                        <lightning-combobox 
+                            label="Select Material" 
+                            value={row.materialId} 
+                            options={row.availableOptions} 
+                            onchange={handleMaterialChange} 
+                            data-index={index}
+                            required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="3" padding="horizontal-small" class="slds-p-top_large slds-p-left_medium">
+                        <lightning-input 
+                            type="checkbox" 
+                            label="Testing Completed" 
+                            checked={row.isCheckboxChecked} 
+                            onchange={handleCheckboxChange} 
+                            data-index={index}
+                            required>
+                        </lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="4" padding="horizontal-small">
+                        <template if:true={milestoneId}>
+                            <lightning-file-upload
+                                label="Testing Proof File"
+                                name="fileUploader"
+                                accept=".pdf, .png, .jpg, .jpeg, .doc, .docx"
+                                record-id={milestoneId}
+                                onuploadfinished={handleUploadFinished}
+                                data-index={index}
+                                required>
+                            </lightning-file-upload>
+                            
+                            <template if:true={row.isFileUploaded}>
+                                <span class="slds-text-color_success slds-text-body_small slds-m-top_xxx-small">
+                                    <lightning-icon icon-name="utility:success" size="xx-small" variant="success"></lightning-icon> File Attached
+                                </span>
+                            </template>
+                        </template>
+                        <template if:false={milestoneId}>
+                            <span class="slds-text-color_error">Milestone not found.</span>
+                        </template>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="1" padding="horizontal-small" class="slds-p-top_large slds-text-align_right">
+                        <lightning-button-icon 
+                            icon-name="utility:delete" 
+                            variant="destructive" 
+                            alternative-text="Remove Row" 
+                            title="Remove Row" 
+                            onclick={removeRow} 
+                            data-index={index}>
+                        </lightning-button-icon>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+            </div>
+        </template>
+
+        <div class="slds-m-top_medium">
+            <lightning-button label="Add Material" icon-name="utility:add" onclick={addRow}></lightning-button>
+        </div>
+
+        <div slot="footer">
+            <lightning-button label="Cancel" onclick={closeAction} class="slds-m-right_small"></lightning-button>
+            <lightning-button label="Save" variant="brand" onclick={handleSave}></lightning-button>
+        </div>
+        
+    </lightning-quick-action-panel>
+</template>

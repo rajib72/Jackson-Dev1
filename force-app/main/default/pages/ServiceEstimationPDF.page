@@ -1,0 +1,169 @@
+<apex:page standardController="Service_Estimation_Feedback__c"
+           extensions="ServiceEstimationPDF_Ctrl"
+           renderAs="pdf"
+           applyBodyTag="false">
+
+<head>
+    <style>
+        @page {
+            size: A4;
+            margin: 20px;
+        }
+
+        body {
+            font-family: sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page {
+            padding: 20px;
+        }
+
+        /* Section Headings */
+        h3 { 
+            background-color: #ADD8E6;
+            padding: 5px; 
+            border-bottom: 1px solid #ccc; 
+            color: #000;
+            margin: 0 0 10px 0;
+        }
+
+        /* Title */
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #ADD8E6;
+            border-bottom: 1px solid #ccc;
+            color: #000;
+            margin: 0 0 20px 0;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .info-block {
+            margin-bottom: 18px;
+            page-break-inside: avoid;
+        }
+
+        .info-label {
+            font-weight: bold;
+            width: 200px;
+            display: inline-block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 18px;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th { 
+            background-color: #E0FFFF;
+            color: #000;
+        }
+
+        .final-cost {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+
+    <h2>Service Estimation Feedback Report</h2>
+
+    <div class="info-block">
+        <h3>Case Basic Info</h3>
+        <div><span class="info-label">Account Name:</span> {!woRecord.Case.Account.Name}</div>
+        <div><span class="info-label">Contact Name:</span> {!woRecord.Case.Contact.Name}</div>
+        <div><span class="info-label">Contact Phone:</span> {!woRecord.Case.ContactPhone}</div>
+        <div><span class="info-label">Contact Email:</span> {!woRecord.Case.ContactEmail}</div>
+        <div><span class="info-label">Case Number:</span> {!woRecord.Case.CaseNumber}</div>
+        
+        <div><span class="info-label">Complain Type:</span> {!woRecord.Case.Complaint_Type__c}</div>
+    </div>
+
+    <div class="info-block">
+        <h3>Work Order Details</h3>
+        <div><span class="info-label">Work Order Number:</span> {!woRecord.WorkOrderNumber}</div>
+        
+    </div>
+
+    <div class="info-block">
+        <h3>Item Details With Serial Number</h3>
+        <table>
+            <tr>
+                <th>Asset Number</th>
+                <th>Asset Serial Number</th>
+            </tr>
+            <apex:repeat value="{!woliList}" var="woli">
+                <tr>
+                    <td>{!woli.Asset.Name}</td>
+                    <td>{!woli.Asset_Serial_No__c}</td>
+                </tr>
+            </apex:repeat>
+        </table>
+    </div>
+
+    <div class="info-block">
+        <h3>Assign Resource Information</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Resource Type</th>
+                <th>Phone Number</th>
+                <th>Email ID</th>
+            </tr>
+            <apex:repeat value="{!resourceInfoList}" var="res">
+                <tr>
+                    <td>{!res.resourceName}</td>
+                    <td>{!res.resourceType}</td>
+                    <td>{!res.phone}</td>
+                    <td>{!res.email}</td>
+                </tr>
+            </apex:repeat>
+        </table>
+    </div>
+
+    <div class="info-block">
+        <h3>Service Estimation Cost Details</h3>
+        <table>
+            <tr>
+                <th>Estimation Cost</th>
+                <th>Description</th>
+            </tr>
+            <apex:repeat value="{!costDetails}" var="cost">
+                <tr>
+                    <td>{!cost.Estimated_Cost__c}</td>
+                    <td>{!cost.Description__c}</td>
+                </tr>
+            </apex:repeat>
+        </table>
+
+        <div class="final-cost">
+            <span class="info-label">Final Service Estimation Cost:</span>
+            {!woRecord.Final_Service_Estimation_Cost__c}
+        </div>
+    </div>
+
+    <div class="info-block">
+        <h3>Customer Feedback</h3>
+        <div><span class="info-label">Customer Feedback:</span> {!feedbackRecord.Customar_Feedback__c}</div>
+        <div><span class="info-label">Remarks:</span> {!feedbackRecord.Remarks__c}</div>
+    </div>
+
+</div>
+</body>
+</apex:page>

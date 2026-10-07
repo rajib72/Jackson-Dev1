@@ -1,0 +1,114 @@
+<apex:page standardController="Case" extensions="FeedbackFormController" sidebar="false" showHeader="false" standardStylesheets="false">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #fff; color: #333; }
+        .header-title { font-size: 22px; font-weight: bold; margin-bottom: 20px; text-align: center; color: #0176d3; }
+        .section-title { color: #FFA500; font-weight: bold; margin: 15px 0 5px 0; display: block; }
+        .container { background-color: #F2F2F2; border: 1px solid #D3D3D3; border-radius: 4px; padding: 15px; margin-bottom: 20px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .label { font-weight: bold; display: block; margin-bottom: 5px; }
+        .input-field { width: 100%; padding: 8px; border: 1px solid #CCC; border-radius: 3px; box-sizing: border-box; }
+        .submit-btn { background-color: #FFA500; color: white; border: none; padding: 12px 40px; border-radius: 4px; font-weight: bold; cursor: pointer; display: block; margin: 20px auto; }
+        .hindi-text { color: #888; font-size: 11px; display: block; margin-bottom: 8px; }
+        .thank-you { text-align: center; padding: 50px; }
+    </style>
+ 
+    <apex:outputPanel id="mainPanel">
+        <apex:pageMessages /> <apex:outputPanel rendered="{!isSuccess}">
+            <div class="thank-you">
+                <h1 style="color: #4CAF50;">Thank you for your feedback!</h1>
+                <p>Your response has been successfully recorded for Ticket #{!currentCase.CaseNumber}.</p>
+            </div>
+        </apex:outputPanel>
+ 
+        <apex:form rendered="{!NOT(isSuccess)}">
+            <div class="header-title">Customer Feedback Form</div>
+            
+            <span class="section-title">A: Customer Information</span>
+            <div class="container">
+                <div class="info-grid">
+                    <div>
+                        <p><span class="label">Case Number:</span> {!currentCase.CaseNumber}</p>
+                        <p><span class="label">Customer Name:</span> {!currentCase.Contact.Name}</p>
+                        <p>
+                            <span class="label">Installation Type:</span>{!currentCase.Customer_Persona__c}
+                        </p>
+						<p>
+                            <span class="label">Date Of Complaint:</span>
+                            <apex:outputText value="{0,date,dd/MM/yyyy}">
+                                <apex:param value="{!currentCase.CreatedDate}" />
+                            </apex:outputText>
+                        </p>
+                    </div>
+                    <div>
+                        <p><span class="label">Contact Number:</span> {!currentCase.ContactPhone}</p>
+                        <p>
+                            <span class="label">State:</span>{!currentCase.States__c}
+                        </p>
+                    </div>
+                </div>
+            </div>
+ 
+            <div class="container">
+                <span class="section-title">B: Did our Service Engineer help resolve your issues?</span>
+                <span class="hindi-text">क्या हमारे सर्विस इंजीनियर ने आपकी समस्याओं को हल करने में मदद की?</span>
+                <apex:selectList value="{!engineerHelp}" size="1" styleClass="input-field">
+                    <apex:selectOption itemValue="" itemLabel="--Select Rating--"/>
+                    <apex:selectOption itemValue="10" itemLabel="😃 10"/>
+                    <apex:selectOption itemValue="9" itemLabel="😃 9"/>
+                    <apex:selectOption itemValue="8" itemLabel="😃 8"/>
+                    <apex:selectOption itemValue="7" itemLabel="😃 7"/>
+                    <apex:selectOption itemValue="6" itemLabel="😃 6"/>
+                    <apex:selectOption itemValue="5" itemLabel="😃 5"/>
+                    <apex:selectOption itemValue="4" itemLabel="😊 4"/>
+                    <apex:selectOption itemValue="3" itemLabel="😐 3"/>
+                    <apex:selectOption itemValue="2" itemLabel="☹️ 2"/>
+                    <apex:selectOption itemValue="1" itemLabel="😡 1"/>
+                </apex:selectList>
+            </div>
+ 
+            <div class="container">
+                <span class="section-title">C: How would you rate the speed of issue resolution?</span>
+                <span class="hindi-text">आप समस्या समाधान की गति को कैसे रेट करेंगे?</span>
+                <apex:selectList value="{!speedRating}" size="1" styleClass="input-field">
+                    <apex:selectOption itemValue="" itemLabel="--Select Rating--"/>
+                    <apex:selectOption itemValue="10" itemLabel="😃 10"/>
+                    <apex:selectOption itemValue="9" itemLabel="😃 9"/>
+                    <apex:selectOption itemValue="8" itemLabel="😃 8"/>
+                    <apex:selectOption itemValue="7" itemLabel="😃 7"/>
+                    <apex:selectOption itemValue="6" itemLabel="😃 6"/>
+                    <apex:selectOption itemValue="5" itemLabel="😃 5"/>
+                    <apex:selectOption itemValue="4" itemLabel="😊 4"/>
+                    <apex:selectOption itemValue="3" itemLabel="😐 3"/>
+                    <apex:selectOption itemValue="2" itemLabel="☹️ 2"/>
+                    <apex:selectOption itemValue="1" itemLabel="😡 1"/>
+                </apex:selectList>
+            </div>
+ 
+            <div class="container">
+                <span class="section-title">D: How can we enhance our product or service?</span>
+                <span class="hindi-text">हम अपने उत्पाद या सेवा को कैसे बेहतर बना सकते हैं?</span>
+                <apex:inputTextarea value="{!enhanceProduct}" styleClass="input-field" style="height:80px;"/>
+            </div>
+ 
+            <div class="container">
+                <span class="section-title">E: How likely are you to recommend us?</span>
+                <span class="hindi-text">आप हमें दूसरों को सिफारिश करने की कितनी संभावना रखते हैं?</span>
+                <apex:selectList value="{!recommendRating}" size="1" styleClass="input-field">
+                    <apex:selectOption itemValue="" itemLabel="--Select Rating--"/>
+                    <apex:selectOption itemValue="10" itemLabel="😃 10"/>
+                    <apex:selectOption itemValue="9" itemLabel="😃 9"/>
+                    <apex:selectOption itemValue="8" itemLabel="😃 8"/>
+                    <apex:selectOption itemValue="7" itemLabel="😃 7"/>
+                    <apex:selectOption itemValue="6" itemLabel="😃 6"/>
+                    <apex:selectOption itemValue="5" itemLabel="😃 5"/>
+                    <apex:selectOption itemValue="4" itemLabel="😊 4"/>
+                    <apex:selectOption itemValue="3" itemLabel="😐 3"/>
+                    <apex:selectOption itemValue="2" itemLabel="☹️ 2"/>
+                    <apex:selectOption itemValue="1" itemLabel="😡 1"/>
+                </apex:selectList>
+            </div>
+ 
+            <apex:commandButton value="Submit Feedback" action="{!saveFeedback}" styleClass="submit-btn" reRender="mainPanel"/>
+        </apex:form>
+    </apex:outputPanel>
+</apex:page>

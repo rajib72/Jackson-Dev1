@@ -1,0 +1,36 @@
+<template>
+    <div class="container">
+        <div class="header">
+            <h2>Update Execution Mode</h2>
+            <p>Select the execution mode for this Work Order.</p>
+        </div>
+
+        <div class="body">
+            <lightning-combobox
+                name="executionMode"
+                label="Execution Mode"
+                value={selectedValue}
+                placeholder="Select Execution Mode"
+                options={executionModeOptions}
+                onchange={handleChange}
+                required>
+            </lightning-combobox>
+        </div>
+
+        <div class="footer">
+            <lightning-button
+                label="Cancel"
+                variant="neutral"
+                onclick={handleCancel}
+                class="btn-space">
+            </lightning-button>
+
+            <lightning-button
+                label="Update"
+                variant="brand"
+                onclick={handleSave}
+                disabled={isSaveDisabled}>
+            </lightning-button>
+        </div>
+    </div>
+</template>

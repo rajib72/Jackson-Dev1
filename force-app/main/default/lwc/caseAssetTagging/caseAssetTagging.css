@@ -1,0 +1,92 @@
+:host {
+    display: block;
+    background: transparent;
+}
+
+.asset-wrapper {
+    padding: 0.5rem;
+}
+
+.asset-card {
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+/* Header */
+.asset-header {
+    padding: 1.5rem 1.75rem 1rem 1.75rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.asset-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.2;
+}
+
+.asset-subtitle {
+    margin: 0.4rem 0 0 0;
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+/* Table */
+.table-section {
+    padding: 1.25rem 1.25rem 0.75rem 1.25rem;
+    background: #ffffff;
+}
+
+.custom-datatable {
+    border: 1px solid #d8dde6;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+/* Footer */
+.asset-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem 1.25rem 1.25rem 1.25rem;
+    background: #ffffff;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Optional button polish */
+lightning-button {
+    --slds-c-button-brand-radius-border: 10px;
+    --slds-c-button-brand-spacing-inline-start: 1.5rem;
+    --slds-c-button-brand-spacing-inline-end: 1.5rem;
+    --slds-c-button-brand-font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .asset-header {
+        padding: 1.1rem 1rem 0.85rem 1rem;
+    }
+
+    .asset-title {
+        font-size: 1.45rem;
+    }
+
+    .asset-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .table-section {
+        padding: 0.85rem 0.85rem 0.5rem 0.85rem;
+    }
+
+    .asset-footer {
+        padding: 0.85rem 0.85rem 1rem 0.85rem;
+    }
+}

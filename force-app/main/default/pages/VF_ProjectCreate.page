@@ -1,0 +1,25 @@
+<apex:page standardController="Project__c"
+    showHeader="false"
+    sidebar="false"
+    lightningStylesheets="true">
+
+    <apex:includeLightning />
+
+    <div id="lwcContainer"></div>
+
+    <script>
+
+        $Lightning.use("c:ProjectApp", function() {
+            $Lightning.createComponent(
+                "c:projectCreate_LWC",
+                {},
+                "lwcContainer",
+                function(component) {
+                    console.log("LWC loaded");
+                }
+            );
+        });
+
+    </script>
+
+</apex:page>

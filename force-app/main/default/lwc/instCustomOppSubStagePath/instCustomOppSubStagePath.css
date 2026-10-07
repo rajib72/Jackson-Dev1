@@ -1,0 +1,118 @@
+.path-wrapper {
+    width: 100%;
+}
+
+/* =========================
+   PROFESSIONAL HEADER
+========================= */
+.header-bar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    margin-bottom: 14px;
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: 0.2px;
+}
+
+.header-subtitle {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.pill {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    font-size: 12px;
+    font-weight: 700;
+    color: #374151;
+    white-space: nowrap;
+}
+
+.pill-strong {
+    color: #111827;
+    font-weight: 800;
+}
+
+/* =========================
+   PATH (NO SCROLLBAR)
+   Wrap into multiple rows
+========================= */
+.path-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Each step (pill style) */
+.step {
+    flex: 0 0 auto;
+    border-radius: 999px;
+    padding: 10px 16px;
+    border: 1px solid #d8dde6;
+    background: #f3f4f6;
+    color: #374151;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Completed */
+.step.complete {
+    background: #e0f2fe;
+    border-color: #0284c7;
+    color: #075985;
+}
+
+/* Active */
+.step.active {
+    background: #dcfce7;
+    border-color: #16a34a;
+    color: #166534;
+    box-shadow: 0 4px 14px rgba(22,163,74,0.25);
+}
+
+/* Future */
+.step.future {
+    background: #f5f5f5;
+    border-color: #e5e7eb;
+    color: #6b7280;
+}
+
+/* Long labels */
+.label {
+    display: inline-block;
+    max-width: 260px;   /* slightly larger for desktop */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Mobile: keep it clean */
+@media (max-width: 480px) {
+    .header-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .label {
+        max-width: 200px;
+    }
+}

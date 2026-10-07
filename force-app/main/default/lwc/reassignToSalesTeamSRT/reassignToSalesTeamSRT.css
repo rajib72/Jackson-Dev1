@@ -1,0 +1,46 @@
+/* ===== BODY ===== */
+.custom-body {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* MESSAGE STYLE */
+.reassign-message {
+    font-size: 1.05rem;
+    font-weight: 500;
+    text-align: center;
+    color: #16325c;
+}
+
+/* ===== FOOTER ===== */
+.custom-footer {
+    border-top: 1px solid #e5e5e5;
+    padding: 1rem 1.5rem;
+}
+
+/* Footer button layout */
+.footer-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+
+    .custom-body {
+        padding: 1rem;
+    }
+
+    .footer-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .footer-buttons lightning-button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,33 @@
+<apex:component controller="MaterialRequestCreatedController"
+    access="global">
+
+    <apex:attribute name="workOrderRecordId"
+        type="Id"
+        assignTo="{!workOrderId}"
+        description="Work Order Id"/>
+
+    <apex:outputPanel rendered="{!NOT(hasError)}">
+        <p>
+            <strong>Case Number:</strong>
+            <apex:outputText value="{!caseNumber}"/>
+            <br/>
+
+            <strong>Work Order Number:</strong>
+            <apex:outputText value="{!workOrderNumber}"/>
+            <br/>
+
+            <strong>Material Request Number:</strong>
+            <apex:outputText value="{!productRequestNumber}"/>
+        </p>
+    </apex:outputPanel>
+
+    <!-- Remove this panel after testing -->
+    <apex:outputPanel rendered="{!hasError}">
+        <p style="color:red;">
+            <strong>
+                <apex:outputText value="{!errorMessage}"/>
+            </strong>
+        </p>
+    </apex:outputPanel>
+
+</apex:component>

@@ -1,0 +1,129 @@
+<template>
+    <lightning-quick-action-panel title="Create Material Draft In MDM">
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <div class="slds-m-around_small">
+
+            <div class="main-banner slds-media slds-media_center slds-m-bottom_medium slds-p-around_medium">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:product" size="large"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="banner-title slds-m-bottom_xxx-small">Create Material Drafts</h2>
+                    <p class="banner-subtitle">
+                        Select unique opportunity products and create material drafts instantly.
+                    </p>
+                </div>
+            </div>
+
+            <div class="info-banner slds-grid slds-grid_align-spread slds-m-bottom_medium slds-p-around_small slds-grid_vertical-align-center">
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <span class="info-title slds-text-title_bold slds-m-right_small">
+                        Available Products
+                    </span>
+                    <span class="custom-badge">{availableCount}</span>
+                </div>
+                <div>
+                    <span class="info-instruction">
+                        Please select one or more products before creating.
+                    </span>
+                </div>
+            </div>
+
+            <template if:true={hasProducts}>
+                <div class="custom-table-container slds-scrollable_y" style="max-height: 380px;">
+                    <table class="slds-table slds-table_cell-buffer custom-table">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col" style="width: 4rem;">
+                                    <div class="slds-truncate" title="SELECT">SELECT</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="PRODUCT NAME">PRODUCT NAME</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="MATERIAL TYPE">MATERIAL TYPE</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="MATERIAL DESCRIPTION">
+                                        MATERIAL DESCRIPTION
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <template for:each={products} for:item="prod" for:index="index">
+                                <tr key={prod.Id} class="slds-hint-parent">
+
+                                    <td data-label="SELECT">
+                                        <lightning-input
+                                            type="checkbox"
+                                            name="rowSelection"
+                                            checked={prod.isSelected}
+                                            disabled={prod.isDisabled}
+                                            data-index={index}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </td>
+
+                                    <td data-label="PRODUCT NAME" class="slds-cell-wrap slds-p-vertical_small">
+                                        <strong>{prod.Name}</strong>
+
+                                        <template if:true={prod.isDisabled}>
+                                            <div class="slds-text-color_error slds-text-body_small slds-m-top_xxx-small">
+                                                ({prod.disabledReason})
+                                            </div>
+                                        </template>
+                                    </td>
+
+                                    <td data-label="MATERIAL TYPE">
+                                        <lightning-input
+                                            type="text"
+                                            variant="label-hidden"
+                                            value={prod.Material_Type__c}
+                                            readonly>
+                                        </lightning-input>
+                                    </td>
+
+                                    <td data-label="MATERIAL DESCRIPTION" class="slds-cell-wrap slds-p-vertical_small">
+                                        <div style="white-space: normal; word-break: break-word; line-height: 1.4; color: #333;">
+                                            <lightning-formatted-text value={prod.Material_Description__c}>
+                                            </lightning-formatted-text>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+
+            <template if:false={hasProducts}>
+                <p class="slds-text-align_center slds-text-color_weak slds-m-top_medium">
+                    No Opportunity Products found.
+                </p>
+            </template>
+        </div>
+
+        <div slot="footer">
+            <lightning-button
+                label="Cancel"
+                onclick={closeAction}
+                class="slds-m-right_small">
+            </lightning-button>
+
+            <lightning-button
+                variant="brand"
+                label="Create Drafts"
+                onclick={handleCreate}
+                disabled={disableCreate}>
+            </lightning-button>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

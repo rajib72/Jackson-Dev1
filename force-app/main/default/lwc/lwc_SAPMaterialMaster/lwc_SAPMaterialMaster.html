@@ -1,0 +1,137 @@
+<template>
+    <lightning-card>
+        <div class="main-container">
+
+            <div class="header-section">
+                <div>
+                    <h1 class="page-title">SAP Material Master Sync</h1>
+                    <p class="page-subtitle">Fetch material master records from SAP and create/update them in Salesforce</p>
+                </div>
+            </div>
+
+            <div class="filter-card">
+                <div class="section-title">Filter Criteria</div>
+
+                <div class="filter-grid">
+                    <div class="input-box filter-type-box">
+                        <lightning-combobox
+                            name="filterType"
+                            label="Filter Type"
+                            value={filterType}
+                            options={filterOptions}
+                            onchange={handleFilterChange}>
+                        </lightning-combobox>
+                    </div>
+
+                    <template if:true={isDateRangeFilter}>
+                        <div class="input-box">
+                            <lightning-input
+                                type="date"
+                                name="fromDate"
+                                label="From Date"
+                                value={fromDate}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="input-box">
+                            <lightning-input
+                                type="date"
+                                name="toDate"
+                                label="To Date"
+                                value={toDate}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+                    </template>
+
+                    <template if:true={isMaterialCodeFilter}>
+                        <div class="input-box">
+                            <lightning-input
+                                type="text"
+                                name="materialCode"
+                                label="Material Code"
+                                value={materialCode}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+                    </template>
+
+                    <div class="button-box">
+                        <lightning-button
+                            label="Fetch Data"
+                            variant="brand"
+                            onclick={handleFetch}
+                            disabled={isLoading}
+                            class="action-btn">
+                        </lightning-button>
+
+                        <lightning-button
+                            label="Refresh"
+                            variant="neutral"
+                            onclick={handleRefresh}
+                            disabled={isLoading}
+                            class="action-btn">
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+
+            <template if:true={isLoading}>
+                <div class="spinner-wrapper">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:true={summaryMessage}>
+                <div class="summary-section">
+                    <div class="summary-header">
+                        <span class="summary-title">Processing Summary</span>
+                    </div>
+
+                    <div class="summary-message">
+                        {summaryMessage}
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card total">
+                            <div class="stat-label">Total Received</div>
+                            <div class="stat-value">{totalReceived}</div>
+                        </div>
+
+                        <div class="stat-card created">
+                            <div class="stat-label">Created</div>
+                            <div class="stat-value">{createdCount}</div>
+                        </div>
+
+                        <div class="stat-card updated">
+                            <div class="stat-label">Updated</div>
+                            <div class="stat-value">{updatedCount}</div>
+                        </div>
+
+                        <div class="stat-card error">
+                            <div class="stat-label">Errors</div>
+                            <div class="stat-value">{errorCount}</div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={hasResults}>
+                <div class="table-card">
+                    <div class="section-title">Processed Records</div>
+                    <div class="table-wrapper">
+                        <lightning-datatable
+                            key-field="uniqueKey"
+                            data={resultData}
+                            columns={columns}
+                            hide-checkbox-column
+                            show-row-number-column>
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

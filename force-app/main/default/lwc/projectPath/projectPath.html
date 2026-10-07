@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="Project Milestone Path">
+        <div class="slds-p-around_medium">
+            <div class="slds-path custom-path">  <!-- <-- custom-path here -->
+                <div class="slds-grid slds-path__track">
+                    <div class="slds-grid slds-path__scroller-container">
+                        <div class="slds-path__scroller" role="application">
+                            <div class="slds-path__scroller_inner">
+                                <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                    <template for:each={processedMilestones} for:item="mile">
+                                        <li key={mile.Id} class={mile.cssClass} role="presentation">
+                                            <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" role="option" tabindex="-1">
+                                                <span class="slds-path__stage">
+                                                    <lightning-icon icon-name="utility:check" 
+                                                                    size="x-small" 
+                                                                    alternative-text="Complete" 
+                                                                    variant="inverse">
+                                                    </lightning-icon>
+                                                </span>
+                                                <span class="slds-path__title">
+                                                    {mile.Milestone_Name__c}
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

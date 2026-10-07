@@ -1,0 +1,348 @@
+<apex:page standardController="ProductRequest"
+           extensions="ProductRequestFeedbackController"
+           showHeader="false"
+           sidebar="false"
+           standardStylesheets="false">
+
+    <style>
+        :root {
+            --primary: #0176d3;
+            --success: #2e844a;
+            --danger: #ea001e;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #181818;
+            --text-muted: #747474;
+            --border: #e5e5e5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 30px;
+        }
+
+        .page-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .section {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .data-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .value {
+            font-size: 15px;
+            font-weight: 500;
+            margin-top: 4px;
+            word-break: break-word;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .custom-table th {
+            background-color: #f9f9f9;
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .custom-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .action-section {
+            background-color: #fafafb;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .prompt-text {
+            font-size: 15px;
+            margin-bottom: 20px;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            margin: 0 10px;
+        }
+
+        .btn-approve {
+            background-color: var(--success);
+        }
+
+        .btn-reject {
+            background-color: var(--danger);
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            margin-top: 15px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .remarks-box {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .input-area {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        .success-msg {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .success-msg h2 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <div class="page-container">
+        <div class="header">Product Request Approval</div>
+
+        <apex:form id="mainForm">
+            <apex:pageMessages />
+
+            <apex:outputPanel rendered="{!isSuccess}">
+                <div class="success-msg">
+                    <h2>✓ Feedback Submitted Successfully</h2>
+                    <p>Thank you. Your response has been recorded for Product Request {!productRequestNumber}.</p>
+                </div>
+            </apex:outputPanel>
+
+            <apex:outputPanel rendered="{!NOT(isSuccess)}">
+
+                <div class="section">
+                    <div class="section-title">1. Case Basic Info</div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="label">Case Number</span>
+                            <span class="value">{!IF(ISBLANK(caseNumber), 'N/A', caseNumber)}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">Complaint Type</span>
+                            <span class="value">{!IF(ISBLANK(complaintType), 'N/A', complaintType)}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">Account Name</span>
+                            <span class="value">{!IF(ISBLANK(accountName), 'N/A', accountName)}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">Contact Name</span>
+                            <span class="value">{!IF(ISBLANK(contactName), 'N/A', contactName)}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">Contact Phone</span>
+                            <span class="value">{!IF(ISBLANK(contactPhone), 'N/A', contactPhone)}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">Contact Email</span>
+                            <span class="value">{!IF(ISBLANK(contactEmail), 'N/A', contactEmail)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">2. Work Order Details</div>
+                    <div class="data-item">
+                        <span class="label">Work Order Number</span>
+                        <span class="value">{!IF(ISBLANK(workOrderNumber), 'N/A', workOrderNumber)}</span>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">3. Product Request Details</div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="label">Product Request Number</span>
+                            <span class="value">{!IF(ISBLANK(productRequestNumber), 'N/A', productRequestNumber)}</span>
+                        </div>
+
+                        <div class="data-item">
+                            <span class="label">Final Expected Delivery Date</span>
+                            <span class="value">{!IF(ISBLANK(needByDateText), 'N/A', LEFT(needByDateText, 10))}</span>
+                        </div>
+
+                        <div class="data-item">
+                            <span class="label">Final Amount to be paid</span>
+                            <span class="value" style="color: var(--primary); font-weight: bold;">
+                                {!IF(ISBLANK(finalAmountText), 'N/A', '$' + finalAmountText)}
+                            </span>
+                        </div>
+
+                        <div class="data-item">
+                            <span class="label">Ship To Address</span>
+                            <span class="value">{!IF(ISBLANK(shipToAddressText), 'N/A', shipToAddressText)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">4. Line Items Details</div>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>UOM</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                                <tbody>
+                                    <apex:repeat value="{!lineItemRows}" var="li">
+                                        <tr>
+                                            <td>{!IF(ISBLANK(li.materialCode), 'N/A', li.materialCode)}</td>
+                                            <td>{!IF(ISBLANK(li.materialDescription), 'N/A', li.materialDescription)}</td>
+                                            <td>{!IF(ISBLANK(li.quantityRequested), 'N/A', li.quantityRequested)}</td>
+                                            <td>{!IF(ISBLANK(li.quantityUom), 'N/A', li.quantityUom)}</td>
+                                            <td>{!IF(ISBLANK(li.priceText), 'N/A', li.priceText)}</td>
+                                        </tr>
+                                    </apex:repeat>
+                                </tbody>
+                    </table>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">5. Assign Resources Information</div>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!resourceInfoList}" var="res">
+                                <tr>
+                                    <td>{!IF(ISBLANK(res.resourceName), 'N/A', res.resourceName)}</td>
+                                    <td>{!IF(ISBLANK(res.resourceType), 'N/A', res.resourceType)}</td>
+                                    <td>{!IF(ISBLANK(res.phone), 'N/A', res.phone)}</td>
+                                    <td>{!IF(ISBLANK(res.email), 'N/A', res.email)}</td>
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="action-section">
+                    <div class="prompt-text">
+                        Please review the details above. If everything is accurate, click <strong>Approve</strong>. If not, please click <strong>Reject</strong>.
+                    </div>
+
+                    <apex:outputPanel id="actionButtons">
+                        <apex:commandButton value="Approve"
+                                            action="{!selectApprove}"
+                                            reRender="actionPanel"
+                                            styleClass="btn btn-approve"
+                                            rendered="{!NOT(showRemarksBox)}"/>
+                        <apex:commandButton value="Reject"
+                                            action="{!selectReject}"
+                                            reRender="actionPanel"
+                                            styleClass="btn btn-reject"
+                                            rendered="{!NOT(showRemarksBox)}"/>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="actionPanel">
+                        <apex:outputPanel rendered="{!showRemarksBox}" layout="block" styleClass="remarks-box">
+                            <div class="data-item">
+                                <span class="label" style="color: var(--primary); margin-bottom: 8px;">
+                                    You selected: <b>{!feedbackStatus}</b>. Please provide your remarks below:
+                                    <span style="color:red; font-size:16px;">*</span>
+                                </span>
+                                <apex:inputTextarea value="{!remarks}" rows="4" styleClass="input-area" html-placeholder="Enter your comments here..."/>
+                            </div>
+                            <div style="text-align: center;">
+                                <apex:commandButton value="Submit Feedback"
+                                                    action="{!saveFeedback}"
+                                                    styleClass="btn btn-submit"
+                                                    reRender="mainForm"/>
+                            </div>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </div>
+
+            </apex:outputPanel>
+        </apex:form>
+    </div>
+</apex:page>

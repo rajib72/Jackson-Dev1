@@ -1,0 +1,528 @@
+:host {
+    --border-color: #d8dde6;
+    --background-light: #f7f9fb;
+    --text-primary: #181818;
+    --text-secondary: #5f6b7a;
+    --brand-color: #0176d3;
+    --success-color: #2e844a;
+
+    display: block;
+    width: 100%;
+}
+
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.section-box {
+    padding: 0;
+
+    border-color: var(--border-color);
+
+    border-radius: 0.6rem;
+
+    overflow: visible;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 1px 3px
+        rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.section-header {
+    padding:
+        0.8rem
+        1rem;
+
+    background: var(--background-light);
+
+    border-bottom:
+        1px solid
+        var(--border-color);
+
+    border-radius:
+        0.6rem
+        0.6rem
+        0
+        0;
+}
+
+
+.section-header-content {
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.65rem;
+}
+
+
+.section-header-text {
+    min-width: 0;
+}
+
+
+.section-title {
+    font-size: 0.92rem;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+
+    color: var(--text-primary);
+}
+
+
+.section-subtitle {
+    margin-top: 0.12rem;
+
+    font-size: 0.7rem;
+
+    line-height: 1.3;
+
+    color: var(--text-secondary);
+}
+
+
+/* =========================================================
+   SECTION BODY
+   ========================================================= */
+
+.section-body {
+    padding:
+        1.1rem
+        1rem
+        1.2rem;
+}
+
+
+/* =========================================================
+   FIELD LABELS
+   ========================================================= */
+
+.dealer-label,
+.remarks-label {
+    margin-bottom: 0.35rem;
+
+    font-size: 0.75rem;
+
+    font-weight: 600;
+
+    color: var(--text-primary);
+}
+
+
+/* =========================================================
+   SEARCH RESULT BOX
+   ========================================================= */
+
+.search-results {
+    position: relative;
+
+    z-index: 10;
+
+    width: 100%;
+
+    max-height: 230px;
+
+    overflow-y: auto;
+
+    border:
+        1px solid
+        var(--border-color);
+
+    border-radius: 0.45rem;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 5px 14px
+        rgba(0, 0, 0, 0.11);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   DEALER RESULT
+   ========================================================= */
+
+.dealer-result {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    min-height: 66px;
+
+    gap: 1rem;
+
+    padding:
+        0.75rem
+        0.9rem;
+
+    border: 0;
+
+    border-bottom:
+        1px solid
+        #edf0f4;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    font-family: inherit;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.15s ease;
+}
+
+
+.dealer-result:last-child {
+    border-bottom: 0;
+}
+
+
+.dealer-result:hover {
+    background: #f2f7fc;
+}
+
+
+/* =========================================================
+   DEALER RESULT DATA
+   ========================================================= */
+
+.dealer-main {
+    display: flex;
+
+    align-items: center;
+
+    flex: 1;
+
+    min-width: 0;
+
+    gap: 0.75rem;
+}
+
+
+.dealer-icon {
+    display: flex;
+
+    flex-shrink: 0;
+}
+
+
+.dealer-content {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.dealer-name {
+    font-size: 0.84rem;
+
+    font-weight: 700;
+
+    color: var(--brand-color);
+}
+
+
+.dealer-meta {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 0.3rem;
+
+    margin-top: 0.2rem;
+
+    font-size: 0.71rem;
+
+    color: var(--text-secondary);
+}
+
+
+.separator {
+    color: #a8b0bb;
+}
+
+
+.result-arrow {
+    display: flex;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   SELECTED DEALER
+   ========================================================= */
+
+.selected-dealer {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    width: 100%;
+
+    padding:
+        0.9rem
+        1rem;
+
+    background:
+        linear-gradient(
+            90deg,
+            #edf9f1,
+            #f8fcf9
+        );
+
+    border:
+        1px solid
+        #91d9a8;
+
+    border-left:
+        4px solid
+        var(--success-color);
+
+    border-radius: 0.5rem;
+
+    box-sizing: border-box;
+}
+
+
+.selected-dealer-main {
+    display: flex;
+
+    align-items: center;
+
+    flex: 1;
+
+    min-width: 0;
+
+    gap: 0.75rem;
+}
+
+
+.selected-check {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 2rem;
+    height: 2rem;
+
+    min-width: 2rem;
+
+    border-radius: 50%;
+
+    background: var(--success-color);
+
+    --slds-c-icon-color-foreground-default: #ffffff;
+}
+
+
+.selected-content {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.selected-label {
+    margin-bottom: 0.1rem;
+
+    font-size: 0.63rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.04rem;
+
+    color: #53675a;
+}
+
+
+.selected-name {
+    font-size: 0.86rem;
+
+    font-weight: 700;
+
+    color: #1f3b2d;
+}
+
+
+.selected-email,
+.selected-location {
+    margin-top: 0.15rem;
+
+    font-size: 0.71rem;
+
+    color: #53675a;
+}
+
+
+.selected-action {
+    flex-shrink: 0;
+
+    margin-left: 1rem;
+}
+
+
+/* =========================================================
+   REMARKS HELP
+   ========================================================= */
+
+.remarks-help {
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.4rem;
+
+    padding:
+        0.55rem
+        0.65rem;
+
+    background: #f7f9fb;
+
+    border-radius: 0.35rem;
+
+    color: var(--text-secondary);
+
+    font-size: 0.69rem;
+
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   SEARCH LOADING
+   ========================================================= */
+
+.search-loading {
+    position: relative;
+
+    min-height: 65px;
+
+    border:
+        1px solid
+        #edf0f4;
+
+    border-radius: 0.4rem;
+
+    background: #fafbfc;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 0.75rem;
+
+    width: 100%;
+}
+
+
+.footer-cancel {
+    margin-right: 0.75rem;
+}
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.spinner-container {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    background:
+        rgba(255, 255, 255, 0.55);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.search-results::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.search-results::-webkit-scrollbar-track {
+    background: #f4f5f7;
+}
+
+
+.search-results::-webkit-scrollbar-thumb {
+    background: #b9c0c9;
+
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media only screen and (max-width: 768px) {
+
+    .section-subtitle {
+        display: none;
+    }
+
+
+    .selected-dealer {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .selected-dealer-main {
+        width: 100%;
+    }
+
+
+    .selected-action {
+        margin-left: 2.75rem;
+    }
+
+
+    .footer-cancel {
+        margin-right: 0.5rem;
+    }
+
+}

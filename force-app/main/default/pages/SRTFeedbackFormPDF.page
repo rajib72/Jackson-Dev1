@@ -1,0 +1,694 @@
+<apex:page controller="SRTFeedbackFormPDFController" renderAs="PDF" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+
+    <html>
+        <head>
+            <style>
+                
+                @page {
+                    size: A4 portrait;
+                    margin: 12mm 10mm 14mm 10mm;
+                    @bottom-center {
+                        content: "Jakson Customer Service  |  Page " counter(page) " of " counter(pages);
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 8px;
+                        color: #5f6b76;
+                    }
+                }
+
+                * { box-sizing: border-box; }
+
+                body {
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 9px;
+                    line-height: 1.25;
+                    margin: 0;
+                    padding: 0;
+                    color: #1f2933;
+                    background: #ffffff;
+                }
+                
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    margin: 0 0 7px 0;
+                    table-layout: fixed;
+                    background: #ffffff;
+                    -fs-table-paginate: paginate;
+                }
+                
+                th, td {
+                    border: 0.6px solid #9fb3c8;
+                    padding: 4px 5px;
+                    vertical-align: top;
+                    overflow-wrap: break-word;
+                }
+
+                tr { page-break-inside: avoid; }
+                
+                .header {
+                    font-size: 17px;
+                    line-height: 1.15;
+                    font-weight: bold;
+                    color: #005b96;
+                    text-align: center;
+                    letter-spacing: 0.4px;
+                }
+                
+                .subheader {
+                    font-size: 8px;
+                    color: #4a6c8f;
+                    text-align: center;
+                    font-weight: normal;
+                    letter-spacing: 0;
+                }
+                
+                .section {
+                    background: #0b5cad;
+                    color: #ffffff;
+                    font-weight: bold;
+                    font-size: 9px;
+                    padding: 5px;
+                    text-align: left;
+                }
+                
+                .label { font-weight: bold; color: #005b96; }
+                
+                .no-border td { border: none; background: #ffffff; }
+
+                .document-header {
+                    border-bottom: 2px solid #0b5cad;
+                    margin-bottom: 8px;
+                }
+
+                .document-header td { vertical-align: middle; padding: 3px 4px 7px 4px; }
+                
+                label { display: inline-block; margin: 0 7px 2px 0; white-space: nowrap; }
+
+                input[type="checkbox"] {
+                    width: 9px;
+                    height: 9px;
+                    margin: 0 2px 0 0;
+                    vertical-align: middle;
+                }
+                
+                .signature { height: 82px; background: #ffffff; line-height: 1.4; }
+                
+                .footer {
+                    text-align: center;
+                    color: #0b5cad;
+                    font-size: 9px;
+                    font-weight: bold;
+                    margin-top: 7px;
+                }
+
+                
+                .keep-together { page-break-inside: avoid; }
+                .center { text-align: center; }
+                .small { font-size: 8px; }
+                .spacer-row td { height: 28px; }
+                .remarks-row td { height: 22px; }
+                
+            </style>
+        </head>
+        
+        <body>
+            
+            <table class="no-border document-header">
+                <tr>
+                    <td width="25%">
+                        <b>JAKSON</b><br/>
+                        DISTRIBUTED ENERGY
+                    </td>
+                    
+                    <td width="50%" class="header">
+                        CUSTOMER SERVICE<br/>
+                        FIELD SERVICE JOB SHEET
+                        <br/>
+                        
+                        <span class="subheader">
+                            Because Every Customer is a Part of the Jakson Family
+                        </span>
+                    </td>
+                    
+                    <td width="25%" align="right">
+                        <b>JOB SHEET NO.</b><br/>
+                        JS-____________
+                    </td>
+                </tr>
+            </table>
+            
+            <table>
+                <tr>
+                    <th colspan="4" class="section">
+                        CUSTOMER FEEDBACK<br/>
+                        <span class="small" style="font-weight:normal;color:#ffffff;">
+                            Your feedback helps us serve the Jakson family better.
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <label>
+                            <b>SERVICE FOR</b><br/>
+                            <input type="checkbox" name="serviceType" value="Electrical"/> Service</label>           
+                        <label><input type="checkbox" name="serviceType" value="Mechanical"/> Installation</label>            
+                        <label><input type="checkbox" name="serviceType" value="Battery/BMS"/> Commissioning</label>             
+                        <label><input type="checkbox" name="serviceType" value="Installation"/> Breakdown</label>   
+                        <label><input type="checkbox" name="serviceType" value="Other"/> Preventive Maintenance</label>
+                    </td>
+                </tr>
+            </table>
+            
+            <table>
+                <tr>
+                    <th colspan="2" class="section">
+                        SERVICE REQUEST DETAILS    
+                    </th>
+                    <th colspan="2" class="section">
+                        VISIT DETAILS    
+                    </th>
+                </tr>
+                <tr >
+                    <td>Service Request No.</td>
+                    <td></td>
+                    <td>Visit Date</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>Complaint Type</td>                              
+                    <td>
+                        <label>
+                            <input type="checkbox" name="complaintType" value="Installation"/> Installation</label>
+                        
+                        <label>
+                            <input type="checkbox" name="complaintType" value="Commissioning "/> Commissioning </label>
+                        
+                        <label>
+                            <input type="checkbox" name="complaintType" value="Breakdown "/> Breakdown </label>
+                        
+                        <label>
+                            <input type="checkbox" name="complaintType" value="PM"/> PM  </label>
+                        
+                        <label>
+                            <input type="checkbox" name="complaintType" value="DOA"/> DOA </label>
+                        <label>
+                            <input type="checkbox" name="complaintType" value="Other"/> Other 
+                        </label>
+                    </td>
+                    
+                    <td>Visit No.</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Priority</td>
+                    <td>
+                        <label><input type="checkbox" name="priority" value="P1 Critical "/> P1 Critical</label>
+                        <label><input type="checkbox" name="priority" value="P2 High "/> P2 High</label>
+                        <label><input type="checkbox" name="priority" value="P3 Normal"/> P3 Normal</label>
+                    </td>
+                    <td>Warranty</td>
+                    <td>
+                        <label><input type="checkbox" name="warrenty" value="Yes"/> Yes </label>
+                        <label><input type="checkbox" name="warrenty" value="No"/> No </label>
+                        <label><input type="checkbox" name="warrenty" value="Validation"/> Validation</label>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>Assigned SSD / Partner</td>
+                    <td></td>
+                    <td>Engineer / Service Lead</td>
+                    <td></td>
+                </tr>
+            </table>
+            
+            <table>
+                
+                <tr>
+                    <th colspan="4" class="section">
+                        
+                        1. CUSTOMER and SITE DETAILS    
+                        
+                    </th>
+                </tr>
+                <tr >
+                    <td colspan="1" class="section">Customer / Site Information</td>
+                    <td colspan="1" class="section">Details</td>
+                    <td colspan="1" class="section">Customer / Site Information</td>
+                    <td colspan="1" class="section">Details</td>
+                </tr>
+                
+                <tr>
+                    <td>Customer Name</td>
+                    <td></td>
+                    <td>Mobile No.</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>Site Address</td>
+                    <td></td>
+                    <td>Pincode</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>City / District / State</td>
+                    <td></td>
+                    <td>Email ID</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>Contact Person</td>
+                    <td></td>
+                    <td>Alternate Contact</td>
+                    <td></td>
+                </tr>
+                
+            </table>
+            
+            <table>
+                
+                <tr>
+                    <th colspan="4" class="section">
+                        2. PRODUCT / ASSET DETAILS
+                    </th>
+                </tr>
+                <tr >
+                    <td colspan="1" class="section">Fields</td>
+                    <td colspan="1" class="section">Details</td>
+                    <td colspan="1" class="section">Fields</td>
+                    <td colspan="1" class="section">Details</td>
+                </tr>
+                
+                <tr>
+                    <td>Product</td>
+                    
+                    <td>
+                        <label><input type="checkbox" name="product" value="BESS "/>BESS</label>
+                        <label><input type="checkbox" name="product" value="Solar / GTI "/> Solar / GTI</label>
+                        <label><input type="checkbox" name="product" value="Genset"/> Genset</label>
+                        <label><input type="checkbox" name="product" value="MLT"/> MLT</label>
+                        <label><input type="checkbox" name="product" value="Other"/> Other</label>
+                    </td>
+                    <td>Model</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    
+                    <td>Serial No.</td>
+                    <td></td>
+                    <td>Invoice No.</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    
+                    <td>Date of Invoice/DOP</td>
+                    <td></td>
+                    <td>Manufacturing Month / MOM</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>Warranty Start Date</td>
+                    <td></td>
+                    <td>Warranty End Date</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>Application/Installation Location</td>
+                    <td></td>
+                    <td>Product Status</td>
+                    <td>
+                        <label><input type="checkbox" name="productStatus" value="Working"/> Working</label>
+                        <label><input type="checkbox" name="productStatus" value="Not Working"/>Not Working</label>
+                        <label><input type="checkbox" name="productStatus" value="Damaged"/> Damaged</label>
+                    </td>
+                </tr>
+                
+            </table>
+            
+            <table >
+                
+                <tr>
+                    <th colspan="4" class="section">
+                        3. COMPLAINT and DIAGNOSIS
+                    </th>
+                </tr>
+                
+                <tr>
+                    <td colspan="2" class="section">
+                        Reported Complaint / Customer Statement
+                        
+                    </td>
+                    
+                    <td colspan="2" class="section">
+                        Diagnosis / Observation
+                        
+                    </td>
+                    
+                </tr>
+                <tr class="spacer-row"><td colspan="2"></td>
+                    <td colspan="2"></td>
+                </tr>
+                
+                <tr><td colspan="1" class="section">Failure Category</td>
+                    <td colspan="1" class="section">Details / Code</td>
+                    <td colspan="1" class="section">Action Taken</td>
+                    <td colspan="1" class="section">Status</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="failureCategory" value="Electrical"/> Electrical
+                        </label><br/>
+                        
+                        <label>
+                            <input type="checkbox" name="failureCategory" value="Mechanical"/> Mechanical
+                        </label><br/>
+                        
+                        <label>
+                            <input type="checkbox" name="failureCategory" value="Battery/BMS"/> Battery/BMS
+                        </label><br/>
+                        
+                        <label>
+                            <input type="checkbox" name="failureCategory" value="Installation"/> Installation
+                        </label><br/>
+                        
+                        <label>
+                            <input type="checkbox" name="failureCategory" value="Other"/> Other
+                        </label>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="status" value="Resolved"/> Resolved
+                        </label><br/>
+                        
+                        <label>
+                            <input type="checkbox" name="status" value="Pending"/>Pending
+                        </label>
+                    </td>
+                    
+                </tr>
+                
+            </table>
+            
+            <table>
+                
+                <tr>
+                    <th colspan="5" class="section">
+                        4. SITE OBSERVATION / INSTALLATION CHECK
+                    </th>
+                </tr>
+                
+                <tr class="section">
+                    <th colspan="1" class="section">Check Point</th>
+                    <th colspan="1" class="section">OK</th>
+                    <th colspan="1" class="section">Not OK</th>
+                    <th colspan="1" class="section">N/A</th>
+                    <th colspan="1" class="section">Remarks</th>
+                </tr>
+                
+                <tr><td>Input Supply / Voltage</td><td><label><input type="checkbox" name="ok" value="Input Supply / Voltage"/> </label>
+                    </td><td><label><input type="checkbox" name="not ok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Input Supply / Voltage"/> </label></td><td></td></tr>
+                <tr><td>Output / Load Condition</td><td><label><input type="checkbox" name="ok" value="Output / Load Condition"/> </label>
+                    </td><td><label><input type="checkbox" name="not ok" value="Output / Load Condition"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Output / Load Condition"/> </label></td><td></td></tr>
+                <tr><td>Earthing / Neutral</td><td><label><input type="checkbox" name="ok" value="Input Supply / Voltage"/> </label>
+                    </td><td><label><input type="checkbox" name="notok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Input Supply / Voltage"/> </label></td><td></td></tr>
+                <tr><td>MCB / Protection / Bypass</td><td><label><input type="checkbox" name="ok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="notok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Input Supply / Voltage"/> </label></td><td></td></tr>
+                <tr><td>Cable / Terminal/ Connection</td><td><label><input type="checkbox" name="ok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="notok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Input Supply / Voltage"/> </label></td><td></td></tr>
+                <tr><td>Ventilation/ Site condition</td><td><label><input type="checkbox" name="ok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="notok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Input Supply / Voltage"/> </label></td><td></td></tr>
+                <tr><td>Battery / BMS / Communication</td><td><label><input type="checkbox" name="ok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="notok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Input Supply / Voltage"/> </label></td><td></td></tr>
+                <tr><td>Physical Condition / Damage</td><td><label><input type="checkbox" name="ok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="notok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Input Supply / Voltage"/> </label></td><td></td></tr>
+                <tr><td>Other Observation</td><td><label><input type="checkbox" name="ok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="notok" value="Input Supply / Voltage"/> </label></td>
+                    <td><label><input type="checkbox" name="n/a" value="Input Supply / Voltage"/> </label></td><td></td></tr>
+                
+            </table>
+            
+            <table >
+                
+                <tr>
+                    <th colspan="6" class="section">
+                        5. SPARE PARTS / MATERIAL USED
+                    </th>
+                </tr>
+                
+                <tr class="section">
+                    <th>Part Code</th>
+                    <th>Part Description</th>
+                    <th>Qty</th>
+                    <th>Warranty/Paid</th>
+                    <th>Old Part / Serial No.</th>
+                    <th>Remarks</th>
+                </tr>
+                
+                <tr class="remarks-row"><td>&#160;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr class="remarks-row"><td>&#160;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr class="remarks-row"><td>&#160;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                
+            </table>
+            
+            <table>
+                
+                <tr>
+                    <th colspan="2" class="section">
+                        6. SERVICE OUTCOME
+                    </th>
+                </tr>
+                <tr class="section">
+                    <td colspan="1" class="section">Outcome</td>
+                    <td colspan="1" class="section">Detail</td>
+                </tr>
+                
+                <tr>
+                    
+                    <td >Service Result</td>
+                    
+                    <td>
+                        <label><input type="checkbox" name="serviceResult" value="Resolved"/>Resolved </label>
+                        <label><input type="checkbox" name="serviceResult" value="Partially Resolved"/>Partially Resolved </label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Spare"/> Awaiting Spare </label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Customer"/>Awaiting Customer </label>
+                        <label><input type="checkbox" name="serviceResult" value="L3 Escalation "/>L3 Escalation </label>
+                        <label><input type="checkbox" name="serviceResult" value="Repeat Visit Required"/>Repeat Visit Required </label>
+                    </td>
+                </tr>
+                
+                <tr>
+                    
+                    <td >Unproductive Visit Reason</td>
+                    
+                    <td>
+                        <label><input type="checkbox" name="serviceResult" value="Resolved"/>House Locked  </label>
+                        <label><input type="checkbox" name="serviceResult" value="Partially Resolved"/>Customer Unavailable  </label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Spare"/> Duplicate/Wrong Complaint  </label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Customer"/>Other Brand  </label>
+                        <label><input type="checkbox" name="serviceResult" value="L3 Escalation "/>Invoice Not Available  </label>
+                        <label><input type="checkbox" name="serviceResult" value="Repeat Visit Required"/>Estimate Not Approved </label>
+                        <label><input type="checkbox" name="serviceResult" value="Partially Resolved"/>Customer Refused   </label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Spare"/> Wrong Address   </label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Customer"/>Product Shifted   </label>
+                        <label><input type="checkbox" name="serviceResult" value="L3 Escalation "/>Already Repaired/Complaint Not Found  </label>
+                        <label><input type="checkbox" name="serviceResult" value="Repeat Visit Required"/>Other </label>
+                    </td>
+                </tr>
+                
+                <tr>
+                    
+                    <td>
+                        Pending Action / Next Visit
+                    </td>
+                    
+                    <td style="height:60px;"></td>
+                    
+                </tr>
+                
+                <tr>
+                    
+                    <td>
+                        Expected Closure Date
+                    </td>
+                    
+                    <td></td>
+                    
+                </tr>
+                
+            </table>
+            
+            <table >
+                
+                <tr>
+                    <th colspan="2" class="section">
+                        7. CUSTOMER CONFIRMATION and FEEDBACK
+                    </th>
+                </tr>
+                
+                <tr class="section">
+                    <td>Customer Confirmation</td>
+                    <td>Details</td>
+                </tr>
+                
+                <tr>
+                    
+                    <td>
+                        Service explanation given
+                    </td>
+                    
+                    <td>
+                        <label><input type="checkbox" name="serviceResult" value="Partially Resolved"/>Yes </label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Spare"/>No</label>
+                    </td>
+                    
+                </tr>
+                
+                <tr>
+                    
+                    <td>
+                        Issue resolved to customer's satisfaction
+                    </td>
+                    
+                    <td>
+                        <label><input type="checkbox" name="serviceResult" value="Partially Resolved"/>Yes  </label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Customer"/>Partially</label>
+                        <label><input type="checkbox" name="serviceResult" value="Awaiting Spare"/>No</label>
+                        
+                        
+                    </td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>CSAT Rating</td>
+                    
+                    <td style="font-size:11px;font-weight:bold;color:#0b5cad;">
+                        
+                        <apex:outputPanel rendered="{!IF(feedbackRecord.Overall_Satisfaction_CSAT__c = '1', true, false)}">
+                            1 / 5
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel rendered="{!IF(feedbackRecord.Overall_Satisfaction_CSAT__c = '2', true, false)}">
+                            2 / 5
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel rendered="{!IF(feedbackRecord.Overall_Satisfaction_CSAT__c = '3', true, false)}">
+                            3 / 5
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel rendered="{!IF(feedbackRecord.Overall_Satisfaction_CSAT__c = '4', true, false)}">
+                            4 / 5
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel rendered="{!IF(feedbackRecord.Overall_Satisfaction_CSAT__c = '5', true, false)}">
+                            5 / 5
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+                <tr>
+                    <td>NPS Rating</td>
+                    
+                    <td style="font-size:11px;font-weight:bold;color:#0b5cad;">
+                        
+                        <apex:outputPanel rendered="{!IF(feedbackRecord.Would_you_recommend_Jakson_NPS__c = '1', true, false)}">
+    1 / 5
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(feedbackRecord.Would_you_recommend_Jakson_NPS__c = '2', true, false)}">
+    2 / 5
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(feedbackRecord.Would_you_recommend_Jakson_NPS__c = '3', true, false)}">
+    3 / 5
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(feedbackRecord.Would_you_recommend_Jakson_NPS__c = '4', true, false)}">
+    4 / 5
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(feedbackRecord.Would_you_recommend_Jakson_NPS__c = '5', true, false)}">
+    5 / 5
+</apex:outputPanel>
+                        
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    
+                    <td>
+                        Customer Comments
+                    </td>
+                    
+                    <td style="height:70px;"></td>
+                    
+                </tr>
+                
+            </table>
+            
+            <table class="keep-together">
+                
+                <tr>
+                    
+                    <td width="50%" class="signature">
+                        <b style="color:#005b96;">Customer / Authorized Person</b><br/><br/><br/>
+                        
+                        Name : ___________________________<br/><br/>
+                        
+                        Signature : _______________________<br/><br/>
+                        
+                        Date/Time : ______________________
+                        
+                    </td>
+                    
+                    <td width="50%" class="signature">
+                        <b style="color:#005b96;">Service Engineer / SSD</b><br/><br/><br/>
+                        
+                        Name : ___________________________<br/><br/>
+                        
+                        Signature : _______________________<br/><br/>
+                        
+                        Date/Time : ______________________
+                        
+                    </td>
+                    
+                </tr>
+                
+            </table>
+            
+            <div class="center small">
+                <b>Jakson Customer Service</b><br/>
+                This job sheet forms part of the service record and must be updated in CRM.
+            </div>
+            <div class="footer">
+                Thank you for choosing Jakson.
+                <br/>
+                Together, we build lasting relationships through trust, quality, and care.
+            </div>
+            
+        </body>
+        
+    </html>
+    
+</apex:page>

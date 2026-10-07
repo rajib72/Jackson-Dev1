@@ -1,0 +1,41 @@
+<aura:component 
+    implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader"
+    access="global">
+
+    <aura:attribute name="recordId" type="String"/>
+
+<aura:html tag="style">
+
+/* Force modal to use almost full screen */
+.slds-modal__container {
+    width: 60vw !important;
+    max-width: 80vw !important;
+
+    height: 95vh !important;
+    max-height: 95vh !important;
+
+    margin: 0 auto !important;
+}
+
+/* Make only one scroll */
+.slds-modal__content {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
+}
+
+/* Remove Salesforce internal padding wrapper */
+.cuf-content,
+.slds-p-around--medium {
+    height: 100% !important;
+    padding: 0 !important;
+}
+
+</aura:html>
+
+
+    <c:technoCommercialOffer
+        recordId="{!v.recordId}"
+        onclosequickaction="{!c.handleClose}" />
+
+</aura:component>

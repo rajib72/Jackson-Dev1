@@ -1,0 +1,82 @@
+/* --- Main Banner Styling (Smooth Blue Gradient) --- */
+.main-banner {
+    background: linear-gradient(135deg, #f4f9fd 0%, #e8f2fc 100%);
+    border: 1px solid #a6c5e6;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 95, 178, 0.08); /* Soft depth shadow */
+    transition: box-shadow 0.3s ease;
+}
+
+.main-banner .banner-title {
+    color: #cc0000;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: 0.3px;
+}
+
+.main-banner .banner-subtitle {
+    color: #005fb2;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* --- Info Banner Styling (Smooth Red Gradient) --- */
+.info-banner {
+    background: linear-gradient(135deg, #ffffff 0%, #fdf5f5 100%);
+    border: 1px solid #e6b3b3;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(204, 0, 0, 0.05);
+}
+
+.info-title {
+    color: #cc0000;
+    font-size: 0.95rem;
+}
+
+.info-instruction {
+    color: #005fb2;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* Custom Red Badge with Gradient */
+.custom-badge {
+    background: linear-gradient(135deg, #cc0000 0%, #a30000 100%);
+    color: #ffffff;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 6px rgba(204, 0, 0, 0.25);
+}
+
+/* --- Smooth Table Container --- */
+.custom-table-container {
+    border: 1px solid #d8dde6;
+    border-radius: 12px;
+    overflow: hidden; /* Ensures the table doesn't poke out of rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* --- Dark Blue Headers --- */
+.custom-table thead th {
+    background: linear-gradient(to bottom, #f8faff, #f1f5f9) !important;
+    border-bottom: 2px solid #c9d2de;
+}
+
+.custom-table thead th .slds-truncate {
+    color: #002244 !important; /* Deep Dark Blue */
+    font-weight: 800;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Table Row Smooth Hover Effect */
+.custom-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #f4f8fc;
+}

@@ -1,0 +1,104 @@
+<template>
+
+    <div class="container">
+
+        <!-- ================= STEP 1 ================= -->
+        <template if:true={isStepOne}>
+
+            <div class="section-box">
+                <h3 class="section-title">Basic Information</h3>
+
+                <div class="responsive-grid">
+                    <lightning-input label="Account" value={accountName} disabled></lightning-input>
+                    <lightning-input label="Opportunity" value={opportunityName} disabled></lightning-input>
+                </div>
+
+                <lightning-input
+                    label="Quote Name"
+                    value={quoteName}
+                    onchange={handleQuoteNameChange}
+                    required>
+                </lightning-input>
+
+                <lightning-input
+                    type="date"
+                    label="Expiration Date"
+                    value={expirationDate}
+                    onchange={handleExpirationChange}
+                    required>
+                </lightning-input>
+
+                <lightning-textarea
+                    label="Description"
+                    value={description}
+                    onchange={handleDescriptionChange}>
+                </lightning-textarea>
+            </div>
+
+            <div class="section-box">
+                <h3 class="section-title">Contact Information</h3>
+
+                <lightning-combobox
+                    label="Contact Details"
+                    value={contactId}
+                    options={contactOptions}
+                    onchange={handleContactChange}
+                    required>
+                </lightning-combobox>
+            </div>
+
+            <div class="footer">
+                <lightning-button
+                    variant="brand"
+                    label="Next"
+                    onclick={handleNext}>
+                </lightning-button>
+            </div>
+
+        </template>
+
+        <!-- ================= STEP 2 ================= -->
+        <template if:true={isStepTwo}>
+
+            <div class="section-box">
+                <h3 class="section-title">Billing Address</h3>
+
+                <div class="responsive-grid">
+                    <lightning-input label="Billing Street" value={billingStreet}></lightning-input>
+                    <lightning-input label="Billing City" value={billingCity}></lightning-input>
+                    <lightning-input label="Billing State" value={billingState}></lightning-input>
+                    <lightning-input label="Billing Postal Code" value={billingPostalCode}></lightning-input>
+                    <lightning-input label="Billing Country" value={billingCountry}></lightning-input>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <h3 class="section-title">Shipping Address</h3>
+
+                <div class="responsive-grid">
+                    <lightning-input label="Shipping Street" value={shippingStreet}></lightning-input>
+                    <lightning-input label="Shipping City" value={shippingCity}></lightning-input>
+                    <lightning-input label="Shipping State" value={shippingState}></lightning-input>
+                    <lightning-input label="Shipping Postal Code" value={shippingPostalCode}></lightning-input>
+                    <lightning-input label="Shipping Country" value={shippingCountry}></lightning-input>
+                </div>
+            </div>
+
+            <div class="footer">
+                <lightning-button
+                    label="Previous"
+                    onclick={handlePrevious}>
+                </lightning-button>
+
+                <lightning-button
+                    variant="brand"
+                    label="Create Offer"
+                    onclick={handleCreate}>
+                </lightning-button>
+            </div>
+
+        </template>
+
+    </div>
+
+</template>

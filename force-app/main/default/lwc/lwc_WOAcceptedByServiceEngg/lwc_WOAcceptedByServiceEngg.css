@@ -1,0 +1,22 @@
+.quick-action-body {
+    background: #ffffff;
+    border-radius: 0.75rem;
+}
+
+.form-box {
+    border: 1px solid #d8dde6;
+    border-radius: 0.75rem;
+    background: #f9fafc;
+    padding: 1rem;
+}
+
+.field-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.75rem;
+}
+
+.footer-btn-space {
+    margin-left: 0.5rem;
+}

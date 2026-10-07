@@ -1,0 +1,34 @@
+<template>
+
+    <!-- BODY CONTENT ONLY (Quick Action provides modal wrapper) -->
+
+    <div class="custom-body">
+
+        <div class="reassign-message">
+            This opportunity is being reassigned to you to complete all the required
+            documentation in order to move the stage from "Assign to Sales Head"
+            to "Assign to Pre Design Team".
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="custom-footer">
+
+        <div class="footer-buttons">
+
+            <lightning-button label="Cancel"
+                              onclick={handleClose}>
+            </lightning-button>
+
+            <lightning-button variant="brand"
+                              label="Reassign"
+                              onclick={handleReassign}
+                              disabled={isLoading}>
+            </lightning-button>
+
+        </div>
+
+    </div>
+
+</template>

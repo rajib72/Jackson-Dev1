@@ -1,0 +1,49 @@
+<template>
+    <lightning-card title="Route Selection" icon-name="standard:orders">
+        <div class="slds-p-around_medium">
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <lightning-button
+                label="Fetch Routes"
+                variant="brand"
+                onclick={handleFetchRoutes}
+                class="slds-m-bottom_medium">
+            </lightning-button>
+
+            <template if:true={routeOptions.length}>
+                <lightning-combobox
+                    name="routePicker"
+                    label="Select Route"
+                    value={selectedRoute}
+                    placeholder="Select a Route"
+                    options={routeOptions}
+                    onchange={handleRouteChange}>
+                </lightning-combobox>
+
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        label="Save"
+                        variant="success"
+                        onclick={handleSave}
+                        disabled={disableSave}>
+                    </lightning-button>
+                </div>
+            </template>
+
+            <template if:true={message}>
+                <div class="slds-m-top_medium slds-text-color_success">
+                    {message}
+                </div>
+            </template>
+
+            <template if:true={errorMessage}>
+                <div class="slds-m-top_medium slds-text-color_error">
+                    {errorMessage}
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

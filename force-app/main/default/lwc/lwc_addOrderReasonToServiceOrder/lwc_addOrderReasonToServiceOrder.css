@@ -1,0 +1,29 @@
+/* Modal body er height bariye dewa holo jate dropdown ta proper space pay */
+.custom-modal-body {
+    min-height: 350px; /* Ager 180px theke bariye 350px kora holo */
+    padding: 1rem 0.5rem;
+}
+
+/* Ensures the combobox sits nicely */
+.custom-combobox {
+    margin-top: 0.25rem;
+}
+
+/* Custom styling for the dropdown list */
+.custom-dropdown {
+    max-height: 250px !important; /* Ektu boro kora holo jate aro beshi item dekha jay */
+    overflow-y: auto;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    width: 100%;
+    position: absolute;
+    z-index: 9999;
+    background-color: white;
+}
+
+/* Hover effect on dropdown items */
+.slds-listbox__option:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+}

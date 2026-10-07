@@ -1,0 +1,266 @@
+:host {
+    display: block;
+}
+
+.main-container {
+    position: relative;
+    min-height: 220px;
+    padding: 0.75rem;
+    background: #f8fafc;
+    overflow: visible;
+}
+
+/* Spinner */
+
+.spinner-box {
+    position: relative;
+    min-height: 180px;
+}
+
+/* Information and Error Messages */
+
+.info-box,
+.error-box,
+.empty-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+
+    border-radius: 0.6rem;
+    font-size: 0.85rem;
+}
+
+.info-box {
+    background: #eef4ff;
+    border: 1px solid #c9ddff;
+    color: #16325c;
+}
+
+.error-box {
+    background: #fff1f1;
+    border: 1px solid #ffc4c4;
+    color: #b00020;
+}
+
+.empty-box {
+    background: #fff8e5;
+    border: 1px solid #ffe2a8;
+    color: #7a4b00;
+}
+
+/* Search Field Card */
+
+.field-section {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 1rem;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.04);
+
+    overflow: visible;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+/*
+ * The dropdown is positioned relative to this element.
+ */
+.search-input-anchor {
+    position: relative;
+    display: block;
+
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.search-help-text {
+    margin: 0.3rem 0 0;
+
+    color: #6b7280;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+/* Search Results Dropdown */
+
+.category-dropdown {
+    position: absolute;
+
+    top: calc(100% + 0.25rem);
+    left: 0;
+    right: 0;
+
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    max-height: 240px;
+
+    margin: 0;
+    padding: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background: #ffffff;
+    border: 1px solid #c9c9c9;
+    border-radius: 0.6rem;
+
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.08),
+        0 8px 16px rgba(0, 0, 0, 0.14);
+
+    z-index: 9999;
+}
+
+.category-list {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.category-list-item {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+}
+
+.category-option-button {
+    display: block;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0.8rem 1rem;
+
+    background: #ffffff;
+    border: none;
+    border-bottom: 1px solid #eeeeee;
+
+    color: inherit;
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.category-list-item:last-child
+.category-option-button {
+    border-bottom: none;
+}
+
+.category-option-button:hover,
+.category-option-button:focus {
+    background: #f3f8ff;
+    outline: none;
+    box-shadow: inset 3px 0 0 #0176d3;
+}
+
+.category-option-content {
+    display: block;
+    width: 100%;
+}
+
+.category-code {
+    color: #032d60;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+/* No Search Results */
+
+.no-results-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+
+    background: #ffffff;
+    border: 1px dashed #c9c9c9;
+    border-radius: 0.6rem;
+
+    color: #5c6b77;
+    font-size: 0.82rem;
+}
+
+/* Preview */
+
+.preview-card {
+    margin-top: 1rem;
+    padding: 1rem;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+}
+
+.preview-title {
+    margin-bottom: 0.35rem;
+
+    color: #6b7280;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.selected-value {
+    color: #032d60;
+    font-size: 1.1rem;
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.empty-value {
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+/* Mobile */
+
+@media only screen and (max-width: 768px) {
+    .main-container {
+        padding: 0.5rem;
+    }
+
+    .field-section {
+        padding: 0.75rem;
+    }
+
+    .category-dropdown {
+        max-height: 200px;
+    }
+}

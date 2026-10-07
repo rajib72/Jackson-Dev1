@@ -1,0 +1,1148 @@
+<apex:page standardController="Opportunity"
+           extensions="OpportunityNewExtension"
+           title="New Opportunity"
+           lightningStylesheets="true"
+           showHeader="false"
+           sidebar="false"
+           docType="html-5.0">
+
+    <apex:slds />
+
+    <style>
+
+        /* ---------- MOBILE MODAL FIX ---------- */
+
+        @media only screen and (max-width: 768px) {
+
+            .slds-backdrop {
+                display: none !important;
+            }
+
+            .slds-modal {
+                position: static !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .slds-modal__container {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .slds-modal__header,
+            .slds-modal__content {
+                border-radius: 0 !important;
+                box-shadow: none !important;
+            }
+        }
+
+
+        /* ---------- SECTION HEADER STYLING ---------- */
+
+        body .bPageBlock .pbBody .pbSubheader {
+            background-color: #0070d2 !important;
+            border-top: none !important;
+            padding: 8px 10px !important;
+        }
+
+        body .bPageBlock .pbBody .pbSubheader h3 {
+            color: #ffffff !important;
+            font-size: 16px !important;
+            font-weight: 400 !important;
+        }
+
+        body .bPageBlock .pbBody .pbSubheader .pbSubExtra .requiredText {
+            color: #ffffff !important;
+        }
+
+
+        /* ---------- PAGE BLOCK GENERAL ALIGNMENT ---------- */
+
+        body .bPageBlock {
+            border: 1px solid #d8dde6 !important;
+            border-radius: 4px !important;
+            background: #ffffff !important;
+        }
+
+        body .bPageBlock .pbHeader {
+            padding: 14px 14px 8px 14px !important;
+        }
+
+        body .bPageBlock .pbTitle h2,
+        body .bPageBlock .pbTitle h3 {
+            font-size: 15px !important;
+            font-weight: 600 !important;
+        }
+
+        body .bPageBlock .pbBody {
+            padding: 0 14px 14px 14px !important;
+        }
+
+        body .bPageBlock .pbBody .pbSubsection {
+            width: 100% !important;
+        }
+
+        body .bPageBlock .pbBody table.detailList {
+            width: 100% !important;
+            table-layout: fixed !important;
+            border-collapse: separate !important;
+            border-spacing: 0 8px !important;
+        }
+
+
+        /* ---------- DESKTOP TWO COLUMN LABEL + FIELD ALIGNMENT ---------- */
+
+        body .bPageBlock .pbBody table.detailList td.labelCol,
+        body .bPageBlock .pbBody table.detailList td.labelCol.last {
+            width: 18% !important;
+            min-width: 145px !important;
+            padding: 4px 6px 4px 0 !important;
+            vertical-align: middle !important;
+            text-align: right !important;
+            white-space: normal !important;
+            font-size: 13px !important;
+            color: #080707 !important;
+        }
+
+        body .bPageBlock .pbBody table.detailList td.dataCol,
+        body .bPageBlock .pbBody table.detailList td.dataCol.last {
+            width: 32% !important;
+            padding: 4px 28px 4px 0 !important;
+            vertical-align: middle !important;
+        }
+
+
+        /* ---------- STANDARD INPUT FIELD WIDTH + HEIGHT ---------- */
+
+        body .bPageBlock .pbBody table.detailList td.dataCol input[type="text"],
+        body .bPageBlock .pbBody table.detailList td.dataCol input[type="date"],
+        body .bPageBlock .pbBody table.detailList td.dataCol input[type="number"],
+        body .bPageBlock .pbBody table.detailList td.dataCol input[type="email"],
+        body .bPageBlock .pbBody table.detailList td.dataCol input[type="tel"],
+        body .bPageBlock .pbBody table.detailList td.dataCol select,
+        body .bPageBlock .pbBody table.detailList td.dataCol textarea,
+        body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="text"],
+        body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="date"],
+        body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="number"],
+        body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="email"],
+        body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="tel"],
+        body .bPageBlock .pbBody table.detailList td.dataCol.last select,
+        body .bPageBlock .pbBody table.detailList td.dataCol.last textarea {
+            width: 100% !important;
+            max-width: 410px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            box-sizing: border-box !important;
+            border-radius: 4px !important;
+            font-size: 14px !important;
+            padding: 6px 8px !important;
+        }
+
+        body .bPageBlock .pbBody table.detailList td.dataCol textarea,
+        body .bPageBlock .pbBody table.detailList td.dataCol.last textarea {
+            height: 96px !important;
+            min-height: 96px !important;
+            resize: vertical !important;
+        }
+
+
+        /* ---------- DATE FIELD LINK ALIGNMENT ---------- */
+
+        body .bPageBlock .pbBody table.detailList td.dataCol span.dateFormat,
+        body .bPageBlock .pbBody table.detailList td.dataCol.last span.dateFormat {
+            display: block !important;
+            margin-top: 4px !important;
+            font-size: 13px !important;
+        }
+
+
+        /* ---------- CUSTOM ACCOUNT LOOKUP ---------- */
+
+        .custom-lookup-wrapper {
+            position: relative !important;
+            width: 100% !important;
+            max-width: 410px !important;
+            box-sizing: border-box !important;
+        }
+
+        .custom-lookup-input {
+            width: 100% !important;
+            max-width: 410px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            line-height: 38px !important;
+            padding: 0 34px 0 10px !important;
+            box-sizing: border-box !important;
+            border: 1px solid #dddbda !important;
+            border-radius: 4px !important;
+            font-size: 14px !important;
+            background-color: #ffffff !important;
+            color: #080707 !important;
+        }
+
+        .custom-lookup-input:focus {
+            outline: none !important;
+            border-color: #1589ee !important;
+            box-shadow: 0 0 3px #0070d2 !important;
+        }
+
+        .custom-lookup-icon {
+            position: absolute !important;
+            right: 10px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            color: #706e6b !important;
+            font-size: 14px !important;
+            line-height: 14px !important;
+            pointer-events: none !important;
+        }
+
+        .custom-lookup-dropdown {
+            display: none;
+            position: absolute !important;
+            top: 40px !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 9999 !important;
+            background: #ffffff !important;
+            border: 1px solid #dddbda !important;
+            border-radius: 4px !important;
+            max-height: 240px !important;
+            overflow-y: auto !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18) !important;
+        }
+
+        .custom-lookup-dropdown.show {
+            display: block !important;
+        }
+
+        .custom-lookup-item {
+            padding: 8px 10px !important;
+            cursor: pointer !important;
+            border-bottom: 1px solid #f3f2f2 !important;
+            font-size: 13px !important;
+            color: #080707 !important;
+            background: #ffffff !important;
+        }
+
+        .custom-lookup-item:hover {
+            background-color: #f3f2f2 !important;
+        }
+
+        .custom-lookup-message {
+            padding: 8px 10px !important;
+            font-size: 13px !important;
+            color: #706e6b !important;
+            background: #ffffff !important;
+        }
+
+
+        /* ---------- BUTTON ALIGNMENT ---------- */
+
+        body .bPageBlock .pbButtonb {
+            text-align: center !important;
+            padding-top: 18px !important;
+        }
+
+        body .bPageBlock .pbButtonb .pbButton {
+            text-align: center !important;
+        }
+
+        body .bPageBlock .pbButtonb input,
+        body .bPageBlock .pbButtonb button {
+            margin: 0 4px !important;
+        }
+
+
+        /* ---------- REQUIRED STAR ---------- */
+
+        body .bPageBlock .requiredInput .requiredBlock {
+            background-color: #c23934 !important;
+        }
+
+        body .bPageBlock .labelCol .requiredMark {
+            color: #c23934 !important;
+        }
+
+
+        /* ---------- MOBILE RESPONSIVE FORM ALIGNMENT ---------- */
+
+        @media only screen and (max-width: 768px) {
+
+            body .bPageBlock {
+                border: none !important;
+                border-radius: 0 !important;
+            }
+
+            body .bPageBlock .pbHeader {
+                padding: 12px 8px !important;
+            }
+
+            body .bPageBlock .pbBody {
+                padding: 0 8px 12px 8px !important;
+            }
+
+            body .bPageBlock .pbBody table.detailList,
+            body .bPageBlock .pbBody table.detailList tbody,
+            body .bPageBlock .pbBody table.detailList tr,
+            body .bPageBlock .pbBody table.detailList td {
+                display: block !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+
+            body .bPageBlock .pbBody table.detailList {
+                border-spacing: 0 !important;
+            }
+
+            body .bPageBlock .pbBody table.detailList td.labelCol,
+            body .bPageBlock .pbBody table.detailList td.labelCol.last {
+                text-align: left !important;
+                padding: 10px 0 4px 0 !important;
+                min-width: unset !important;
+                width: 100% !important;
+            }
+
+            body .bPageBlock .pbBody table.detailList td.dataCol,
+            body .bPageBlock .pbBody table.detailList td.dataCol.last {
+                padding: 0 0 10px 0 !important;
+                width: 100% !important;
+            }
+
+            body .bPageBlock .pbBody table.detailList td.dataCol input[type="text"],
+            body .bPageBlock .pbBody table.detailList td.dataCol input[type="date"],
+            body .bPageBlock .pbBody table.detailList td.dataCol input[type="number"],
+            body .bPageBlock .pbBody table.detailList td.dataCol input[type="email"],
+            body .bPageBlock .pbBody table.detailList td.dataCol input[type="tel"],
+            body .bPageBlock .pbBody table.detailList td.dataCol select,
+            body .bPageBlock .pbBody table.detailList td.dataCol textarea,
+            body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="text"],
+            body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="date"],
+            body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="number"],
+            body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="email"],
+            body .bPageBlock .pbBody table.detailList td.dataCol.last input[type="tel"],
+            body .bPageBlock .pbBody table.detailList td.dataCol.last select,
+            body .bPageBlock .pbBody table.detailList td.dataCol.last textarea,
+            .custom-lookup-wrapper,
+            .custom-lookup-input {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .custom-lookup-dropdown {
+                max-height: 220px !important;
+            }
+
+            body .bPageBlock .pbButtonb input,
+            body .bPageBlock .pbButtonb button {
+                min-width: 90px !important;
+                margin-top: 6px !important;
+            }
+        }
+
+    </style>
+
+
+    <div class="slds-scope">
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+        <section role="dialog"
+                 tabindex="-1"
+                 class="slds-modal slds-fade-in-open slds-modal_medium"
+                 aria-labelledby="modal-heading-01"
+                 aria-modal="true"
+                 aria-describedby="modal-content-id-1">
+
+            <div class="slds-modal__container">
+
+                <header class="slds-modal__header">
+
+                    <h2 id="modal-heading-01"
+                        class="slds-modal__title slds-hyphenate">
+                        New Opportunity
+                    </h2>
+
+                </header>
+
+
+                <div class="slds-modal__content slds-p-around_medium"
+                     id="modal-content-id-1">
+
+                    <apex:pageMessages id="pageMsgs" />
+
+
+                    <script>
+
+                        function closeLightningModal() {
+
+                            if ((typeof sforce != 'undefined') &&
+                                sforce &&
+                                (!!sforce.one)) {
+
+                                sforce.one.back(true);
+
+                            } else {
+
+                                window.parent.location.href =
+                                    '{!URLFOR($Action.Opportunity.Tab, $ObjectType.Opportunity)}';
+                            }
+                        }
+
+
+                        document.addEventListener(
+                            "DOMContentLoaded",
+                            function() {
+
+                                var headers =
+                                    document.querySelectorAll('.pbSubheader');
+
+                                if (headers.length > 1) {
+
+                                    var requiredLegend =
+                                        headers[0].querySelector('.pbSubExtra');
+
+                                    if (requiredLegend) {
+
+                                        var clonedLegend =
+                                            requiredLegend.cloneNode(true);
+
+                                        headers[1].appendChild(clonedLegend);
+                                    }
+                                }
+                            }
+                        );
+
+
+                        var accountSearchTimer;
+
+
+                        function searchAccountsFromBox(searchText) {
+
+                            clearTimeout(accountSearchTimer);
+
+                            accountSearchTimer =
+                                setTimeout(function() {
+
+                                    var dropdown =
+                                        document.getElementById(
+                                            'accountDropdown'
+                                        );
+
+                                    var resultContainer =
+                                        document.getElementById(
+                                            'accountDropdownResults'
+                                        );
+
+
+                                    if (!dropdown || !resultContainer) {
+                                        return;
+                                    }
+
+
+                                    dropdown.classList.add('show');
+
+                                    resultContainer.innerHTML =
+                                        '<div class="custom-lookup-message">Searching...</div>';
+
+
+                                    Visualforce.remoting.Manager.invokeAction(
+
+                                        '{!$RemoteAction.OpportunityNewExtension.searchAccountsRemote}',
+
+                                        searchText,
+
+                                        function(result, event) {
+
+                                            resultContainer.innerHTML = '';
+
+
+                                            if (event.status) {
+
+                                                if (
+                                                    result &&
+                                                    result.length > 0
+                                                ) {
+
+                                                    for (
+                                                        var i = 0;
+                                                        i < result.length;
+                                                        i++
+                                                    ) {
+
+                                                        var item =
+                                                            document.createElement(
+                                                                'div'
+                                                            );
+
+                                                        item.className =
+                                                            'custom-lookup-item';
+
+                                                        item.setAttribute(
+                                                            'data-id',
+                                                            result[i].id
+                                                        );
+
+                                                        item.setAttribute(
+                                                            'data-name',
+                                                            result[i].name
+                                                        );
+
+                                                        item.innerHTML =
+                                                            escapeHtml(
+                                                                result[i].name
+                                                            );
+
+
+                                                        item.onclick =
+                                                            function() {
+
+                                                                selectAccountFromLookup(
+                                                                    this.getAttribute(
+                                                                        'data-id'
+                                                                    ),
+                                                                    this.getAttribute(
+                                                                        'data-name'
+                                                                    )
+                                                                );
+                                                            };
+
+
+                                                        resultContainer
+                                                            .appendChild(item);
+                                                    }
+
+
+                                                } else {
+
+                                                    resultContainer.innerHTML =
+                                                        '<div class="custom-lookup-message">No matching Account found.</div>';
+                                                }
+
+
+                                            } else {
+
+                                                resultContainer.innerHTML =
+                                                    '<div class="custom-lookup-message">Error while searching Account.</div>';
+                                            }
+                                        },
+
+                                        { escape: true }
+                                    );
+
+                                }, 300);
+                        }
+
+
+                        function selectAccountFromLookup(
+                            accountId,
+                            accountName
+                        ) {
+
+                            var searchBox =
+                                document.getElementById(
+                                    'accountSearchBox'
+                                );
+
+                            var dropdown =
+                                document.getElementById(
+                                    'accountDropdown'
+                                );
+
+
+                            if (searchBox) {
+                                searchBox.value = accountName;
+                            }
+
+
+                            if (dropdown) {
+                                dropdown.classList.remove('show');
+                            }
+
+
+                            if (
+                                typeof updateSelectedAccount ===
+                                'function'
+                            ) {
+
+                                updateSelectedAccount(accountId);
+
+                            } else {
+
+                                alert(
+                                    'Account selection function not found.'
+                                );
+                            }
+                        }
+
+
+                        function escapeHtml(value) {
+
+                            if (!value) {
+                                return '';
+                            }
+
+                            return value
+                                .replace(/&/g, '&amp;')
+                                .replace(/</g, '&lt;')
+                                .replace(/>/g, '&gt;')
+                                .replace(/"/g, '&quot;')
+                                .replace(/'/g, '&#039;');
+                        }
+
+
+                        document.addEventListener(
+                            'click',
+                            function(event) {
+
+                                var wrapper =
+                                    document.getElementById(
+                                        'accountLookupWrapper'
+                                    );
+
+                                var dropdown =
+                                    document.getElementById(
+                                        'accountDropdown'
+                                    );
+
+
+                                if (
+                                    wrapper &&
+                                    dropdown &&
+                                    !wrapper.contains(event.target)
+                                ) {
+
+                                    dropdown.classList.remove(
+                                        'show'
+                                    );
+                                }
+                            }
+                        );
+
+                    </script>
+
+
+                    <!-- UNDER DEVELOPMENT -->
+
+                    <apex:outputPanel rendered="{!isUnderDevelopment}">
+
+                        <div style="
+                            text-align: center;
+                            margin-top: 20px;
+                            padding: 20px;
+                            border: 2px dashed red;">
+
+                            <h1 style="
+                                color: red;
+                                font-size: 24px;">
+
+                                UNDER DEVELOPMENT
+
+                            </h1>
+
+                            <p style="
+                                font-size: 14px;
+                                margin-top: 10px;">
+
+                                The Residential opportunity creation process
+                                is currently being built.
+
+                            </p>
+
+                            <br/>
+
+
+                            <apex:form >
+
+                                <button type="button"
+                                        class="slds-button slds-button_neutral"
+                                        onclick="closeLightningModal();">
+
+                                    Go Back
+
+                                </button>
+
+                            </apex:form>
+
+                        </div>
+
+                    </apex:outputPanel>
+
+
+                    <!-- MAIN FORM -->
+
+                    <apex:form rendered="{!NOT(isUnderDevelopment)}">
+
+
+                        <apex:actionFunction name="updateSelectedAccount"
+                            action="{!onAccountChange}"
+                            reRender="contactPanel,oppNamePanel"
+                            immediate="true">
+
+                            <apex:param name="selectedAccountParam"
+                                value=""
+                                assignTo="{!selectedAccountId}" />
+
+                        </apex:actionFunction>
+
+
+                        <apex:pageBlock title="Opportunity Information"
+                            mode="edit">
+
+
+                            <apex:pageBlockButtons location="bottom">
+
+                                <button
+                                    type="button"
+                                    class="slds-button slds-button_neutral"
+                                    onclick="closeLightningModal();">
+
+                                    Cancel
+
+                                </button>
+
+
+                                <apex:commandButton value="Save"
+                                    action="{!saveRecord}"
+                                    styleClass="slds-button slds-button_brand" />
+
+                            </apex:pageBlockButtons>
+
+
+                            <apex:pageBlockSection title="Basic Information"
+                                columns="2">
+
+
+                                <!-- OPPORTUNITY NAME -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputPanel >
+
+                                        <apex:outputLabel value="Opportunity Name"
+                                            for="oppNameInput" />
+
+                                    </apex:outputPanel>
+
+
+                                    <apex:outputPanel id="oppNamePanel"
+                                        layout="block">
+
+                                        <apex:inputField value="{!opp.Name}"
+                                            required="true"
+                                            id="oppNameInput" />
+
+                                    </apex:outputPanel>
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- ACCOUNT -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputLabel value="Account Name" />
+
+
+                                    <apex:outputPanel layout="block">
+
+
+                                        <apex:outputPanel rendered="{!NOT(isAccountPrepopulated)}">
+
+
+                                            <div
+                                                class="custom-lookup-wrapper"
+                                                id="accountLookupWrapper">
+
+
+                                                <input
+                                                    type="text"
+                                                    id="accountSearchBox"
+                                                    class="custom-lookup-input"
+                                                    placeholder="Search Account..."
+                                                    autocomplete="off"
+                                                    value="{!selectedAccountName}"
+                                                    onfocus="searchAccountsFromBox(this.value);"
+                                                    onclick="searchAccountsFromBox(this.value);"
+                                                    onkeyup="searchAccountsFromBox(this.value);" />
+
+
+                                                <span
+                                                    class="custom-lookup-icon">
+
+                                                    &#128269;
+
+                                                </span>
+
+
+                                                <div
+                                                    class="custom-lookup-dropdown"
+                                                    id="accountDropdown">
+
+                                                    <div
+                                                        id="accountDropdownResults">
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </apex:outputPanel>
+
+
+                                        <apex:outputText value="{!prepopulatedAccountName}"
+                                            rendered="{!isAccountPrepopulated}" />
+
+
+                                    </apex:outputPanel>
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- TYPE -->
+
+                                <apex:inputField value="{!opp.Type}"
+                                    required="true" />
+
+
+                                <!-- CONTACT -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputLabel value="Contact Name" />
+
+
+                                    <apex:outputPanel id="contactPanel">
+
+                                        <apex:selectList value="{!selectedContactId}"
+                                            size="1"
+                                            required="true">
+
+                                            <apex:selectOptions value="{!contactOptions}" />
+
+                                        </apex:selectList>
+
+                                    </apex:outputPanel>
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- CLOSE DATE
+                                     HIDDEN FOR KAM / INSTITUTIONAL / RETAIL (MID-MARKET) -->
+
+                                <apex:pageBlockSectionItem rendered="{!NOT(OR(
+                                        rtDevName == 'KAM',
+                                        rtDevName == 'Institutional',
+                                        rtDevName == 'Retail'
+                                    ))}">
+
+                                    <apex:outputLabel value="Close Date" />
+
+                                    <apex:inputField type="date"
+                                        value="{!opp.CloseDate}"
+                                        showDatePicker="true"
+                                        required="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- RATING
+                                     ONLY KAM / INSTITUTIONAL / RETAIL
+                                     MANDATORY -->
+
+                                <apex:pageBlockSectionItem rendered="{!OR(
+                                        rtDevName == 'KAM',
+                                        rtDevName == 'Institutional',
+                                        rtDevName == 'Retail'
+                                    )}">
+
+                                    <apex:outputLabel value="Rating" />
+
+                                    <apex:inputField value="{!opp.Rating__c}"
+                                        required="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- EXPECTED CLOSURE DATE
+                                     ONLY KAM / INSTITUTIONAL / RETAIL
+                                     MANDATORY -->
+
+                                <apex:pageBlockSectionItem rendered="{!OR(
+                                        rtDevName == 'KAM',
+                                        rtDevName == 'Institutional',
+                                        rtDevName == 'Retail'
+                                    )}">
+
+                                    <apex:outputLabel value="Expected Closure Date" />
+
+                                    <apex:inputField type="date"
+                                        value="{!opp.Expected_Closure_Date__c}"
+                                        showDatePicker="true"
+                                        required="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- KAM STAGE -->
+
+                                <apex:pageBlockSectionItem rendered="{!rtDevName == 'KAM'}">
+
+                                    <apex:outputLabel value="Stage" />
+
+                                    <apex:inputField value="{!opp.Key_Account_Opp_Stages__c}"
+                                        html-disabled="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- KAM SRT STAGE -->
+
+                                <apex:pageBlockSectionItem rendered="{!rtDevName == 'KAM_SRT'}">
+
+                                    <apex:outputLabel value="Stage" />
+
+                                    <apex:inputField value="{!opp.KAM_SRT_Opp_Stages__c}"
+                                        html-disabled="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- COMMERCIAL INDUSTRIAL STAGE -->
+
+                                <apex:pageBlockSectionItem rendered="{!rtDevName == 'Commercial_Industrial'}">
+
+                                    <apex:outputLabel value="Stage" />
+
+                                    <apex:inputField value="{!opp.C_I_Opp_Stage__c}"
+                                        html-disabled="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- INSTITUTIONAL STAGE -->
+
+                                <apex:pageBlockSectionItem rendered="{!rtDevName == 'Institutional'}">
+
+                                    <apex:outputLabel value="Stage" />
+
+                                    <apex:inputField value="{!opp.Institutional_Opp_Stages__c}"
+                                        html-disabled="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- RETAIL STAGE -->
+
+                                <apex:pageBlockSectionItem rendered="{!rtDevName == 'Retail'}">
+
+                                    <apex:outputLabel value="Stage" />
+
+                                    <apex:inputField value="{!opp.Retail_Opp_Stages__c}"
+                                        html-disabled="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- PROBABILITY -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputLabel value="Probability (%)" />
+
+                                    <apex:inputField value="{!opp.Probability}"
+                                        html-disabled="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- INTERNAL BUSINESS TEAM -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputLabel value="Internal Business Team" />
+
+                                    <apex:inputField value="{!opp.Internal_Business_Team__c}"
+                                        html-disabled="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- BUSINESS SEGMENT -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputLabel value="Business Segment" />
+
+                                    <apex:inputField value="{!opp.Business_Segment__c}"
+                                        html-disabled="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- BUSINESS SUB SEGMENT -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputLabel value="Business Sub Segment" />
+
+                                    <apex:inputField value="{!opp.Business_Sub_Segment__c}"
+                                        required="true" />
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- MARKET SEGMENT -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputLabel value="Market Segment" />
+
+
+                                    <apex:actionRegion >
+
+                                        <apex:inputField value="{!opp.Market_Segment__c}"
+                                            required="true">
+
+                                            <apex:actionSupport event="onchange"
+                                                action="{!onMarketSegmentChange}"
+                                                reRender="marketSegmentOthersLabel,marketSegmentOthersContainer" />
+
+                                        </apex:inputField>
+
+                                    </apex:actionRegion>
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- MARKET SEGMENT OTHERS -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputPanel id="marketSegmentOthersLabel">
+
+                                        <apex:outputLabel value="Market Segment (If Others)"
+                                            rendered="{!opp.Market_Segment__c == 'Others'}" />
+
+                                    </apex:outputPanel>
+
+
+                                    <apex:outputPanel id="marketSegmentOthersContainer">
+
+                                        <apex:inputField value="{!opp.Market_Segment_Others__c}"
+                                            rendered="{!opp.Market_Segment__c == 'Others'}"
+                                            required="{!opp.Market_Segment__c == 'Others'}" />
+
+                                    </apex:outputPanel>
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- OPPORTUNITY SOURCE -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputLabel value="Opportunity Source" />
+
+
+                                    <apex:actionRegion >
+
+                                        <apex:inputField value="{!opp.LeadSource}"
+                                            required="true">
+
+                                            <apex:actionSupport event="onchange"
+                                                action="{!onOpportunitySourceChange}"
+                                                reRender="oppSourceOthersLabel,oppSourceOthersContainer" />
+
+                                        </apex:inputField>
+
+                                    </apex:actionRegion>
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- OPPORTUNITY SOURCE OTHERS -->
+
+                                <apex:pageBlockSectionItem >
+
+                                    <apex:outputPanel id="oppSourceOthersLabel">
+
+                                        <apex:outputLabel value="Opportunity Source (If Others)"
+                                            rendered="{!opp.LeadSource == 'Others'}" />
+
+                                    </apex:outputPanel>
+
+
+                                    <apex:outputPanel id="oppSourceOthersContainer">
+
+                                        <apex:inputField value="{!opp.Opportunity_Source_Others__c}"
+                                            rendered="{!opp.LeadSource == 'Others'}"
+                                            required="{!opp.LeadSource == 'Others'}" />
+
+                                    </apex:outputPanel>
+
+                                </apex:pageBlockSectionItem>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <apex:inputField value="{!opp.Description}"
+                                    required="{!rtDevName != 'Institutional'}"
+                                    style="width: 100%; height: 80px;" />
+
+
+                            </apex:pageBlockSection>
+
+
+                            <!-- TENDER DETAILS -->
+
+                            <apex:pageBlockSection title="Tender Details"
+                                columns="2"
+                                rendered="{!rtDevName == 'Institutional'}">
+
+                                <apex:inputField value="{!opp.Tender_ID__c}"
+                                    required="true" />
+
+                                <apex:inputField value="{!opp.Tender_Name__c}"
+                                    required="true" />
+
+                                <apex:inputField value="{!opp.Tender_Source__c}"
+                                    required="true" />
+
+                                <apex:inputField value="{!opp.Tender_Type__c}"
+                                    html-disabled="true"
+                                    required="true" />
+
+                                <apex:inputField type="date"
+                                    value="{!opp.Tender_Due_Date__c}"
+                                    showDatePicker="true"
+                                    required="true" />
+
+                                <apex:inputField value="{!opp.Estimated_Tender_Value_CR__c}"
+                                    required="true" />
+
+                                <apex:inputField value="{!opp.Tender_Details__c}"
+                                    required="true"
+                                    style="width: 100%; height: 80px;" />
+
+                            </apex:pageBlockSection>
+
+
+                        </apex:pageBlock>
+
+                    </apex:form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</apex:page>

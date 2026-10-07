@@ -1,0 +1,63 @@
+/* ================= MAIN CONTAINER ================= */
+.container {
+    padding: 2rem;
+}
+
+/* ================= SECTION BOX ================= */
+.section-box {
+    background: #f7f9fc;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* ================= GRID ================= */
+.responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+/* ================= DESKTOP LARGE ================= */
+@media (min-width: 1200px) {
+
+    :host {
+        display: block;
+        min-height: 75vh;
+    }
+
+}
+
+/* ================= TABLET ================= */
+@media (max-width: 1024px) {
+    .responsive-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+
+    .footer {
+        flex-direction: column;
+    }
+
+    .footer lightning-button {
+        width: 100%;
+    }
+
+}

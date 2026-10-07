@@ -1,0 +1,46 @@
+<template>
+    <div class="backdrop" onclick={handleBackdropClick}></div>
+
+    <section class="modal" role="dialog" aria-modal="true">
+        <header class="modal-header">
+            <h2 class="modal-title">{label}</h2>
+            <button class="close-btn" title="Close" onclick={handleClose}>✕</button>
+        </header>
+
+        <div class="modal-body">
+            <input type="search"
+                   class="search"
+                   placeholder="Search..."
+                   oninput={handleSearch} />
+
+            <ul class="options" role="listbox">
+                <template for:each={filteredOptions} for:item="opt">
+                    <li key={opt.value}
+                        data-value={opt.value}
+                        class="option"
+                        role="option"
+                        onclick={selectOption}
+                        aria-selected={opt.selected}>
+
+                        <span>{opt.label}</span>
+
+                        <template if:true={opt.selected}>
+                            <span class="selected-check">✔</span>
+                        </template>
+                    </li>
+                </template>
+
+                <template if:true={noResults}>
+                    <li class="option no-results">No results</li>
+                </template>
+            </ul>
+        </div>
+
+        <footer class="modal-footer">
+            <button class="slds-button slds-button_neutral"
+                    onclick={handleClose}>
+                Cancel
+            </button>
+        </footer>
+    </section>
+</template>

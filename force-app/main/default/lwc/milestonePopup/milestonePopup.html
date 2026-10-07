@@ -1,0 +1,59 @@
+<template>
+    <lightning-card title="Select Milestones">
+
+        <template for:each={dropdownList} for:item="item" for:index="index">
+            <div key={item.id} class="slds-grid slds-m-bottom_small">
+
+                <div class="slds-col">
+                    <lightning-combobox
+                        label="Milestone"
+                        data-index={index}
+                        value={item.value}
+                        options={item.options}
+                        onchange={handleChange}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-col slds-p-left_small slds-m-top_large">
+                    <lightning-button-icon
+                        icon-name="utility:add"
+                        alternative-text="Add"
+                        onclick={addDropdown}>
+                    </lightning-button-icon>
+                </div>
+
+                  <template if:true={item.showRemove}>
+
+            <div class="slds-col slds-p-left_small slds-m-top_large">
+
+                <lightning-button-icon
+                    icon-name="utility:dash"
+                    alternative-text="Remove"
+                    data-index={index}
+                    onclick={removeDropdown}>
+                </lightning-button-icon>
+
+            </div>
+          </template>
+
+            </div>
+        </template>
+
+        <div class="slds-m-top_medium">
+
+            <lightning-button
+                label="Close"
+                onclick={handleClose}>
+            </lightning-button>
+
+            <lightning-button
+                label="Save"
+                variant="brand"
+                class="slds-m-left_small"
+                onclick={handleSave}>
+            </lightning-button>
+
+        </div>
+
+    </lightning-card>
+</template>

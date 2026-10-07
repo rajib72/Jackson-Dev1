@@ -1,0 +1,33 @@
+<apex:component controller="CaseClosedEmailController"
+    access="global">
+
+    <apex:attribute name="caseRecordId"
+        type="Id"
+        assignTo="{!caseId}"
+        description="Case record ID"/>
+
+    <apex:outputPanel rendered="{!NOT(hasError)}">
+
+        <p>
+            <strong>Resolution Type:</strong>
+            <apex:outputText value="{!resolutionType}"/>
+        </p>
+
+        <p>
+            <strong>Feedback Form Link:</strong>
+            <br/>
+
+            <apex:outputLink value="{!feedbackFormLink}">
+                Fill Feedback Form
+            </apex:outputLink>
+        </p>
+
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!hasError}">
+        <p style="color:red;">
+            <apex:outputText value="{!errorMessage}"/>
+        </p>
+    </apex:outputPanel>
+
+</apex:component>

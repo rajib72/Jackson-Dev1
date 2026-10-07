@@ -1,0 +1,152 @@
+.main-wrapper {
+    padding: 1rem;
+    background: #f4f6f9;
+}
+
+.table-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-input {
+    width: 300px;
+}
+
+/* Fixed height is mandatory for infinite scrolling */
+.table-wrapper {
+    height: 480px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+}
+
+.header-box {
+    background: linear-gradient(135deg, #0176d3, #014486);
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    opacity: 0.95;
+}
+
+.search-card {
+    background: #ffffff;
+    border: 1px solid #d8dde6;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: end;
+}
+
+.field-area {
+    flex: 1 1 320px;
+    min-width: 260px;
+}
+
+.button-area {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.info-card {
+    background: #ffffff;
+    border: 1px solid #d8dde6;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-label {
+    font-size: 0.8rem;
+    color: #5f6a7d;
+    margin-bottom: 0.35rem;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #16325c;
+    word-break: break-word;
+}
+
+.table-card {
+    background: #ffffff;
+    border: 1px solid #d8dde6;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #16325c;
+    margin-bottom: 0.75rem;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+}
+
+.empty-state {
+    text-align: center;
+    background: #ffffff;
+    border: 1px dashed #c9c9c9;
+    border-radius: 12px;
+    padding: 1rem;
+    color: #5f6a7d;
+    font-weight: 600;
+}
+
+@media only screen and (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .field-area {
+        width: 100%;
+    }
+
+    .button-area {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}

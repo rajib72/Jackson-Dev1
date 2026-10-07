@@ -1,0 +1,30 @@
+<template>
+    <lightning-card title="SAP Order Sync" icon-name="standard:service_contract">
+        <div class="slds-p-horizontal_medium slds-text-align_center">
+            
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Processing..." size="medium"></lightning-spinner>
+            </template>
+
+            <template if:true={validationErrors}>
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_medium slds-text-align_left" role="alert">
+                    <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small">
+                        <lightning-icon icon-name="utility:error" variant="inverse" size="x-small"></lightning-icon>
+                    </span>
+                    <h2><strong>Please fill in the following missing fields before syncing:</strong><br/><br/> {validationErrors}</h2>
+                </div>
+            </template>
+
+            <p class="slds-m-bottom_medium">Click the button below to push this Order to SAP.</p>
+            
+            <lightning-button 
+                label="Sync to SAP" 
+                variant="brand" 
+                icon-name="utility:sync" 
+                onclick={handleSync} 
+                disabled={isLoading}>
+            </lightning-button>
+            
+        </div>
+    </lightning-card>
+</template>

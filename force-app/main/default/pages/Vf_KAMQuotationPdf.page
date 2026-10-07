@@ -1,0 +1,494 @@
+<apex:page renderAs="pdf"
+           standardController="Quote"
+           extensions="Ctrl_KAMQuotationPdf"
+           cache="false"
+           applyHtmlTag="false"
+           applyBodyTag="false"
+           standardStylesheets="false"
+           showHeader="false"
+           sidebar="false"
+           lightningStylesheets="false">
+    
+    <html>
+        <head>
+            <style>
+                @page {
+                size: A4;
+                margin: 95px 35px 75px 35px;
+                
+                @top-right {
+                content: element(header);
+                }
+                
+                @bottom-center {
+                content: element(footer);
+                }
+                }
+                
+                body {
+                font-family: Helvetica, Arial, sans-serif;
+                font-size: 10px;
+                color: #000000;
+                margin: 0;
+                padding: 0;
+                }
+                
+                #header {
+                display: block;
+                position: running(header);
+                text-align: right;
+                padding: 0;
+                }
+                
+                #header img {
+                width: 120px;
+                height: auto;
+                }
+                
+                .logo-line {
+                width: 180px;
+                height: 4px;
+                background: #005eb8;
+                margin-top: 4px;
+                margin-left: auto;
+                }
+                
+                .date-text {
+                font-size: 10px;
+                margin: 4px 0 0 0;
+                text-align: right;
+                }
+                
+                #footer {
+                position: running(footer);
+                text-align: center;
+                font-size: 9px;
+                color: #444;
+                border-top: 1px solid #cfcfcf;
+                padding-top: 6px;
+                }
+                
+                .page-number {
+                margin-top: 2px;
+                }
+                
+                .page-number .page:before {
+                content: counter(page);
+                }
+                
+                .page-number .topage:before {
+                content: counter(pages);
+                }
+                
+                .content {
+                width: 100%;
+                }
+                
+                .main-title {
+                text-align: center;
+                font-size: 12pt;
+                font-weight: bold;
+                text-decoration: underline;
+                margin: 0 0 14px 0;
+                }
+                
+                .body-text {
+                font-size: 10px;
+                margin: 8px 0;
+                line-height: 1.5;
+                }
+                
+                .label-line {
+                margin: 10px 0 5px 0;
+                font-size: 10px;
+                }
+                
+                .section-gap {
+                margin-top: 14px;
+                }
+                
+                table {
+                width: 100%;
+                border-collapse: collapse;
+                border-spacing: 0;
+                }
+                
+                .table-box,
+                .product-table,
+                .cert-table,
+                .terms-table {
+                width: 100%;
+                border: 1px solid #000;
+                -fs-table-paginate: paginate;
+                }
+                
+                .table-box th,
+                .table-box td,
+                .product-table th,
+                .product-table td,
+                .cert-table th,
+                .cert-table td,
+                .terms-table th,
+                .terms-table td {
+                border: 1px solid #000;
+                padding: 6px;
+                vertical-align: top;
+                }
+                
+                .table-box th,
+                .product-table th,
+                .cert-table th,
+                .terms-table th {
+                background: #005eb8;
+                color: #fff;
+                font-weight: bold;
+                }
+                
+                .table-box th {
+                text-align: left;
+                font-size: 10px;
+                }
+                
+                .table-box td {
+                font-size: 10px;
+                line-height: 1.5;
+                }
+                
+                .product-table {
+                table-layout: fixed;
+                }
+                
+                .product-table th {
+                text-align: center;
+                font-size: 8.5px;
+                padding: 5px 4px;
+                }
+                
+                .product-table td {
+                text-align: center;
+                font-size: 8.5px;
+                padding: 5px 4px;
+                word-wrap: break-word;
+                vertical-align: middle;
+                }
+                
+                .text-left {
+                text-align: left !important;
+                line-height: 1.45;
+                }
+                
+                .pre-wrap {
+                white-space: pre-wrap;
+                }
+                
+                .terms-table td {
+                font-size: 10px;
+                line-height: 1.55;
+                }
+                
+                .terms-table ol {
+                margin: 0;
+                padding-left: 18px;
+                }
+                
+                .terms-table ol > li {
+                margin: 0 0 8px 0;
+                }
+                
+                .sub-term-list {
+                margin: 4px 0 0 0;
+                padding-left: 18px;
+                list-style-type: disc;
+                }
+                
+                .sub-term-list li {
+                margin: 0 0 4px 0;
+                }
+                
+                .signature-text {
+                font-size: 10px;
+                line-height: 1.6;
+                margin-top: 12px;
+                }
+                
+                .no-data {
+                border: 1px solid #000;
+                padding: 8px;
+                font-size: 10px;
+                }
+            </style>
+        </head>
+        
+        <body>
+            <!-- Header -->
+            <div id="header">
+                <apex:image url="{!$Resource.solarLogo}" width="120" height="36"/>
+                <div class="logo-line"></div>
+                <p class="date-text">
+                    <strong>Date:</strong>
+                    <apex:outputText value="{0,date,MMMM d',' yyyy}">
+                        <apex:param value="{!TODAY()}"/>
+                    </apex:outputText>
+                </p>
+            </div>
+            
+            <!-- Footer -->
+            <div id="footer">
+                <div class="page-number">
+                    Page <span class="page"></span> of <span class="topage"></span>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="content">
+                <div class="main-title">
+                    Commercial Offer for {!quoteRecord.Commercial_offer_for__c}
+                </div>
+                
+                <table class="table-box">
+                    <tr>
+                        <th style="width:50%;">To: {!quoteRecord.Opportunity.Account.Name}</th>
+                        <th style="width:50%;">Description: {!quoteRecord.Commercial_offer_for__c}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Kind Attn:</strong>
+                            {!quoteContact.FirstName} {!quoteContact.LastName}<br/>
+                            <strong>Mail ID:</strong> {!quoteContact.Email}<br/>
+                            <strong>Phone No.:</strong> {!quoteContact.MobilePhone}
+                        </td>
+                        <td>
+                            <strong>From:</strong>
+                            {!ownerUser.FirstName} {!ownerUser.LastName}<br/>
+                            <strong>Mail ID:</strong> {!ownerUser.Email}<br/>
+                            <strong>Phone No.:</strong> {!ownerUser.Phone}
+                        </td>
+                    </tr>
+                </table>
+                
+                <p class="body-text">Dear Sir/Madam,</p>
+                
+                <p class="body-text">
+                    Please find below our best commercial offer for the
+                    {!quoteRecord.Commercial_offer_for__c}
+                    in line with your requirement.
+                </p>
+                
+                <p class="label-line">
+                    <strong>Subject:</strong> {!quoteRecord.Project_Capacity__c}
+                </p>
+                
+                <p class="label-line">
+                    <strong>Product Detail:</strong>
+                </p>
+                
+                <!-- Product Detail Table -->
+                <apex:outputPanel rendered="{!productRows.size > 0}">
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th style="width:34%;">Material Description</th>
+                                <th style="width:8%;">Nos</th>
+                                <th style="width:13%;">Project Capacity</th>
+                                <th style="width:7%;">UOM</th>
+                                <th style="width:10%;">Price/Wp</th>
+                                <th style="width:11%;">Total</th>
+                                <th style="width:7%;">GST</th>
+                                <th style="width:10%;">Grand Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!productRows}" var="row">
+                                <tr>
+                                    <td class="text-left">{!row.materialDescription}</td>
+                                    <td>
+                                        <apex:outputText value="{0,number,###,##0}">
+                                            <apex:param value="{!row.nos}" />
+                                        </apex:outputText>
+                                    </td>
+                                    <td>
+                                        <apex:outputText value="{0,number,###,##0.00}">
+                                            <apex:param value="{!row.projectCapacity}" />
+                                        </apex:outputText>
+                                    </td>
+                                    <td>{!row.uom}</td>
+                                    <td>
+                                        <apex:outputText value="{0,number,###,##0.00}">
+                                            <apex:param value="{!row.priceWp}" />
+                                        </apex:outputText>
+                                    </td>
+                                    <td>
+                                        <apex:outputText value="{0,number,###,##0.00}">
+                                            <apex:param value="{!row.total}" />
+                                        </apex:outputText>
+                                    </td>
+                                    <td>{!row.gst}</td>
+                                    <td>
+                                        <apex:outputText value="{0,number,###,##0.00}">
+                                            <apex:param value="{!row.grandTotal}" />
+                                        </apex:outputText>
+                                    </td>
+                                </tr>
+                                
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                    <table style="width:100%; margin-top:10px;">
+                        
+                        <tr>
+                            <td colspan="2" style="padding-top:5px;font-weight:bold;">
+                                Amount in Words :
+                                {!grandTotalInWords}
+                            </td>
+                        </tr>
+                    </table>
+                </apex:outputPanel>
+                
+                <apex:outputPanel rendered="{!productRows.size = 0}">
+                    <div class="no-data">No quote line items available.</div>
+                </apex:outputPanel>
+                
+                <!-- Certifications -->
+                <div class="section-gap"></div>
+                <table class="cert-table">
+                    <tr>
+                        <th>Certifications</th>
+                    </tr>
+                    <tr>
+                        <td class="pre-wrap">
+                            <apex:outputText value="{!quoteRecord.Certificates__c}" />
+                        </td>
+                    </tr>
+                </table>
+                
+                <!-- General Terms -->
+                <div class="section-gap"></div>
+                <table class="terms-table">
+                    <tr>
+                        <th>General Terms &amp; Conditions</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <ol>
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.GST__c))}">
+                                    <li>
+                                        <strong>GST:</strong> {!quoteRecord.GST__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!paymentTermsList.size > 0}">
+                                    <li>
+                                        <strong>Payment Terms:</strong>
+                                        <ul class="sub-term-list">
+                                            <apex:repeat value="{!paymentTermsList}" var="pt">
+                                                <li>{!pt}</li>
+                                            </apex:repeat>
+                                        </ul>
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.In_Co_terms__c))}">
+                                    <li>
+                                        <strong>IncoTerms:</strong> {!quoteRecord.In_Co_terms__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Third_Party_Insurance__c))}">
+                                    <li>
+                                        <strong>Third Party Insurance:</strong> {!quoteRecord.Third_Party_Insurance__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Packing_Forwarding__c))}">
+                                    <li>
+                                        <strong>Packing &amp; Forwarding:</strong> {!quoteRecord.Packing_Forwarding__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Unloading__c))}">
+                                    <li>
+                                        <strong>Unloading:</strong> {!quoteRecord.Unloading__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Claims_Damages__c))}">
+                                    <li>
+                                        <strong>Claims &amp; Damages:</strong> {!quoteRecord.Claims_Damages__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.QAP__c))}">
+                                    <li>
+                                        <strong>QAP:</strong> {!quoteRecord.QAP__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!limitationList.size > 0}">
+                                    <li>
+                                        <strong>Limitation of Liability:</strong>
+                                        <ul class="sub-term-list">
+                                            <apex:repeat value="{!limitationList}" var="lim">
+                                                <li>{!lim}</li>
+                                            </apex:repeat>
+                                        </ul>
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Offer_Validity__c))}">
+                                    <li>
+                                        <strong>Offer Validity:</strong> {!quoteRecord.Offer_Validity__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Cable_Length__c))}">
+                                    <li>
+                                        <strong>Cable Length:</strong> {!quoteRecord.Cable_Length__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Warranty__c))}">
+                                    <li>
+                                        <strong>Warranty:</strong> {!quoteRecord.Warranty__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Storage_Charges__c))}">
+                                    <li>
+                                        <strong>Storage Charges:</strong> {!quoteRecord.Storage_Charges__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Deemed_MDCC__c))}">
+                                    <li>
+                                        <strong>Deemed MDCC:</strong> {!quoteRecord.Deemed_MDCC__c}
+                                    </li>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(quoteRecord.Governing_Law_Jurisdiction__c))}">
+                                    <li>
+                                        <strong>Governing Law &amp; Jurisdiction:</strong>
+                                        {!quoteRecord.Governing_Law_Jurisdiction__c}
+                                    </li>
+                                </apex:outputPanel>
+                            </ol>
+                        </td>
+                    </tr>
+                </table>
+                
+                <div class="section-gap"></div>
+                
+                <p class="body-text">
+                    In case of any clarification, please feel free to reach out to the undersigned.
+                </p>
+                
+                <p class="signature-text">
+                    <strong>With Best Regards,</strong><br/>
+                    {!ownerUser.FirstName} {!ownerUser.LastName}<br/>
+                    {!ownerUser.Title}<br/>
+                    {!ownerUser.Email}<br/>
+                    {!ownerUser.Phone}
+                </p>
+            </div>
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,121 @@
+<template>
+    <lightning-card>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+
+        <div class="sheet">
+            <div class="top-row">
+                <div class="title-cell">HOTO CHECKLIST</div>
+                <div class="logo-cell">
+                    <!--<div class="logo-main">JAKSON</div>-->
+                    <div class="logo-sub">DISTRIBUTED ENERGY</div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-field">
+                    <div class="info-label">Client Name:</div>
+                    <lightning-input type="text" variant="label-hidden" value={projectInfo.clientName} data-field="clientName" readonly></lightning-input>
+                </div>
+
+                <div class="info-field">
+                    <div class="info-label">Project Location:</div>
+                    <lightning-input type="text" variant="label-hidden" value={projectInfo.projectLocation} data-field="projectLocation" readonly></lightning-input>
+                </div>
+
+                <div class="info-field">
+                    <div class="info-label">Project Name:</div>
+                    <lightning-input type="text" variant="label-hidden" value={projectInfo.projectName} data-field="projectName" readonly></lightning-input>
+                </div>
+
+                <div class="info-field">
+                    <div class="info-label">Inspection Date:</div>
+                    <lightning-input type="date" variant="label-hidden" value={projectInfo.inspectionDate} data-field="inspectionDate" onchange={handleInfoChange}></lightning-input>
+                </div>
+
+                <div class="info-field">
+                    <div class="info-label">Project Capacity:</div>
+                    <lightning-input type="text" variant="label-hidden" value={projectInfo.projectCapacity} data-field="projectCapacity" readonly></lightning-input>
+                </div>
+
+                <div class="info-field">
+                    <div class="info-label">Document Number:</div>
+                    <lightning-input type="text" variant="label-hidden" value={projectInfo.documentNumber} data-field="documentNumber" onchange={handleInfoChange}></lightning-input>
+                </div>
+
+                <div class="info-field">
+                    <div class="info-label">Contractor Name:</div>
+                    <lightning-input type="text" variant="label-hidden" value={projectInfo.contractorName} data-field="contractorName" onchange={handleInfoChange}></lightning-input>
+                </div>
+
+                <div class="info-field">
+                    <div class="info-label">Drawing Reference No:</div>
+                    <lightning-input type="text" variant="label-hidden" value={projectInfo.drawingReferenceNo} data-field="drawingReferenceNo" onchange={handleInfoChange}></lightning-input>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th class="sn-col">S. No.</th>
+                            <th class="particulars-col">Particulars</th>
+                            <th class="status-col">Status</th>
+                            <th class="remark-col">Remark</th>
+                            <th class="file-col">File Upload</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <template for:each={pagedRows} for:item="row">
+                            
+                            <template if:true={row.showSectionHeader}>
+                                <tr class="section-row" key={row.section}>
+                                    <td></td>
+                                    <td colspan="4">{row.section}</td>
+                                </tr>
+                            </template>
+
+                            <tr key={row.fieldApi}>
+                                <td class="sn-col">{row.rowNumber}</td>
+
+                                <td class="particulars-cell">
+                                    <div class="particulars-inner">
+                                        <lightning-input type="checkbox" variant="label-hidden" checked={row.checked} data-index={row.globalIndex} onchange={handleCheckboxChange}></lightning-input>
+                                        <span class="particulars-text">{row.label}</span>
+                                    </div>
+                                </td>
+
+                                <td class="center-cell">
+                                    <lightning-combobox class="field-fit" variant="label-hidden" placeholder="Select an Option" options={dynamicStatusOptions} value={row.status} data-index={row.globalIndex} onchange={handleStatusChange}></lightning-combobox>
+                                </td>
+
+                                <td class="center-cell">
+                                    <div class="remark-wrapper">
+                                        <lightning-textarea class="field-fit" variant="label-hidden" value={row.remark} data-index={row.globalIndex} onchange={handleRemarkChange}></lightning-textarea>
+                                    </div>
+                                </td>
+
+                                <td class="center-cell">
+                                    <div class="upload-box">
+                                        <lightning-file-upload label="Upload Files" multiple record-id={currentUserId} data-index={row.globalIndex} onuploadfinished={handleUploadFinished}></lightning-file-upload>
+                                        <template if:true={row.hasFiles}>
+                                            <div class="file-names">{row.fileNamesText}</div>
+                                        </template>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="footer-actions">
+                <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}></lightning-button>
+                <lightning-button label={saveButtonLabel} variant="brand" onclick={handleSaveNext}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

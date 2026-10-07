@@ -1,0 +1,91 @@
+<template>
+    <lightning-quick-action-panel header="Tag Asset">
+        <template if:true={isLoading}>
+            <div class="spinner-container">
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </div>
+        </template>
+
+        <div class="tag-container">
+            <lightning-combobox
+                name="asset"
+                label="Asset"
+                value={selectedAssetId}
+                options={assets}
+                onchange={handleAssetChange}
+                placeholder="Select Asset"
+                required>
+            </lightning-combobox>
+
+            <template if:true={selectedAssetId}>
+                <div class="serial-section">
+                    <label class="serial-label">Asset Serial Number(s)<span class="required">*</span></label>
+
+                    <lightning-input
+                        type="search"
+                        variant="label-hidden"
+                        placeholder="Search Serial Number..."
+                        value={searchTerm}
+                        onchange={handleSearch}>
+                    </lightning-input>
+
+                    <template if:true={hasSerialNumbers}>
+                        <div class="select-all-container">
+                            <lightning-input
+                                type="checkbox"
+                                label="Select All"
+                                checked={allSelected}
+                                onchange={handleSelectAll}>
+                            </lightning-input>
+
+                            <span class="selected-count">
+                                Selected: {selectedCount}
+                            </span>
+                        </div>
+
+                        <div class="serial-list">
+                            <template for:each={filteredSerialNumbers} for:item="serial">
+                                <div class="serial-row" key={serial.id}>
+                                    <lightning-input
+                                        type="checkbox"
+                                        label={serial.label}
+                                        checked={serial.selected}
+                                        data-id={serial.id}
+                                        onchange={handleSerialChange}>
+                                    </lightning-input>
+                                </div>
+                            </template>
+
+                            <template if:false={filteredSerialNumbers.length}>
+                                <div class="no-results">
+                                    No Serial Numbers found.
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <template if:true={hasNoSerialNumbers}>
+                        <div class="no-results">
+                            No Serial Numbers are available for this Asset.
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+        <div slot="footer">
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}>
+            </lightning-button>
+
+            <lightning-button
+                class="save-button"
+                variant="brand"
+                label="Save"
+                onclick={handleSave}
+                disabled={saveDisabled}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

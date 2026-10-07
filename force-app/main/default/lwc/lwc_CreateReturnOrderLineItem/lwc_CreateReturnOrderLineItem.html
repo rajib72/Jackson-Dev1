@@ -1,0 +1,113 @@
+<template>
+    <div class="slds-theme_default slds-is-relative">
+        <div class="slds-p-vertical_medium slds-border_bottom slds-text-align_center">
+            <h1 class="slds-text-heading_medium" style="font-weight: bold; color: #080707;">
+                Create Return Order Line Items
+            </h1>
+        </div>
+
+        <div class="slds-p-around_medium">
+            <template for:each={rows} for:item="row" for:index="index">
+                <div key={row.id} class="slds-box slds-m-bottom_medium slds-p-around_none slds-theme_default">
+
+                    <div class="slds-grid slds-grid_align-end slds-p-around_x-small">
+                        <lightning-button-icon icon-name="utility:delete" variant="border-filled"
+                            alternative-text="Remove Item" data-index={index} onclick={removeRow} title="Remove Item">
+                        </lightning-button-icon>
+                    </div>
+
+                    <div class="slds-theme_shade slds-p-vertical_x-small slds-p-horizontal_small slds-text-title_caps"
+                        style="font-weight: bold; border-top: 1px solid #dddbda; border-bottom: 1px solid #dddbda;">
+                        Information
+                    </div>
+
+                    <div class="slds-p-around_medium">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-combobox label="Product Request Line Item"
+                                    value={row.ProductRequestLineItemId} options={prliOptions} data-index={index}
+                                    data-field="ProductRequestLineItemId" onchange={handleInputChange}>
+                                </lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-combobox label="Asset" value={row.AssetId} options={assetOptions}
+                                    data-index={index} data-field="AssetId" onchange={handleInputChange}>
+                                </lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-combobox label="Processing Plan" value={row.ProcessingPlan}
+                                    options={processingPlanOptions} data-index={index} data-field="ProcessingPlan"
+                                    onchange={handleInputChange}>
+                                </lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-input type="text" label="Reason for Change Text"
+                                    value={row.ReasonForChangeText} data-index={index} data-field="ReasonForChangeText"
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-combobox label="Repayment Method" value={row.RepaymentMethod}
+                                    options={repaymentMethodOptions} data-index={index} data-field="RepaymentMethod"
+                                    onchange={handleInputChange}>
+                                </lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small"></div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-input type="number" label="Quantity Returned" value={row.QuantityReturned}
+                                    required step="0.01" data-index={index} data-field="QuantityReturned"
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                <lightning-combobox label="Quantity Unit Of Measure" value={row.QuantityUnitOfMeasure}
+                                    options={uomOptions} data-index={index} data-field="QuantityUnitOfMeasure"
+                                    onchange={handleInputChange}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-theme_shade slds-p-vertical_x-small slds-p-horizontal_small slds-text-title_caps"
+                        style="font-weight: bold; border-top: 1px solid #dddbda; border-bottom: 1px solid #dddbda;">
+                        Shipping Information
+                    </div>
+
+                    <div class="slds-p-around_medium">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input type="text" label="Source Location" value={row.SourceLocationName}
+                                    disabled></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input type="text" label="Destination Location"
+                                    value={row.DestinationLocationName} disabled></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-theme_shade slds-p-vertical_x-small slds-p-horizontal_small slds-text-title_caps"
+                        style="font-weight: bold; border-top: 1px solid #dddbda; border-bottom: 1px solid #dddbda;">
+                        Destination
+                    </div>
+
+                    <div class="slds-p-around_medium">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-textarea label="Description" value={row.Description} data-index={index}
+                                    data-field="Description" onchange={handleInputChange}>
+                                </lightning-textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <div class="slds-text-align_center slds-m-top_large slds-p-bottom_medium">
+                <lightning-button label="Add Item" icon-name="utility:add" variant="neutral" onclick={addRow}
+                    class="slds-m-right_small"></lightning-button>
+                <lightning-button label="Save All Items" variant="brand" onclick={handleSave}></lightning-button>
+            </div>
+        </div>
+    </div>
+</template>

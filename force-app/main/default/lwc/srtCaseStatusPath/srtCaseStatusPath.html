@@ -1,0 +1,51 @@
+<template>
+    <lightning-card>
+        <div class="path-wrapper">
+
+            <div class="path-header">
+                <div class="path-title">
+                    Service Request Status
+                </div>
+
+                <div class="current-status-badge">
+                    Current: {currentStatusLabel}
+                </div>
+            </div>
+
+            <div class="path-scroll">
+                <div class="status-path">
+
+                    <template for:each={pathSteps} for:item="step">
+
+                        <div key={step.value} class={step.containerClass}>
+
+                            <button class={step.buttonClass} data-value={step.value} onclick={handleStatusClick}
+                                disabled={isUpdating}>
+
+                                <span class="step-index">
+                                    {step.displayIndex}
+                                </span>
+
+                                <span class="step-label">
+                                    {step.label}
+                                </span>
+
+                            </button>
+
+                        </div>
+
+                    </template>
+
+                </div>
+            </div>
+
+            <template if:true={isUpdating}>
+                <div class="spinner-overlay">
+                    <lightning-spinner alternative-text="Updating Case Status" size="small">
+                    </lightning-spinner>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

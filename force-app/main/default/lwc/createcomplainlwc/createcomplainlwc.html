@@ -1,0 +1,47 @@
+<template>
+    <lightning-card title="Search Customer">
+
+        <div class="slds-p-around_medium">
+            <div class="slds-grid slds-gutters slds-wrap">
+
+                <div class="slds-col slds-size_1-of-4">
+                    <lightning-input
+                        label="Customer Name"
+                        value={customerName}
+                        onchange={handleCustomerName}
+                        disabled={disableCustomerName}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-4">
+                    <lightning-input
+                        label="Serial No"
+                        value={serialNo}
+                        onchange={handleSerialNo}
+                        disabled={disableSerialNo}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-4">
+                    <lightning-input
+                        label="Mobile No"
+                        value={mobileNo}
+                        onchange={handleMobileNo}
+                        disabled={disableMobileNo}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-4 slds-align-bottom">
+                    <lightning-button
+                        label="Search"
+                        variant="brand"
+                        onclick={handleSearch}
+                        class="slds-m-top_large">
+                    </lightning-button>
+                </div>
+
+            </div>
+        </div>
+
+    </lightning-card>
+</template>

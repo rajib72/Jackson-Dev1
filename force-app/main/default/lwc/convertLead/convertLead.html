@@ -1,0 +1,146 @@
+<template>
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" aria-modal="true" class="custom-modal">
+            <div class="custom-modal-container">
+
+                <!-- Header -->
+                <div class="custom-header">
+                    <div class="header-title-wrap">
+                        <h2 class="header-title">
+                            Convert Solar Sales Lead
+                        </h2>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="custom-modal-body">
+
+                    <!-- ACCOUNT -->
+                    <div class="slds-box slds-theme_shade slds-m-bottom_medium slds-m-top_medium">
+                        <h3 class="slds-text-heading_small">Account Info</h3>
+
+                        <template if:true={accountExists}>
+                            <p class="status-success">✅ Account already exists.</p>
+                        </template>
+
+                        <div class="slds-grid slds-gutters slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                                <lightning-input label="Account Name" value={accountName} onchange={handleAccountChange}
+                                    disabled={isLoading}>
+                                </lightning-input>
+
+                                <lightning-input label="PAN No" value={panNumber} onchange={handlePanChange}
+                                    disabled={isLoading}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                                <lightning-input label="Billing GST No" value={billingGstNumber}
+                                    onchange={handleBillingGstChange} disabled={isLoading}>
+                                </lightning-input>
+
+                                <lightning-input label="Shipping GST No" value={shippingGstNumber}
+                                    onchange={handleShippingGstChange} disabled={isLoading}>
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <template if:true={showNoMatchingAccounts}>
+                            <p class="status-error">No matching accounts found.</p>
+                        </template>
+
+                        <template if:true={matchingAccounts.length}>
+                            <div class="search-results slds-m-top_small" onscroll={handleAccountResultsScroll}>
+                                <p>Select an existing account:</p>
+                                <lightning-radio-group name="accountOptions" options={matchingAccounts}
+                                    value={selectedAccountId} onchange={handleAccountSelection} type="radio"
+                                    disabled={isLoading}>
+                                </lightning-radio-group>
+                                <template if:true={isLoadingAccounts}>
+                                    <lightning-spinner alternative-text="Loading accounts" size="small">
+                                    </lightning-spinner>
+                                </template>
+                            </div>
+
+                            <div class="slds-m-top_medium">
+                                <lightning-button label="Clear Response" onclick={clearSelection} disabled={isLoading}>
+                                </lightning-button>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- CONTACT -->
+                    <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small">Contact Info</h3>
+
+                        <template if:true={contactExists}>
+                            <p class="status-success">✅ Contact already exists.</p>
+                        </template>
+
+                        <lightning-input label="Contact Name" value={fullcontactName} onchange={handleContactChange}
+                            required disabled={isLoading}>
+                        </lightning-input>
+
+                        <template if:true={showNoMatchingContacts}>
+                            <p class="status-error">No matching contacts found.</p>
+                        </template>
+
+                        <template if:true={matchingContacts.length}>
+                            <div class="search-results slds-m-top_small" onscroll={handleContactResultsScroll}>
+                                <p>Select an existing contact:</p>
+                                <lightning-radio-group name="contactOptions" options={matchingContacts}
+                                    value={selectedContactId} onchange={handleContactSelection} type="radio"
+                                    disabled={isLoading}>
+                                </lightning-radio-group>
+                                <template if:true={isLoadingContacts}>
+                                    <lightning-spinner alternative-text="Loading contacts" size="small">
+                                    </lightning-spinner>
+                                </template>
+                            </div>
+
+                            <div class="slds-m-top_medium">
+                                <lightning-button label="Clear Response" onclick={clearSelection1}
+                                    disabled={isLoading}>
+                                </lightning-button>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- OPPORTUNITY -->
+                    <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small">Opportunity Info</h3>
+
+                        <lightning-input label="Opportunity Name" value={opportunityName} disabled>
+                        </lightning-input>
+                    </div>
+                </div>
+                <!-- Footer -->
+
+                <footer class="custom-modal-footer">
+                    <div class="footer-button-group">
+                        <lightning-button label="Cancel" variant="neutral" onclick={handleCloseModal}
+                            disabled={isLoading}>
+                        </lightning-button>
+
+                        <lightning-button label="Convert" variant="brand" onclick={handleConvert} disabled={isLoading}>
+                        </lightning-button>
+                    </div>
+                </footer>
+
+                <!-- Spinner -->
+                <template if:true={isLoading}>
+                    <div class="custom-spinner-wrapper">
+                        <div class="slds-spinner slds-spinner_medium slds-spinner_brand" role="status">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+        </section>
+
+        <div class="custom-backdrop"></div>
+    </template>
+</template>

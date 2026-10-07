@@ -1,0 +1,503 @@
+<template>
+
+    <lightning-quick-action-panel header="Create Asset, Serial Number & Warranty">
+
+        <!-- =====================================================
+             LOADING
+             ===================================================== -->
+
+        <template if:true={isLoading}>
+
+            <div class="spinner-container">
+
+                <lightning-spinner alternative-text="Please wait" size="medium">
+                </lightning-spinner>
+
+            </div>
+
+        </template>
+
+
+        <div class="content">
+
+            <!-- =================================================
+                 CASE
+                 ================================================= -->
+
+            <template if:true={caseLoaded}>
+
+                <div class="case-banner">
+
+                    <lightning-icon icon-name="standard:case" size="small">
+                    </lightning-icon>
+
+
+                    <div class="case-info">
+
+                        <div class="case-number">
+                            Case {caseContext.caseNumber}
+                        </div>
+
+
+                        <div class="case-subject">
+                            {caseContext.subject}
+                        </div>
+
+                    </div>
+
+
+                    <div class="customer-info">
+
+                        <div class="info-label">
+                            Customer
+                        </div>
+
+
+                        <div class="info-value">
+                            {caseContext.accountName}
+                        </div>
+
+
+                        <template if:true={caseContext.contactName}>
+
+                            <div class="info-secondary">
+                                Contact:
+                                {caseContext.contactName}
+                            </div>
+
+                        </template>
+
+                    </div>
+
+                </div>
+
+            </template>
+
+
+            <!-- =================================================
+                 INFORMATION
+                 ================================================= -->
+
+            <div class="information-note">
+
+                <lightning-icon icon-name="utility:info" size="x-small">
+                </lightning-icon>
+
+
+                <span>
+                    Create one Asset with one Serial Number
+                    and one Warranty record against each Serial Number.
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 ASSET
+                 ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-header">
+
+                    <div class="section-number">
+                        1
+                    </div>
+
+
+                    <div>
+
+                        <div class="section-title">
+                            Asset Details
+                        </div>
+
+
+                        <div class="section-description">
+                            Enter the common Asset information.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     BASIC ASSET DETAILS
+                     ============================================= -->
+
+                <div class="form-grid">
+
+
+                    <!-- PRODUCT PICKLIST -->
+                    <lightning-combobox label="Product" name="productName" value={form.productName}
+                        options={productOptions} onchange={handleProductChange} required>
+                    </lightning-combobox>
+
+
+                    <!-- DEPENDENT PRODUCT CATEGORY PICKLIST -->
+                    <lightning-combobox label="Product Category" name="productCategory" value={form.productCategory}
+                        options={productCategoryOptions} onchange={handleProductCategoryChange}
+                        disabled={isProductCategoryDisabled} required>
+                    </lightning-combobox>
+
+
+                    <!--<lightning-record-picker
+                        label="Order Product"
+                        placeholder="Search Order Product..."
+                        object-api-name="OrderItem"
+                        value={form.orderProductId}
+                        onchange={handleOrderProductChange}>
+                    </lightning-record-picker>-->
+
+
+                    <!--<lightning-input
+                        type="date"
+                        label="Purchase Date"
+                        name="purchaseDate"
+                        value={form.purchaseDate}
+                        onchange={handleInputChange}>
+                    </lightning-input>-->
+
+
+                    <!--<lightning-input
+                        type="date"
+                        label="Install Date"
+                        name="installDate"
+                        value={form.installDate}
+                        onchange={handleInputChange}>
+                    </lightning-input>-->
+
+
+                    <lightning-input type="number" min="0" step="0.01" label="Quantity" name="quantity"
+                        value={form.quantity} onchange={handleInputChange} required>
+                    </lightning-input>
+
+                    <template for:each={serials} for:item="serial">
+
+                        <div key={serial.key}>
+
+                            <lightning-input label="Serial Number" value={serial.serialNumber}
+                                data-serial-key={serial.key} data-field="serialNumber" onchange={handleSerialChange}>
+                            </lightning-input>
+
+                        </div>
+
+                    </template>
+
+
+                    <lightning-input label="Invoice Number" name="invoiceNumber" value={form.invoiceNumber}
+                        onchange={handleInputChange} required>
+                    </lightning-input>
+
+
+                    <lightning-input type="date" label="Invoice Date" name="invoiceDate" value={form.invoiceDate}
+                        onchange={handleInputChange} required>
+                    </lightning-input>
+
+
+                    <!--<lightning-input
+                        label="Batch Number"
+                        name="batchNumber"
+                        value={form.batchNumber}
+                        onchange={handleInputChange}>
+                    </lightning-input>-->
+
+
+                    <!--<lightning-input
+                        label="Site Name"
+                        name="siteName"
+                        value={form.siteName}
+                        onchange={handleInputChange}>
+                    </lightning-input>-->
+
+                </div>
+
+
+                <!-- =============================================
+                     LOCATION
+                     ============================================= -->
+
+                <!--<div class="subsection-title">
+                    Location Details
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <lightning-input
+                        label="City"
+                        name="city"
+                        value={form.city}
+                        onchange={handleInputChange}>
+                    </lightning-input>
+
+
+                    <lightning-input
+                        label="State"
+                        name="state"
+                        value={form.state}
+                        onchange={handleInputChange}>
+                    </lightning-input>
+
+
+                    <lightning-input
+                        label="Country"
+                        name="country"
+                        value={form.country}
+                        onchange={handleInputChange}>
+                    </lightning-input>
+
+
+                    <lightning-input
+                        label="Pin Code"
+                        name="pinCode"
+                        value={form.pinCode}
+                        onchange={handleInputChange}>
+                    </lightning-input>
+
+
+                    <div class="full-width">
+
+                        <lightning-textarea
+                            label="Street Address"
+                            name="address"
+                            value={form.address}
+                            onchange={handleInputChange}>
+                        </lightning-textarea>
+
+                    </div>
+
+                </div>-->
+
+
+                <!-- =============================================
+                     DEALER
+                     ============================================= -->
+
+                <!--<div class="subsection-title">
+                    Dealer Details
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <lightning-input
+                        label="Dealer Name"
+                        name="dealerName"
+                        value={form.dealerName}
+                        onchange={handleInputChange}>
+                    </lightning-input>
+
+
+                    <lightning-input
+                        type="tel"
+                        label="Dealer Phone No."
+                        name="dealerPhone"
+                        value={form.dealerPhone}
+                        onchange={handleInputChange}>
+                    </lightning-input>
+
+
+                    <div class="full-width">
+
+                        <lightning-textarea
+                            label="Dealer Address"
+                            name="dealerAddress"
+                            value={form.dealerAddress}
+                            onchange={handleInputChange}>
+                        </lightning-textarea>
+
+                    </div>
+
+
+                    <div class="full-width">
+
+                        <lightning-textarea
+                            label="Description"
+                            name="description"
+                            value={form.description}
+                            onchange={handleInputChange}>
+                        </lightning-textarea>
+
+                    </div>
+
+                </div>-->
+
+
+                <!-- =============================================
+                     DEFAULT WARRANTY
+                     ============================================= -->
+
+                <div class="subsection-title">
+                    Default Warranty Information
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Product Duration -->
+
+                    <lightning-input type="number" min="0" label="Product Warranty Duration"
+                        name="productWarrantyDuration" value={form.productWarrantyDuration} readonly>
+                    </lightning-input>
+
+
+                    <!-- Duration Unit -->
+
+                    <lightning-input label="Warranty Duration Unit" value={form.productWarrantyDurationUnit} readonly>
+                    </lightning-input>
+
+
+                    <!-- Warranty Start -->
+
+                    <lightning-input type="date" label="Warranty Start Date" value={form.warrantyStartDate} readonly>
+                    </lightning-input>
+
+
+                    <!-- Warranty End -->
+
+                    <lightning-input type="date" label="Warranty End Date" value={form.warrantyEndDate} readonly>
+                    </lightning-input>
+
+
+                    <!-- Warranty Status -->
+
+                    <lightning-input label="Warranty Status" value={form.warrantyStatus} readonly>
+                    </lightning-input>
+
+
+                    <!-- Existing Performance Warranty -->
+
+                    <!--<lightning-input
+                        type="number"
+                        min="0"
+                        label="Performance Warranty Duration"
+                        name="performanceWarrantyDuration"
+                        value={form.performanceWarrantyDuration}
+                        onchange={handleInputChange}>
+                    </lightning-input>-->
+
+
+                    <!-- Existing Asset Product Warranty End -->
+
+                    <!--<lightning-input
+                        type="date"
+                        label="Product Warranty End Date"
+                        name="assetProductWarrantyEndDate"
+                        value={form.assetProductWarrantyEndDate}
+                        onchange={handleInputChange}>
+                    </lightning-input>-->
+
+
+                    <!-- Existing Performance Warranty End -->
+
+                    <!--<lightning-input
+                        type="date"
+                        label="Performance Warranty End Date"
+                        name="assetPerformanceWarrantyEndDate"
+                        value={form.assetPerformanceWarrantyEndDate}
+                        onchange={handleInputChange}>
+                    </lightning-input>-->
+
+                </div>
+
+            </section>
+
+            <!-- =================================================
+     ATTACHMENTS
+     ================================================= -->
+
+            <section class="form-section attachment-section">
+
+                <div class="section-header">
+
+                    <div class="section-number">
+                        2
+                    </div>
+
+                    <div>
+
+                        <div class="section-title">
+                            Attachment POP (Proof of purchase) &amp;
+                            model sr. no.
+                        </div>
+
+                        <div class="section-description">
+                            Upload Proof of Purchase, Model Serial Number
+                            and other supporting documents.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="attachment-content">
+
+                    <div class="attachment-info">
+
+                        <lightning-icon icon-name="utility:info" size="x-small">
+                        </lightning-icon>
+
+                        <span>
+                            You can upload up to 10 files at a time by default.
+                            Maximum file size is 10 GB per file.
+                        </span>
+
+                    </div>
+
+
+                    <div class="file-upload-container">
+
+                        <lightning-file-upload label="Attach Files" name="caseFileUploader" record-id={recordId}
+                            multiple onuploadfinished={handleUploadFinished} required>
+                        </lightning-file-upload>
+
+                    </div>
+
+
+                    <template if:true={uploadedFileCount}>
+
+                        <div class="uploaded-file-summary">
+
+                            <lightning-icon icon-name="utility:success" size="x-small">
+                            </lightning-icon>
+
+                            <span>
+                                {uploadedFileCount}
+                                file(s) uploaded successfully to this Case.
+                            </span>
+
+                        </div>
+
+                    </template>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =====================================================
+             FOOTER
+             ===================================================== -->
+
+        <div slot="footer" class="footer-actions">
+
+
+            <lightning-button label="Cancel" onclick={handleCancel} disabled={isLoading}>
+            </lightning-button>
+
+
+            <lightning-button variant="brand" label="Save Asset" onclick={handleSave} disabled={isLoading}>
+            </lightning-button>
+
+        </div>
+
+    </lightning-quick-action-panel>
+
+</template>

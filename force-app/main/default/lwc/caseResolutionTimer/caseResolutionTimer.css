@@ -1,0 +1,438 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.timer-shell {
+    width: 100%;
+    box-sizing: border-box;
+
+    border: 1px solid #d8dde6;
+    border-radius: 0.75rem;
+
+    background: #ffffff;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   TOP ACCENT
+   ========================================================= */
+
+.timer-active {
+    border-top: 4px solid #0176d3;
+}
+
+.timer-closed {
+    border-top: 4px solid #2e844a;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.timer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding: 1rem 1.25rem;
+
+    border-bottom: 1px solid #e5e5e5;
+
+    background: #ffffff;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+
+    gap: 0.75rem;
+
+    min-width: 0;
+}
+
+.icon-container {
+    flex-shrink: 0;
+}
+
+.eyebrow {
+    margin-bottom: 0.15rem;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    letter-spacing: 0.06rem;
+
+    color: #5f6b7a;
+}
+
+.case-title {
+    font-size: 1rem;
+    font-weight: 700;
+
+    color: #181818;
+}
+
+.case-subject {
+    margin-top: 0.1rem;
+
+    max-width: 500px;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: 0.76rem;
+
+    color: #5f6b7a;
+}
+
+/* =========================================================
+   STATUS BADGE
+   ========================================================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 0.4rem;
+
+    flex-shrink: 0;
+
+    padding:
+        0.35rem
+        0.65rem;
+
+    border-radius: 999px;
+
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.status-running {
+    background: #eaf5fe;
+    color: #014486;
+}
+
+.status-closed {
+    background: #e6f4ea;
+    color: #194e31;
+}
+
+.status-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+/* =========================================================
+   STATUS JOURNEY
+   ========================================================= */
+
+.status-journey {
+    display: grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto;
+
+    align-items: center;
+
+    gap: 0.6rem;
+
+    padding:
+        0.75rem
+        1.25rem
+        0;
+
+    background: #ffffff;
+}
+
+.journey-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    color: #5f6b7a;
+
+    text-transform: uppercase;
+}
+
+.journey-line {
+    position: relative;
+
+    height: 3px;
+
+    border-radius: 999px;
+
+    background: #e5e5e5;
+
+    overflow: hidden;
+}
+
+.journey-progress {
+    width: 100%;
+    height: 100%;
+
+    background: #0176d3;
+
+    border-radius: 999px;
+}
+
+.timer-closed .journey-progress {
+    background: #2e844a;
+}
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+.timer-grid {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.6rem;
+
+    padding:
+        1.35rem
+        1rem
+        1.1rem;
+}
+
+.time-box {
+    min-width: 82px;
+
+    padding:
+        0.75rem
+        0.65rem;
+
+    text-align: center;
+
+    border: 1px solid #d8dde6;
+    border-radius: 0.55rem;
+
+    background: #f8fafc;
+}
+
+.time-number {
+    font-size: 1.8rem;
+    line-height: 1;
+
+    font-weight: 700;
+
+    color: #181818;
+
+    font-variant-numeric:
+        tabular-nums;
+}
+
+.timer-active .time-number {
+    color: #0176d3;
+}
+
+.timer-closed .time-number {
+    color: #2e844a;
+}
+
+.time-label {
+    margin-top: 0.45rem;
+
+    font-size: 0.6rem;
+    font-weight: 700;
+
+    letter-spacing: 0.05rem;
+
+    color: #5f6b7a;
+}
+
+.time-separator {
+    margin-top: -1rem;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+
+    color: #8c8c8c;
+}
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.timer-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 0.4rem;
+
+    margin:
+        0
+        1.25rem
+        1rem;
+
+    padding:
+        0.55rem
+        0.75rem;
+
+    border-radius: 0.4rem;
+
+    font-size: 0.72rem;
+}
+
+.running-message {
+    background: #eef4ff;
+    color: #014486;
+}
+
+.closed-message {
+    background: #e6f4ea;
+    color: #194e31;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.timer-footer {
+    display: flex;
+
+    align-items: stretch;
+
+    border-top: 1px solid #e5e5e5;
+
+    background: #f7f9fb;
+}
+
+.footer-item {
+    flex: 1;
+
+    min-width: 0;
+
+    padding:
+        0.75rem
+        1rem;
+}
+
+.footer-label {
+    margin-bottom: 0.25rem;
+
+    font-size: 0.6rem;
+    font-weight: 700;
+
+    letter-spacing: 0.04rem;
+
+    color: #5f6b7a;
+}
+
+.footer-value {
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    color: #181818;
+}
+
+.footer-divider {
+    width: 1px;
+
+    margin:
+        0.6rem
+        0;
+
+    background: #d8dde6;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-area {
+    position: relative;
+
+    min-height: 160px;
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error-area {
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    padding: 1rem;
+
+    color: #ba0517;
+
+    background: #fef1ee;
+
+    font-size: 0.8rem;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media only screen and (max-width: 768px) {
+
+    .timer-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .timer-grid {
+        gap: 0.25rem;
+
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .time-box {
+        min-width: 0;
+
+        flex: 1;
+
+        padding:
+            0.65rem
+            0.25rem;
+    }
+
+    .time-number {
+        font-size: 1.35rem;
+    }
+
+    .time-label {
+        font-size: 0.5rem;
+    }
+
+    .time-separator {
+        font-size: 1rem;
+    }
+
+    .timer-footer {
+        flex-direction: column;
+    }
+
+    .footer-divider {
+        width: auto;
+        height: 1px;
+
+        margin:
+            0
+            1rem;
+    }
+}

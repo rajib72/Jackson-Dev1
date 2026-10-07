@@ -1,0 +1,76 @@
+<template>
+    <lightning-quick-action-panel header="SAP Employee Selection">
+        <div class="slds-p-around_medium container-box">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <div class="search-wrapper">
+                <lightning-input
+                    type="search"
+                    label="Search SAP Employee"
+                    placeholder="Type employee code or name"
+                    value={searchKey}
+                    onchange={handleSearchChange}
+                    onfocus={handleSearchFocus}>
+                </lightning-input>
+
+                <template if:true={showDropdown}>
+                    <div class="dropdown-box">
+                        <template for:each={filteredEmployeeOptions} for:item="emp">
+                            <div
+                                key={emp.employeeCode}
+                                class={emp.cssClass}
+                                data-code={emp.employeeCode}
+                                data-name={emp.employeeName}
+                                onclick={handleSelectEmployee}>
+                                <div class="emp-code">{emp.employeeCode}</div>
+                                <div class="emp-name">{emp.employeeName}</div>
+                            </div>
+                        </template>
+
+                        <template if:true={noRecordsFound}>
+                            <div class="no-records">No matching employee found.</div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <template if:true={hasSelectedEmployee}>
+                <div class="selected-box slds-m-top_medium">
+                    <div><strong>Selected Employee Code:</strong> {selectedEmployeeCode}</div>
+                    <div><strong>Selected Employee Name:</strong> {selectedEmployeeName}</div>
+
+                    <div class="slds-m-top_small">
+                        <lightning-button
+                            label="Clear Selection"
+                            variant="destructive-text"
+                            onclick={handleClearSelection}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <div slot="footer">
+            <lightning-button
+                label="Refresh"
+                onclick={handleRefresh}
+                class="slds-m-right_small">
+            </lightning-button>
+
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}
+                class="slds-m-right_small">
+            </lightning-button>
+
+            <lightning-button
+                variant="brand"
+                label="Save"
+                onclick={handleSave}
+                disabled={isSaveDisabled}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

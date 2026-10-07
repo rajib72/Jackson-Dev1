@@ -1,0 +1,38 @@
+/* Styling for the main "Product Request Details" Title */
+.custom-main-header {
+    color: #0176D3 !important; 
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Styling for "Information", "Amount Details", and "Related Line Items" */
+.custom-section-header {
+    background: linear-gradient(90deg, #e0ebfb, transparent); 
+    color: #014486 !important; 
+    padding: 8px 12px;
+    border-left: 5px solid #0176D3; 
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Gives the main page header a subtle top border to make it pop */
+.slds-page-header {
+    border-top: 4px solid #0176D3;
+}
+
+/* Make the Table Headers bold and dark */
+.slds-table thead th,
+.slds-table thead th .slds-truncate {
+    font-weight: 600 !important;
+    color: #000000 !important; /* Pure Dark Black */
+    background-color: #f3f3f3 !important; /* Slight contrast for sticky header */
+}
+:host {
+  --slds-c-modal-footer-spacing-block-start:0.4rem;
+  --slds-c-modal-footer-spacing-block-end:0.4rem;
+}

@@ -1,0 +1,15 @@
+.body-section {
+    min-height: 120px;
+}
+
+.info-box {
+    background: #f3f3f3;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d8dde6;
+}
+
+.info-text {
+    font-size: 0.95rem;
+    color: #1f1f1f;
+}

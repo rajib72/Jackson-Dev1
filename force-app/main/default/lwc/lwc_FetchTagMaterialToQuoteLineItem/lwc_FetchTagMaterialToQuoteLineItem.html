@@ -1,0 +1,65 @@
+<template>
+    <lightning-card title="Search Material From SAP" icon-name="standard:product">
+        <div class="slds-p-horizontal_medium">
+
+            <div class="slds-grid slds-gutters slds-grid_vertical-align-end slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-4">
+                    <lightning-combobox
+                        label="Search By"
+                        value={searchMode}
+                        options={searchModeOptions}
+                        onchange={handleSearchModeChange}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-col slds-size_2-of-4">
+                    <lightning-input
+                        label={inputLabel}
+                        value={searchText}
+                        onchange={handleInputChange}
+                        placeholder={inputPlaceholder}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-4">
+                    <lightning-button
+                        label="Fetch Material From SAP"
+                        variant="brand"
+                        onclick={handleSearch}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </template>
+
+            <template if:true={hasResults}>
+                <div style="height: 250px;">
+                    <lightning-datatable
+                        key-field="rowId"
+                        data={materials}
+                        columns={displayColumns}
+                        max-row-selection="1"
+                        onrowselection={handleRowSelection}
+                        column-widths-mode="auto">
+                    </lightning-datatable>
+                </div>
+
+                <div class="slds-m-top_medium slds-text-align_center">
+                    <lightning-button
+                        label="Save & Link Selected Material"
+                        variant="success"
+                        onclick={handleSyncAndLink}
+                        disabled={isSaveDisabled}>
+                    </lightning-button>
+                </div>
+            </template>
+
+            <template if:true={noResults}>
+                <p class="slds-text-color_error slds-m-top_medium">{noResultsMessage}</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

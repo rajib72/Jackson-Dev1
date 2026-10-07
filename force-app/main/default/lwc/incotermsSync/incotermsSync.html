@@ -1,0 +1,74 @@
+<template>
+    <div class="slds-card" style="background: transparent; border: none;">
+        
+        <div class="custom-header slds-p-around_medium slds-m-bottom_medium">
+            <h1 class="slds-text-heading_medium slds-text-color_inverse slds-m-bottom_xxx-small" style="font-weight: 700;">SAP Incoterms Sync</h1>
+            <p class="slds-text-color_inverse">Fetch incoterm records from SAP and create/update them in Salesforce</p>
+        </div>
+
+        <div class="slds-box slds-theme_default slds-m-bottom_medium slds-grid slds-grid_align-center slds-p-around_small">
+            <lightning-button label="Refresh" title="Refresh" onclick={handleRefresh} class="slds-m-right_small"></lightning-button>
+            <lightning-button variant="brand" label="Fetch Data" title="Fetch Data" onclick={handleFetch} disabled={isLoading}></lightning-button>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={hasProcessed}>
+            
+            <div class="slds-box slds-m-bottom_medium slds-theme_default">
+                <div class="slds-text-title_bold slds-m-bottom_small" style="color: #0b5cab;">Processing Summary</div>
+                
+                <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light slds-m-bottom_medium" role="status">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:info" size="small" variant="info"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <p>Processed successfully. Total Received: {summary.totalReceived}, Created: {summary.totalCreated}, Updated: {summary.totalUpdated}, Errors: {summary.totalErrors}</p>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-4">
+                        <div class="metric-box bg-blue">
+                            <div class="metric-title">Total Received</div>
+                            <div class="metric-value">{summary.totalReceived}</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <div class="metric-box bg-green">
+                            <div class="metric-title">Created</div>
+                            <div class="metric-value">{summary.totalCreated}</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <div class="metric-box bg-orange">
+                            <div class="metric-title">Updated</div>
+                            <div class="metric-value">{summary.totalUpdated}</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <div class="metric-box bg-red">
+                            <div class="metric-title">Errors</div>
+                            <div class="metric-value">{summary.totalErrors}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-box slds-theme_default">
+                <div class="slds-text-title_bold slds-m-bottom_small" style="color: #0b5cab;">Processed Records</div>
+                <div style="height: 300px;">
+                    <lightning-datatable
+                        key-field="incoterm"
+                        data={summary.processedRecords}
+                        columns={columns}
+                        hide-checkbox-column="true">
+                    </lightning-datatable>
+                </div>
+            </div>
+
+        </template>
+    </div>
+</template>

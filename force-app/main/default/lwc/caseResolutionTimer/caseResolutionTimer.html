@@ -1,0 +1,262 @@
+<template>
+
+    <div class={timerClass}>
+
+        <!-- LOADING -->
+        <template if:true={isLoading}>
+            <div class="loading-area">
+                <lightning-spinner
+                    alternative-text="Loading Case Timer"
+                    size="small">
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <!-- ERROR -->
+        <template if:true={hasError}>
+            <div class="error-area">
+
+                <lightning-icon
+                    icon-name="utility:error"
+                    size="small"
+                    variant="error">
+                </lightning-icon>
+
+                <span>
+                    {errorMessage}
+                </span>
+
+            </div>
+        </template>
+
+        <!-- TIMER -->
+        <template if:false={isLoading}>
+
+            <template if:false={hasError}>
+
+                <!-- =====================================================
+                     HEADER
+                     ===================================================== -->
+                <div class="timer-header">
+
+                    <div class="header-left">
+
+                        <div class="icon-container">
+                            <lightning-icon
+                                icon-name="standard:case"
+                                size="small">
+                            </lightning-icon>
+                        </div>
+
+                        <div>
+
+                            <div class="eyebrow">
+                                CASE RESOLUTION TIMER
+                            </div>
+
+                            <div class="case-title">
+                                Case {caseNumber}
+                            </div>
+
+                            <template if:true={subject}>
+                                <div class="case-subject">
+                                    {subject}
+                                </div>
+                            </template>
+
+                        </div>
+
+                    </div>
+
+                    <div class={statusClass}>
+
+                        <span class="status-dot"></span>
+
+                        <span>
+                            {status}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- =====================================================
+                     JOURNEY
+                     ===================================================== -->
+                <div class="status-journey">
+
+                    <div class="journey-label">
+                        New
+                    </div>
+
+                    <div class="journey-line">
+                        <div class="journey-progress"></div>
+                    </div>
+
+                    <div class="journey-label">
+                        Closed
+                    </div>
+
+                </div>
+
+                <!-- =====================================================
+                     TIMER
+                     ===================================================== -->
+                <div class="timer-grid">
+
+                    <div class="time-box">
+
+                        <div class="time-number">
+                            {elapsedDays}
+                        </div>
+
+                        <div class="time-label">
+                            DAYS
+                        </div>
+
+                    </div>
+
+                    <div class="time-separator">
+                        :
+                    </div>
+
+                    <div class="time-box">
+
+                        <div class="time-number">
+                            {elapsedHours}
+                        </div>
+
+                        <div class="time-label">
+                            HOURS
+                        </div>
+
+                    </div>
+
+                    <div class="time-separator">
+                        :
+                    </div>
+
+                    <div class="time-box">
+
+                        <div class="time-number">
+                            {elapsedMinutes}
+                        </div>
+
+                        <div class="time-label">
+                            MINUTES
+                        </div>
+
+                    </div>
+
+                    <div class="time-separator">
+                        :
+                    </div>
+
+                    <div class="time-box">
+
+                        <div class="time-number">
+                            {elapsedSeconds}
+                        </div>
+
+                        <div class="time-label">
+                            SECONDS
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- =====================================================
+                     STATUS MESSAGE
+                     ===================================================== -->
+                <div class={messageClass}>
+
+                    <lightning-icon
+                        icon-name={messageIcon}
+                        size="x-small">
+                    </lightning-icon>
+
+                    <span>
+                        {timerMessage}
+                    </span>
+
+                </div>
+
+                <!-- =====================================================
+                     DATE INFORMATION
+                     ===================================================== -->
+                <div class="timer-footer">
+
+                    <div class="footer-item">
+
+                        <div class="footer-label">
+                            TIMER STARTED
+                        </div>
+
+                        <div class="footer-value">
+
+                            <lightning-formatted-date-time
+                                value={createdDate}
+                                year="numeric"
+                                month="short"
+                                day="2-digit"
+                                hour="2-digit"
+                                minute="2-digit"
+                                second="2-digit">
+                            </lightning-formatted-date-time>
+
+                        </div>
+
+                    </div>
+
+                    <div class="footer-divider"></div>
+
+                    <div class="footer-item">
+
+                        <div class="footer-label">
+                            CURRENT STATUS
+                        </div>
+
+                        <div class="footer-value">
+                            {status}
+                        </div>
+
+                    </div>
+
+                    <template if:true={isClosed}>
+
+                        <div class="footer-divider"></div>
+
+                        <div class="footer-item">
+
+                            <div class="footer-label">
+                                TIMER STOPPED
+                            </div>
+
+                            <div class="footer-value">
+
+                                <lightning-formatted-date-time
+                                    value={closedDate}
+                                    year="numeric"
+                                    month="short"
+                                    day="2-digit"
+                                    hour="2-digit"
+                                    minute="2-digit"
+                                    second="2-digit">
+                                </lightning-formatted-date-time>
+
+                            </div>
+
+                        </div>
+
+                    </template>
+
+                </div>
+
+            </template>
+
+        </template>
+
+    </div>
+
+</template>

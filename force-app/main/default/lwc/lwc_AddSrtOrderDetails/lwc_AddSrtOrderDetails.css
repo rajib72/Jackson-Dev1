@@ -1,0 +1,238 @@
+.main-wrapper {
+    position: relative;
+    padding: 1.25rem;
+    background: #f8fbff;
+}
+
+.spinner-wrapper {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 99;
+}
+
+.header-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1rem 1.2rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #eef5ff 0%, #ffffff 100%);
+    border: 1px solid #d8e7ff;
+    margin-bottom: 1rem;
+}
+
+.icon-circle {
+    width: 2.7rem;
+    height: 2.7rem;
+    min-width: 2.7rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #d6e4ff;
+    box-shadow: 0 3px 10px rgba(1, 118, 211, 0.12);
+}
+
+.header-card h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #12345b;
+}
+
+.header-card p {
+    margin: 0.25rem 0 0;
+    color: #5f6f89;
+}
+
+.form-card {
+    padding: 1rem 1.2rem;
+    background: #ffffff;
+    border: 1px solid #e2eaf5;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 20px rgba(18, 52, 91, 0.05);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #12345b;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
+    border-bottom: 1px solid #edf1f7;
+}
+
+.input-gap {
+    margin-bottom: 0.75rem;
+}
+
+.custom-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: #31445f;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.lookup-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+    max-height: 13rem;
+    overflow-y: auto;
+    margin-top: 0.35rem;
+    background: #ffffff;
+    border: 1px solid #d6deea;
+    border-radius: 0.65rem;
+    box-shadow: 0 10px 22px rgba(18, 52, 91, 0.16);
+    z-index: 5;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.65rem 0.85rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f3f8;
+}
+
+.dropdown-item:last-child {
+    border-bottom: 0;
+}
+
+.dropdown-item:hover {
+    background: #f3f7ff;
+}
+
+.radio-circle {
+    width: 0.85rem;
+    height: 0.85rem;
+    min-width: 0.85rem;
+    margin-top: 0.25rem;
+    border: 2px solid #7c8798;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+.option-text {
+    min-width: 0;
+}
+
+.option-code {
+    font-weight: 700;
+    color: #0f3768;
+    line-height: 1.2;
+}
+
+.option-detail {
+    color: #60718a;
+    font-size: 0.78rem;
+    margin-top: 0.15rem;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.no-result {
+    padding: 0.9rem;
+    color: #6b778c;
+    text-align: center;
+}
+
+.selected-pill {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 2.5rem;
+    gap: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #c9d8f0;
+    border-radius: 0.6rem;
+    background: #f8fbff;
+}
+
+.selected-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.selected-code {
+    font-weight: 700;
+    color: #12345b;
+}
+
+.selected-detail {
+    color: #65758d;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-help-box {
+    height: 100%;
+    min-height: 6rem;
+    padding: 0.9rem;
+    border-radius: 0.85rem;
+    background: #f8fbff;
+    border: 1px dashed #c7d8ee;
+}
+
+.help-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    color: #12345b;
+    margin-bottom: 0.35rem;
+}
+
+.search-help-box p {
+    margin: 0;
+    color: #63738a;
+    font-size: 0.84rem;
+    line-height: 1.45;
+}
+
+.selected-help {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.7rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid #e1e9f6;
+    color: #63738a;
+}
+
+.selected-help strong {
+    color: #12345b;
+}
+
+.error-text {
+    margin-top: 0.3rem;
+    color: #ba0517;
+    font-size: 0.75rem;
+}
+
+.footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.7rem;
+    padding-top: 0.3rem;
+}
+
+.save-btn {
+    --slds-c-button-brand-color-background: #1b63c8;
+    --slds-c-button-brand-color-border: #1b63c8;
+}

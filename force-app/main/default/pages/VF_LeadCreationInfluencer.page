@@ -1,0 +1,68 @@
+<apex:page controller="LeadCreationInfluencerCtrl" showHeader="true" sidebar="false" lightningStylesheets="true">
+    <style>
+        
+        .vf-container {
+        max-width: 1050px;
+        margin: 10px auto;
+        }
+        
+    </style>
+    <script>
+    function isNumber(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        
+        // Allow only numbers (0–9)
+        if (charCode >= 48 && charCode <= 57) {
+            return true;
+        }
+        return false;
+    }
+    </script>
+    <div class="vf-container">
+        <apex:form >
+            <apex:pageMessages />
+            
+            <apex:pageBlock >
+                <div style="position: relative; max-width: 1050px; margin: 0 auto; font-size: 20px; font-weight: 700; height: 50px;">
+                    <div style="text-align: center; line-height: 50px;">
+                        <b>Lead Creation Form</b>
+                    </div>
+                    
+                    <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
+                        <apex:image value="{!URLFOR($Resource.JaksonLogo)}" style="height: 40px;" />
+                    </div>
+                </div>
+                
+                <br/>    
+                
+                <apex:pageBlockSection title="Basic Information" columns="2">
+                    <apex:inputField value="{!leadRec.Salutation}" required="true" />
+                    <apex:inputField value="{!leadRec.MobilePhone}" onkeypress="return isNumber(event)"  required="true" />
+                    <apex:inputField value="{!leadRec.FirstName}" required="true" />
+                    <apex:inputField value="{!leadRec.Phone}" onkeypress="return isNumber(event)"  />
+                    <apex:inputField value="{!leadRec.MiddleName}" />
+                    <apex:inputField value="{!leadRec.Email}"  required="true" />
+                    <apex:inputField value="{!leadRec.LastName}" required="true"/>
+                    <apex:inputField value="{!leadRec.Product__c}" required="true"/>                           
+                    <apex:inputField value="{!leadRec.Suffix}" />
+                    <apex:inputField value="{!leadRec.Capacity__c}" required="true"/>
+                </apex:pageBlockSection>
+                
+                <apex:pageBlockSection title="Address Information" columns="2">
+                    <apex:inputField value="{!leadRec.Street}" required="true"/>
+                    <apex:inputField value="{!leadRec.City}" required="true"/>
+                    <apex:inputField value="{!leadRec.PostalCode}" required="true" />
+                    <apex:inputField value="{!leadRec.State}" required="true"/>
+                    <apex:inputField value="{!leadRec.Country}" required="true" />
+                </apex:pageBlockSection>
+                
+            </apex:pageBlock> 
+            
+            <div style="text-align:center; margin:20px 0;">
+                <apex:commandButton value="Save" action="{!saveLead}" />
+            </div>
+            
+        </apex:form>
+    </div>
+    
+</apex:page>

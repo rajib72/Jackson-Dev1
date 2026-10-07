@@ -1,0 +1,216 @@
+<template>
+    <lightning-card title="Create Order" icon-name="standard:orders">
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={isStep0}>
+            <div class="slds-p-around_medium">
+                <template if:true={hasQuotes}>
+                    <div class="slds-m-bottom_medium slds-text-heading_small">
+                        Accepted Quotes were found for this Opportunity. Please select one to proceed:
+                    </div>
+                    <lightning-combobox name="quoteSelect" label="Select Accepted Quote" value={selectedQuoteId}
+                        options={quoteOptions} onchange={handleQuoteSelection} required>
+                    </lightning-combobox>
+                    <div class="slds-m-top_large slds-text-align_right">
+                        <lightning-button variant="brand" label="Proceed with Quote" onclick={handleProceedFromStep0}
+                            disabled={isLoading}></lightning-button>
+                    </div>
+                </template>
+
+                <template if:false={hasQuotes}>
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-bottom_medium" role="alert">
+                        <h2>You dont have any Quote For This Opportunity.</h2>
+                    </div>
+                    <div class="slds-text-body_regular slds-m-bottom_medium">
+                        You can continue to create the Order directly from the Opportunity details instead.
+                    </div>
+                    <div class="slds-m-top_large slds-text-align_right">
+                        <lightning-button variant="brand" label="Create Offer from Opportunity" onclick={handleProceedFromStep0}
+                            disabled={isLoading}></lightning-button>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <template if:true={hasValidationErrors}>
+            <div class="slds-p-around_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_medium" role="alert">
+                    <h2>Cannot Proceed: Please resolve the following errors first.</h2>
+                </div>
+                <div class="slds-box slds-theme_default">
+                    <ul class="slds-list_dotted slds-text-color_error slds-p-left_medium">
+                        <template for:each={initialErrors} for:item="err">
+                            <li key={err}>{err}</li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={isStep0}>
+            <template if:false={hasValidationErrors}>
+                <div class="slds-p-around_medium">
+
+                    <template if:true={isStep1}>
+                        <lightning-accordion allow-multiple-sections-open active-section-name={activeSectionsStep1}>
+
+                            <lightning-accordion-section name="Section1" label="Section 1">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input label="Account Name" value={wizardData.AccountName} disabled
+                                            icon-name="standard:account"></lightning-input>
+                                        <lightning-input label="Opportunity Name" value={wizardData.OpportunityName} disabled
+                                            icon-name="standard:opportunity" class="slds-m-top_small"></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input label="Contact Name" value={wizardData.ContactName} disabled
+                                            icon-name="standard:contact"></lightning-input>
+                                        <lightning-input label="Business Segment" value={wizardData.Business_Segment__c}
+                                            disabled class="slds-m-top_small"></lightning-input>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+
+                            <lightning-accordion-section name="Section2" label="Section 2">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input label="Bill To (Sold To Party)" value={wizardData.BillToPartyName}
+                                            disabled icon-name="standard:account"></lightning-input>
+                                        <lightning-input label="Sold To Party (Code)" value={wizardData.BillToPartyCode}
+                                            disabled class="slds-m-top_small"></lightning-input>
+                                        <lightning-textarea label="Billing Address Street" value={wizardData.BillingStreet}
+                                            disabled class="slds-m-top_small"></lightning-textarea>
+                                        <lightning-input label="City" value={wizardData.BillingCity} disabled
+                                            class="slds-m-top_small"></lightning-input>
+                                        <div class="slds-grid slds-gutters slds-m-top_small">
+                                            <div class="slds-col">
+                                                <lightning-input label="Zip/Postal Code" value={wizardData.BillingPostalCode}
+                                                    disabled></lightning-input>
+                                            </div>
+                                            <div class="slds-col">
+                                                <lightning-input label="State/Province" value={wizardData.BillingState}
+                                                    disabled></lightning-input>
+                                            </div>
+                                        </div>
+                                        <lightning-input label="Country" value={wizardData.BillingCountry} disabled
+                                            class="slds-m-top_small"></lightning-input>
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input label="Ship To Party" value={wizardData.ShipToPartyName} disabled
+                                            icon-name="standard:account"></lightning-input>
+                                        <lightning-input label="Ship To Party (Code)" value={wizardData.ShipToPartyCode}
+                                            disabled class="slds-m-top_small"></lightning-input>
+                                        <lightning-textarea label="Shipping Address Street" value={wizardData.ShippingStreet}
+                                            disabled class="slds-m-top_small"></lightning-textarea>
+                                        <lightning-input label="City" value={wizardData.ShippingCity} disabled
+                                            class="slds-m-top_small"></lightning-input>
+                                        <div class="slds-grid slds-gutters slds-m-top_small">
+                                            <div class="slds-col">
+                                                <lightning-input label="Zip/Postal Code"
+                                                    value={wizardData.ShippingPostalCode} disabled></lightning-input>
+                                            </div>
+                                            <div class="slds-col">
+                                                <lightning-input label="State/Province" value={wizardData.ShippingState}
+                                                    disabled></lightning-input>
+                                            </div>
+                                        </div>
+                                        <lightning-input label="Country" value={wizardData.ShippingCountry} disabled
+                                            class="slds-m-top_small"></lightning-input>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+
+                        </lightning-accordion>
+                    </template>
+
+                    <template if:true={isStep2}>
+                        <lightning-accordion allow-multiple-sections-open active-section-name={activeSectionsStep2}>
+
+                            <lightning-accordion-section name="Section3" label="Section 3">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-combobox label="Order Type" value={formData.orderType}
+                                            options={orderTypeOptions} onchange={handleChange} data-field="orderType"
+                                            required></lightning-combobox>
+                                        <lightning-input label="Distribution Channel" value={wizardData.DistributionChannel}
+                                            disabled class="slds-m-top_small"></lightning-input>
+                                        <lightning-input label="Customer Reference (PO No.)" value={formData.poNo}
+                                            onchange={handleChange} data-field="poNo" required class="slds-m-top_small">
+                                        </lightning-input>
+                                        <lightning-combobox label="BG Required" value={formData.bgRequired}
+                                            options={bgOptions} onchange={handleChange} data-field="bgRequired" required
+                                            class="slds-m-top_small"></lightning-combobox>
+                                        <lightning-combobox label="TPC" value={formData.tpc} options={tpcOptions}
+                                            onchange={handleChange} data-field="tpc" required class="slds-m-top_small">
+                                        </lightning-combobox>
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input label="Sales Org" value={wizardData.SalesOrg} disabled>
+                                        </lightning-input>
+                                        <lightning-input label="Division" value={wizardData.Division} disabled
+                                            class="slds-m-top_small"></lightning-input>
+                                        <lightning-input type="date" label="Customer Reference Date (PO Date)"
+                                            value={formData.poDate} onchange={handleChange} data-field="poDate" required
+                                            class="slds-m-top_small"></lightning-input>
+                                        <lightning-combobox label="LD Clause" value={formData.ldClause} options={ldOptions}
+                                            onchange={handleChange} data-field="ldClause" required class="slds-m-top_small">
+                                        </lightning-combobox>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+
+                            <lightning-accordion-section name="Section4" label="Section 4">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input label="Freight Terms" value={formData.freightTerms}
+                                            onchange={handleChange} data-field="freightTerms" required>
+                                        </lightning-input>
+                                        <lightning-input label="Scope Of OA" value={formData.scopeOfOA}
+                                            onchange={handleChange} data-field="scopeOfOA" required
+                                            class="slds-m-top_small"></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input label="Insurance Terms" value={formData.insuranceTerms}
+                                            onchange={handleChange} data-field="insuranceTerms" required>
+                                        </lightning-input>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>
+
+                        </lightning-accordion>
+                    </template>
+
+                    <template if:true={isStep3}>
+                        <div class="slds-m-vertical_medium slds-box slds-theme_default slds-p-around_none">
+                            <lightning-datatable key-field="Id" data={wizardLineItems} columns={columns}
+                                show-row-number-column="true" suppress-bottom-bar="true" draft-values={draftValues}
+                                oncellchange={handleCellChange} onrowselection={handleRowSelection}>
+                            </lightning-datatable>
+                        </div>
+                    </template>
+
+                </div>
+
+                <div slot="footer" class="slds-grid slds-grid_align-end slds-m-top_medium">
+                    <template if:true={showPrevious}>
+                        <lightning-button label="Previous" onclick={handlePrevious} class="slds-m-right_small"
+                            disabled={isLoading}></lightning-button>
+                    </template>
+                    <template if:true={showNext}>
+                        <lightning-button label="Next" variant="brand" onclick={handleNext} disabled={isLoading}>
+                        </lightning-button>
+                    </template>
+                    <template if:true={showFinish}>
+                        <lightning-button label="Finish" variant="brand" onclick={handleFinish} disabled={isLoading}>
+                        </lightning-button>
+                    </template>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

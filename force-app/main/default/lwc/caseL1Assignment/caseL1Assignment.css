@@ -1,0 +1,344 @@
+:host {
+    --border-color: #d8dde6;
+    --background-light: #f7f9fb;
+    --text-primary: #181818;
+    --text-secondary: #5f6b7a;
+    --brand-color: #0176d3;
+
+    display: block;
+    width: 100%;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.content {
+    width: 100%;
+
+    padding:
+        0
+        0.75rem
+        1rem;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.spinner-container {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    background:
+        rgba(255, 255, 255, 0.55);
+}
+
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.section-card {
+    width: 100%;
+
+    margin-bottom: 1rem;
+
+    border:
+        1px solid
+        var(--border-color);
+
+    border-radius: 0.55rem;
+
+    background: #ffffff;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.simple-section-header {
+    padding:
+        0.75rem
+        1rem;
+
+    border-bottom:
+        1px solid
+        var(--border-color);
+
+    background:
+        var(--background-light);
+}
+
+
+.section-title {
+    font-size: 0.95rem;
+
+    font-weight: 700;
+
+    color:
+        var(--text-primary);
+}
+
+
+/* =========================================================
+   ASSIGN TO
+   ========================================================= */
+
+.assignment-section {
+    border-color: #b8d6f2;
+}
+
+
+.assignment-body {
+    padding:
+        1rem;
+}
+
+
+/*
+ * Keep User dropdown clean and not too wide
+ * on large screens.
+ */
+.assignment-body lightning-combobox {
+    display: block;
+
+    width: 100%;
+
+    max-width: 500px;
+}
+
+
+/* =========================================================
+   CASE DETAILS
+   ========================================================= */
+
+.case-details-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    column-gap: 2rem;
+
+    padding:
+        0.45rem
+        1rem
+        0.8rem;
+}
+
+
+.detail-item {
+    min-width: 0;
+
+    padding:
+        0.65rem
+        0;
+
+    border-bottom:
+        1px solid #edf0f4;
+}
+
+
+.full-width {
+    grid-column:
+        1 / -1;
+}
+
+
+.detail-label {
+    margin-bottom: 0.2rem;
+
+    font-size: 0.7rem;
+
+    color:
+        var(--text-secondary);
+}
+
+
+.detail-value {
+    min-height: 1rem;
+
+    font-size: 0.84rem;
+
+    font-weight: 600;
+
+    color:
+        var(--text-primary);
+
+    overflow-wrap: anywhere;
+}
+
+
+.status-value {
+    color:
+        var(--brand-color);
+}
+
+
+/* =========================================================
+   ASSET TABLE
+   ========================================================= */
+
+.asset-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.asset-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+
+.asset-table th {
+    padding:
+        0.75rem
+        1rem;
+
+    text-align: left;
+
+    background: #fafbfc;
+
+    border-bottom:
+        1px solid
+        var(--border-color);
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+}
+
+
+.asset-table td {
+    padding:
+        0.8rem
+        1rem;
+
+    border-bottom:
+        1px solid
+        #edf0f4;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.82rem;
+
+    vertical-align: middle;
+
+    overflow-wrap: anywhere;
+}
+
+
+.asset-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.asset-name {
+    font-weight: 700;
+
+    color:
+        var(--brand-color);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 0.45rem;
+
+    padding: 1.25rem;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 0.6rem;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media only screen and (max-width: 768px) {
+
+    .content {
+        padding:
+            0
+            0.25rem
+            0.75rem;
+    }
+
+
+    .case-details-grid {
+        grid-template-columns:
+            1fr;
+
+        column-gap: 0;
+    }
+
+
+    .full-width {
+        grid-column: 1;
+    }
+
+
+    .assignment-body lightning-combobox {
+        max-width: none;
+    }
+
+
+    .asset-table {
+        min-width: 600px;
+    }
+
+}

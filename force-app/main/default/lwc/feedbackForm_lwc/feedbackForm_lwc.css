@@ -1,0 +1,51 @@
+.form-container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 24px;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.question {
+    margin-top: 16px;
+}
+
+.rating {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.rate-btn{
+    margin:3px;
+}
+
+.selected-rating{
+    background-color:#0176d3;
+    color:white;
+    border-color:#0176d3;
+}
+
+.rate-btn:hover {
+    background: #0176d3;
+    color: white;
+}
+
+/* Selected state to align with SLDS brand coloring */
+.rate-btn.selected,
+.rate-btn.selected:hover {
+    background: #0176d3;
+    color: #ffffff;
+    border-color: #0176d3;
+}
+
+.submit-section {
+    margin-top: 24px;
+}
+
+.thank-you-message {
+    text-align: center;
+    padding: 20px;
+}

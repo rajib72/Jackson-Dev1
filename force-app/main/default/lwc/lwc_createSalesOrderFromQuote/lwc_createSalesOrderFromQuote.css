@@ -1,0 +1,7 @@
+:host {
+    /* Restores the slds-theme_shade grey color to the accordion headers */
+    --slds-c-accordion-summary-color-background: #f3f3f3;
+    
+    /* Optional: Makes it slightly darker when you hover over it */
+    --slds-c-accordion-summary-color-background-hover: #e5e5e5;
+}

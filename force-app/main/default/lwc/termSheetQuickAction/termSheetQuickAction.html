@@ -1,0 +1,1092 @@
+<template>
+    <lightning-quick-action-panel>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={isFirstStep}>
+            <div class="sheet-wrapper">
+                <div class="brand-strip">
+                    <div class="brand-left"></div>
+                    <div class="brand-title">Termsheet Creation Form</div>
+                    <div class="brand-right">
+                        <img src={jaksonLogo} alt="Jakson Logo" class="brand-logo" />
+                    </div>
+                </div>
+
+                <table class="term-sheet-table top-summary-table">
+                    <tr class="top-info-row">
+                        <td class="company-name" colspan="8">{accountName}</td>
+                        <td class="doc-info" colspan="4">
+                            <div class="doc-line">
+                                <span class="doc-label">Doc No:</span>
+                                <lightning-input variant="label-hidden" value={docNo} onchange={handleInputChange}
+                                    data-field="docNo" disabled>
+                                </lightning-input>
+                            </div>
+                            <div class="doc-line">
+                                <span class="doc-label">Rev No:</span>
+                                <lightning-input variant="label-hidden" value={revNo} onchange={handleInputChange}
+                                    data-field="revNo" disabled>
+                                </lightning-input>
+                            </div>
+                            <div class="doc-date">Issue date: {displayIssueDate}</div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                    </tr>
+                </table>
+
+                <div class="section-banner section-customer">Customer Details</div>
+
+                <table class="term-sheet-table">
+                    <tr class="header-row">
+                        <th class="sr-col" colspan="2">Sr. No</th>
+                        <th class="detail-col" colspan="4">Order Detail</th>
+                        <th class="value-col" colspan="6">Details</th>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{customerNameSrNo}</td>
+                        <td class="label-cell green-cell" colspan="4">Name of customer</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-formatted-text value={accountName}></lightning-formatted-text>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{totalOrderSizeSrNo}</td>
+                        <td class="label-cell green-cell" colspan="4">Actual Total Order size in MW</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-input variant="label-hidden" value={totalOrderSizeInMW}
+                                onchange={handleInputChange} data-field="totalOrderSizeInMW" disabled>
+                            </lightning-input>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{endUserNameSrNo}</td>
+                        <td class="label-cell green-cell" colspan="4">End User name</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-input variant="label-hidden" value={endUserName} onchange={handleInputChange}
+                                data-field="endUserName">
+                            </lightning-input>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{contactCustomerSrNo}</td>
+                        <td class="label-cell green-cell" colspan="4">Contact Person Name of customer</td>
+                        <td class="input-cell" colspan="6">
+
+                            <!-- Desktop -->
+                            <template if:false={isMobileView}>
+                                <lightning-combobox variant="label-hidden" value={contactCustomerId}
+                                    options={contactOptions} onchange={handleInputChange}
+                                    data-field="contactCustomerId">
+                                </lightning-combobox>
+                            </template>
+
+                            <!-- Mobile -->
+                            <template if:true={isMobileView}>
+                                <div class="mobile-picklist-box" onclick={openContactCustomerPopup}>
+                                    <template if:true={selectedContactCustomerLabel}>
+                                        <span>{selectedContactCustomerLabel}</span>
+                                    </template>
+                                    <template if:false={selectedContactCustomerLabel}>
+                                        <span class="mobile-placeholder">Select an Option</span>
+                                    </template>
+                                </div>
+                            </template>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{contactSitePersonSrNo}</td>
+                        <td class="label-cell yellow-cell" colspan="4">Contact Person Name (Site Person)</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-input variant="label-hidden" value={contactSitePerson}
+                                onchange={handleInputChange} data-field="contactSitePerson">
+                            </lightning-input>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{tenderContractSrNo}</td>
+                        <td class="label-cell" colspan="4">Tender/Contract(If any)</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-input variant="label-hidden" value={tenderContract} onchange={handleInputChange}
+                                data-field="tenderContract">
+                            </lightning-input>
+                        </td>
+                    </tr>
+
+                    <template if:false={isRetail}>
+                        <tr>
+                            <td class="sr-cell" colspan="2">{spareModulesRequiredSrNo}</td>
+                            <td class="label-cell" colspan="4">Spare modules required (%)-yes/no</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={spareModulesRequired}
+                                    onchange={handleInputChange} data-field="spareModulesRequired">
+                                </lightning-input>
+                            </td>
+                        </tr>
+                    </template>
+                </table>
+
+                <template if:true={isRetail}>
+                    <!-- RETAIL TABLE -->
+                    <div class="section-banner section-product">Product Details</div>
+
+                    <div class="product-section">
+                        <div class="product-header">
+                            <div class="product-title">Latest Quote Line Items</div>
+                        </div>
+
+                        <div class="product-table-scroll">
+                            <table class="product-entry-table quote-product-table retail-product-table">
+                                <thead>
+                                    <tr>
+                                        <th>Material Description</th>
+                                        <th>Nos</th>
+                                        <th>Project Capacity</th>
+                                        <th>UOM</th>
+                                        <th>Price/Wp</th>
+                                        <th>Total</th>
+                                        <th>GST</th>
+                                        <th>Grand Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <template for:each={productRows} for:item="row">
+                                        <tr key={row.oppLineItemId}>
+                                            <td class="material-cell">{row.materialDescription}</td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.nos}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.projectCapacity}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.uom}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.priceWp}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.total}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.gst}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.grandTotal}
+                                                    disabled></lightning-input>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:false={isRetail}>
+                    <!-- KAM TABLE -->
+                    <div class="section-banner section-product">Product Details</div>
+
+                    <div class="product-section">
+                        <div class="product-header">
+                            <div class="product-title">Latest Quote Line Items</div>
+                        </div>
+
+                        <div class="product-table-scroll">
+                            <table class="product-entry-table quote-product-table kam-product-table">
+                                <thead>
+                                    <tr>
+                                        <th>Material Description</th>
+                                        <th>Nos</th>
+                                        <th>Project Capacity</th>
+                                        <th>UOM</th>
+                                        <th>Price/Wp</th>
+                                        <th>Total</th>
+                                        <th>GST</th>
+                                        <th>Grand Total</th>
+                                        <th>Bin Percentage Applicable</th>
+                                        <th>Module Efficiency as per Tender</th>
+                                        <th>System Voltage</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <template for:each={productRows} for:item="row">
+                                        <tr key={row.oppLineItemId}>
+                                            <td class="material-cell">{row.materialDescription}</td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.nos}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.projectCapacity}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.uom}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.priceWp}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.total}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.gst}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={row.grandTotal}
+                                                    disabled></lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-combobox variant="label-hidden" data-id={row.oppLineItemId}
+                                                    data-field="binPercentageInput" value={row.binPercentageInput}
+                                                    options={yesNoOptions} onchange={handleProductRowChange}>
+                                                </lightning-combobox>
+
+                                                <template if:true={row.showBinPercentageValue}>
+                                                    <lightning-input class="slds-m-top_x-small" variant="label-hidden"
+                                                        placeholder="Enter Bin %" data-id={row.oppLineItemId}
+                                                        data-field="binPercentageValueInput"
+                                                        value={row.binPercentageValueInput}
+                                                        onchange={handleProductRowChange} required
+                                                        message-when-value-missing="Bin Percentage is mandatory when Yes is selected.">
+                                                    </lightning-input>
+                                                </template>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" data-id={row.oppLineItemId}
+                                                    data-field="moduleEfficiencyCriteriaInput"
+                                                    value={row.moduleEfficiencyCriteriaInput}
+                                                    onchange={handleProductRowChange}>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" data-id={row.oppLineItemId}
+                                                    data-field="systemVoltageInput" value={row.systemVoltageInput}
+                                                    onchange={handleProductRowChange}>
+                                                </lightning-input>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </template>
+
+                <div class="section-banner section-module">Module Requirements</div>
+
+                <table class="term-sheet-table">
+                    <tr class="header-row">
+                        <th class="sr-col" colspan="2">Sr. No</th>
+                        <th class="detail-col" colspan="4">Order Detail</th>
+                        <th class="value-col" colspan="6">Details</th>
+                    </tr>
+
+                    <template if:false={isRetail}>
+                        <tr>
+                            <td class="sr-cell" colspan="2">{frameThicknessSrNo}</td>
+                            <td class="label-cell" colspan="4">Frame Thickness</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={frameThickness}
+                                    onchange={handleInputChange} data-field="frameThickness">
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{mountingHolePitchSrNo}</td>
+                            <td class="label-cell" colspan="4">Mounting Hole X pitch / Y pitch</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={mountingHolePitch}
+                                    onchange={handleInputChange} data-field="mountingHolePitch">
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{glassThicknessSrNo}</td>
+                            <td class="label-cell" colspan="4">Glass Thickness</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={glassThickness}
+                                    onchange={handleInputChange} data-field="glassThickness">
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{connectorSrNo}</td>
+                            <td class="label-cell" colspan="4">Connector</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={connector} onchange={handleInputChange}
+                                    data-field="connector">
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{moduleBOMSrNo}</td>
+                            <td class="label-cell" colspan="4">Module BOM</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={moduleBOM} onchange={handleInputChange}
+                                    data-field="moduleBOM">
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{customizeLogoSrNo}</td>
+                            <td class="label-cell" colspan="4">Customize logo</td>
+                            <td class="input-cell" colspan="6">
+
+                                <template if:false={isMobileView}>
+                                    <lightning-combobox variant="label-hidden" value={customizeLogo}
+                                        options={yesNoOptions} onchange={handleInputChange} data-field="customizeLogo">
+                                    </lightning-combobox>
+                                </template>
+
+                                <template if:true={isMobileView}>
+                                    <div class="mobile-picklist-box" onclick={openCustomizeLogoPopup}>
+                                        <template if:true={selectedCustomizeLogoLabel}>
+                                            <span>{selectedCustomizeLogoLabel}</span>
+                                        </template>
+                                        <template if:false={selectedCustomizeLogoLabel}>
+                                            <span class="mobile-placeholder">Select an Option</span>
+                                        </template>
+                                    </div>
+                                </template>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{packingModulesPerBoxSrNo}</td>
+                            <td class="label-cell" colspan="4">Packing (Number of modules per box)</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={packingModulesPerBox}
+                                    onchange={handleInputChange} data-field="packingModulesPerBox">
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{currentBinningRequiredSrNo}</td>
+                            <td class="label-cell" colspan="4">Current Binning Required</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-textarea variant="label-hidden" value={currentBinningRequired}
+                                    onchange={handleInputChange} data-field="currentBinningRequired">
+                                </lightning-textarea>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{thirdPartyInsuranceSrNo}</td>
+                            <td class="label-cell" colspan="4">Third Party Insurance</td>
+                            <td class="input-cell" colspan="6">
+
+                                <template if:false={isMobileView}>
+                                    <lightning-combobox variant="label-hidden" value={thirdPartyInsurance}
+                                        options={yesNoOptions} onchange={handleInputChange}
+                                        data-field="thirdPartyInsurance">
+                                    </lightning-combobox>
+                                </template>
+
+                                <template if:true={isMobileView}>
+                                    <div class="mobile-picklist-box" onclick={openThirdPartyInsurancePopup}>
+                                        <template if:true={selectedThirdPartyInsuranceLabel}>
+                                            <span>{selectedThirdPartyInsuranceLabel}</span>
+                                        </template>
+                                        <template if:false={selectedThirdPartyInsuranceLabel}>
+                                            <span class="mobile-placeholder">Select an Option</span>
+                                        </template>
+                                    </div>
+                                </template>
+
+                            </td>
+                        </tr>
+                    </template>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{anySpecialRequirementSrNo}</td>
+                        <td class="label-cell" colspan="4">Any special requirement</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-textarea variant="label-hidden" value={anySpecialRequirement}
+                                onchange={handleInputChange} data-field="anySpecialRequirement">
+                            </lightning-textarea>
+                        </td>
+                    </tr>
+
+                    <template if:false={isRetail}>
+                        <tr>
+                            <td class="sr-cell" colspan="2">{cellMakeSrNo}</td>
+                            <td class="label-cell" colspan="4">Cell Make</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={cellMake} onchange={handleInputChange}
+                                    data-field="cellMake">
+                                </lightning-input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="sr-cell" colspan="2">{cellSizeSrNo}</td>
+                            <td class="label-cell" colspan="4">Cell Size</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-input variant="label-hidden" value={cellSize} onchange={handleInputChange}
+                                    data-field="cellSize">
+                                </lightning-input>
+                            </td>
+                        </tr>
+                    </template>
+                </table>
+
+                <div class="section-banner section-commercial">Commercial Details</div>
+
+                <table class="term-sheet-table">
+                    <tr class="header-row">
+                        <th class="sr-col" colspan="2">Sr. No</th>
+                        <th class="detail-col" colspan="4">Order Detail</th>
+                        <th class="value-col" colspan="6">Details</th>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{paymentTermsSrNo}</td>
+                        <td class="label-cell" colspan="4">Payment terms</td>
+                        <td class="input-cell" colspan="6">
+
+                            <template if:false={isMobileView}>
+                                <lightning-combobox variant="label-hidden" value={paymentTermId}
+                                    options={paymentTermOptions} onchange={handleInputChange}
+                                    data-field="paymentTermId">
+                                </lightning-combobox>
+                            </template>
+
+                            <template if:true={isMobileView}>
+                                <div class="mobile-picklist-box" onclick={openPaymentTermPopup}>
+                                    <template if:true={selectedPaymentTermLabel}>
+                                        <span>{selectedPaymentTermLabel}</span>
+                                    </template>
+                                    <template if:false={selectedPaymentTermLabel}>
+                                        <span class="mobile-placeholder">Select an Option</span>
+                                    </template>
+                                </div>
+                            </template>
+
+                        </td>
+                    </tr>
+
+                    <template if:true={showOtherPaymentTermRow}>
+                        <tr>
+                            <td class="sr-cell" colspan="2">{otherPaymentTermsSrNo}</td>
+                            <td class="label-cell" colspan="4">Other Payment Terms</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-textarea variant="label-hidden" value={otherPaymentTerm}
+                                    onchange={handleInputChange} data-field="otherPaymentTerm"
+                                    placeholder="Enter Other Payment Terms">
+                                </lightning-textarea>
+                            </td>
+                        </tr>
+                    </template>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{beforeShipmentSrNo}</td>
+                        <!-- <td class="label-cell" colspan="4">Documents from {accountName} to customer Before Shipment</td> -->
+                        <!-- Field name change -->
+                        <td class="label-cell" colspan="4">Documents from Jakson to {accountName} Before/After Shipment</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-input type="file" variant="label-hidden" multiple
+                                onchange={handleBeforeShipmentFiles}>
+                            </lightning-input>
+                            <template if:true={beforeShipmentFileNames}>
+                                <div>{beforeShipmentFileNames}</div>
+                            </template>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{afterShipmentSrNo}</td>
+                        <!-- <td class="label-cell" colspan="4">Documents from {accountName} to customer After Shipment</td> -->
+                          <!-- Field name change -->
+                          <td class="label-cell" colspan="4">Documents from {accountName} to Jakson After Shipment</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-input type="file" variant="label-hidden" multiple
+                                onchange={handleAfterShipmentFiles}>
+                            </lightning-input>
+                            <template if:true={afterShipmentFileNames}>
+                                <div>{afterShipmentFileNames}</div>
+                            </template>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{transportationModeSrNo}</td>
+                        <td class="label-cell" colspan="4">Transportation Mode</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-textarea variant="label-hidden" value={transportationMode}
+                                onchange={handleInputChange} data-field="transportationMode">
+                            </lightning-textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{documentsThroughLCSrNo}</td>
+                        <td class="label-cell" colspan="4">Documents to be submitted to customer through LC</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-textarea variant="label-hidden" value={documentsThroughLC}
+                                onchange={handleInputChange} data-field="documentsThroughLC">
+                            </lightning-textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{customerScopeSrNo}</td>
+                        <!-- <td class="label-cell" colspan="4">Customer Scope</td> -->
+                          <!-- Field name change -->
+                        <td class="label-cell" colspan="4">Jakson's Scope</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-textarea variant="label-hidden" value={customerScope}
+                                onchange={handleInputChange} data-field="customerScope">
+                            </lightning-textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{dispatchProcessSrNo}</td>
+                        <!-- <td class="label-cell" colspan="4">Dispatch process of {accountName}</td> -->
+                          <!-- Field name change -->
+                        <td class="label-cell" colspan="4">Dispatch process of Jakson</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-textarea variant="label-hidden" value={dispatchProcess}
+                                onchange={handleInputChange} data-field="dispatchProcess">
+                            </lightning-textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{incotermsSrNo}</td>
+                        <td class="label-cell" colspan="4">Incoterms</td>
+                        <td class="input-cell" colspan="6">
+
+                            <template if:false={isMobileView}>
+                                <lightning-combobox variant="label-hidden" value={incotermId} options={incotermOptions}
+                                    onchange={handleInputChange} data-field="incotermId">
+                                </lightning-combobox>
+                            </template>
+
+                            <template if:true={isMobileView}>
+                                <div class="mobile-picklist-box" onclick={openIncotermPopup}>
+                                    <template if:true={selectedIncotermLabel}>
+                                        <span>{selectedIncotermLabel}</span>
+                                    </template>
+                                    <template if:false={selectedIncotermLabel}>
+                                        <span class="mobile-placeholder">Select an Option</span>
+                                    </template>
+                                </div>
+                            </template>
+
+                        </td>
+                    </tr>
+
+                    <template if:true={showOtherIncotermRow}>
+                        <tr>
+                            <td class="sr-cell" colspan="2">{otherIncotermSrNo}</td>
+                            <td class="label-cell" colspan="4">Other Incoterms</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-textarea variant="label-hidden" value={otherIncoterm}
+                                    onchange={handleInputChange} data-field="otherIncoterm"
+                                    placeholder="Enter Other Incoterms">
+                                </lightning-textarea>
+                            </td>
+                        </tr>
+                    </template>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{deliveryLocationSrNo}</td>
+                        <td class="label-cell" colspan="4">Delivery Location</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-textarea variant="label-hidden" value={deliveryLocation}
+                                onchange={handleInputChange} data-field="deliveryLocation">
+                            </lightning-textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{validityOfOfferSrNo}</td>
+                        <td class="label-cell" colspan="4">Validity of Offer</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-input type="date" variant="label-hidden" value={validityOfOffer}
+                                onchange={handleInputChange} data-field="validityOfOffer">
+                            </lightning-input>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{deliveryScheduleSrNo}</td>
+                        <td class="label-cell" colspan="4">Delivery Schedule</td>
+                        <td class="input-cell" colspan="6">
+                            <lightning-textarea variant="label-hidden" value={deliverySchedule}
+                                onchange={handleInputChange} data-field="deliverySchedule">
+                            </lightning-textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{concealmentPeriodSrNo}</td>
+                        <td class="label-cell" colspan="4">Concealment Period - Contract requirements</td>
+                        <td class="input-cell" colspan="6">
+
+                            <template if:false={isMobileView}>
+                                <lightning-combobox variant="label-hidden" value={concealmentPeriod}
+                                    options={concealmentPeriodOptions} onchange={handleInputChange}
+                                    data-field="concealmentPeriod">
+                                </lightning-combobox>
+                            </template>
+
+                            <template if:true={isMobileView}>
+                                <div class="mobile-picklist-box" onclick={openConcealmentPeriodPopup}>
+                                    <template if:true={selectedConcealmentPeriodLabel}>
+                                        <span>{selectedConcealmentPeriodLabel}</span>
+                                    </template>
+                                    <template if:false={selectedConcealmentPeriodLabel}>
+                                        <span class="mobile-placeholder">Select an Option</span>
+                                    </template>
+                                </div>
+                            </template>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell" colspan="2">{liquidityDamageSrNo}</td>
+                        <td class="label-cell" colspan="4">Liquidity Damage</td>
+                        <td class="input-cell" colspan="6">
+
+                            <template if:false={isMobileView}>
+                                <lightning-combobox variant="label-hidden" value={liquidityDamage}
+                                    options={liquidityDamageOptions} onchange={handleInputChange}
+                                    data-field="liquidityDamage">
+                                </lightning-combobox>
+                            </template>
+
+                            <template if:true={isMobileView}>
+                                <div class="mobile-picklist-box" onclick={openLiquidityDamagePopup}>
+                                    <template if:true={selectedLiquidityDamageLabel}>
+                                        <span>{selectedLiquidityDamageLabel}</span>
+                                    </template>
+                                    <template if:false={selectedLiquidityDamageLabel}>
+                                        <span class="mobile-placeholder">Select an Option</span>
+                                    </template>
+                                </div>
+                            </template>
+                        </td>
+                    </tr>
+
+                    <template if:true={showOtherLiquidityDamageRow}>
+                        <tr>
+                            <td class="sr-cell" colspan="2">{otherLiquidityDamageSrNo}</td>
+                            <td class="label-cell" colspan="4">Others Liquidity Damage</td>
+                            <td class="input-cell" colspan="6">
+                                <lightning-textarea variant="label-hidden" value={otherLiquidityDamage}
+                                    onchange={handleInputChange} data-field="otherLiquidityDamage"
+                                    placeholder="Enter Others Liquidity Damage">
+                                </lightning-textarea>
+                            </td>
+                        </tr>
+                    </template>
+
+                </table>
+
+                <div class="section-banner section-approval">Approval Details</div>
+
+                <table class="term-sheet-table">
+                    <tr class="header-row">
+                        <th colspan="3">Approval Stage</th>
+                        <th colspan="5">Name</th>
+                        <!--<th colspan="2">Date</th>-->
+                        <th colspan="2">Date</th>
+                    </tr>
+
+                    <tr>
+                        <td class="label-cell" colspan="3">Prepared by Sale RM</td>
+                        <td class="input-cell" colspan="5">
+                            <lightning-input variant="label-hidden" value={preparedBySaleRm} disabled>
+                            </lightning-input>
+                        </td>
+                        <!--<td class="label-cell" colspan="2">Date</td>-->
+                        <td class="input-cell" colspan="2">
+                            <lightning-input type="date" variant="label-hidden" value={preparedBySaleRmDate} disabled>
+                            </lightning-input>
+                        </td>
+                    </tr>
+
+                    <!--<tr>
+                        <td class="label-cell" colspan="3">Approved by Sales Head</td>
+                        <td class="input-cell" colspan="5">
+                            <lightning-input variant="label-hidden" value={approvedBySalesHead}
+                                onchange={handleInputChange} data-field="approvedBySalesHead">
+                            </lightning-input>
+                        </td>-->
+                    <!--<td class="label-cell" colspan="2">Date</td>-->
+                    <!-- <td class="input-cell" colspan="2">
+                            <lightning-input type="date" variant="label-hidden" value={salesHeadApprovalDate}
+                                onchange={handleInputChange} data-field="salesHeadApprovalDate">
+                            </lightning-input>
+                        </td>
+                    </tr>
+                    <template if:false={isRetail}>
+                    <tr>
+                        <td class="label-cell" colspan="3">Approved by Commercial Head</td>
+                        <td class="input-cell" colspan="5">
+                            <lightning-input variant="label-hidden" value={approvedByCommercialHead}
+                                onchange={handleInputChange} data-field="approvedByCommercialHead">
+                            </lightning-input>
+                        </td>-->
+                    <!--<td class="label-cell" colspan="2">Date</td>-->
+                    <!--  <td class="input-cell" colspan="2">
+                            <lightning-input type="date" variant="label-hidden" value={commercialHeadApprovalDate}
+                                onchange={handleInputChange} data-field="commercialHeadApprovalDate">
+                            </lightning-input>
+                        </td>
+                    </tr>-
+                    </template>-->
+                </table>
+            </div>
+        </template>
+
+        <template if:true={isSecondStep}>
+            <div class="sheet-wrapper">
+                <div class="brand-strip">
+                    <div class="brand-left"></div>
+                    <div class="brand-title">Termsheet Creation Form</div>
+                    <div class="brand-right">
+                        <img src={jaksonLogo} alt="Jakson Logo" class="brand-logo" />
+                    </div>
+                </div>
+
+                <table class="term-sheet-table top-summary-table">
+                    <tr>
+                        <td class="company-name company-name-full" colspan="12">{accountName}</td>
+                    </tr>
+                    <tr>
+                        <td class="sheet-title" colspan="12">Checklist Documents Upload</td>
+                    </tr>
+                </table>
+
+                <div class="section-banner section-checklist">Checklist Documents</div>
+
+                <table class="term-sheet-table">
+                    <tr class="header-row">
+                        <th style="width: 8%;">Sr. No.</th>
+                        <th style="width: 37%;">Checklist Item</th>
+                        <th style="width: 15%;">Checkbox</th>
+                        <th style="width: 40%;">File Upload</th>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell">{psiQapSrNo}</td>
+                        <td class="label-cell">PSI QAP</td>
+                        <td class="input-cell" style="text-align:center;">
+                            <lightning-input type="checkbox" checked={psiQap} onchange={handleChecklistCheckboxChange}
+                                data-field="psiQap" variant="label-hidden">
+                            </lightning-input>
+                        </td>
+                        <td class="input-cell">
+                            <lightning-input type="file" multiple onchange={handleChecklistFiles}
+                                data-field="psiQapFiles" variant="label-hidden">
+                            </lightning-input>
+                            <div>{psiQapFileNames}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell">{inpocessQapSrNo}</td>
+                        <td class="label-cell">Inpocess QAP</td>
+                        <td class="input-cell" style="text-align:center;">
+                            <lightning-input type="checkbox" checked={inpocessQap}
+                                onchange={handleChecklistCheckboxChange} data-field="inpocessQap"
+                                variant="label-hidden">
+                            </lightning-input>
+                        </td>
+                        <td class="input-cell">
+                            <lightning-input type="file" multiple onchange={handleChecklistFiles}
+                                data-field="inpocessQapFiles" variant="label-hidden">
+                            </lightning-input>
+                            <div>{inpocessQapFileNames}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell">{rmQapSrNo}</td>
+                        <td class="label-cell">RM QAP</td>
+                        <td class="input-cell" style="text-align:center;">
+                            <lightning-input type="checkbox" checked={rmQap} onchange={handleChecklistCheckboxChange}
+                                data-field="rmQap" variant="label-hidden">
+                            </lightning-input>
+                        </td>
+                        <td class="input-cell">
+                            <lightning-input type="file" multiple onchange={handleChecklistFiles}
+                                data-field="rmQapFiles" variant="label-hidden">
+                            </lightning-input>
+                            <div>{rmQapFileNames}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell">{elAndVisualInspectionCriteriaSrNo}</td>
+                        <td class="label-cell">EL and Visual Inspection Criteria</td>
+                        <td class="input-cell" style="text-align:center;">
+                            <lightning-input type="checkbox" checked={elAndVisualInspectionCriteria}
+                                onchange={handleChecklistCheckboxChange} data-field="elAndVisualInspectionCriteria"
+                                variant="label-hidden">
+                            </lightning-input>
+                        </td>
+                        <td class="input-cell">
+                            <lightning-input type="file" multiple onchange={handleChecklistFiles}
+                                data-field="elAndVisualInspectionCriteriaFiles" variant="label-hidden">
+                            </lightning-input>
+                            <div>{elAndVisualInspectionCriteriaFileNames}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell">{bomSrNo}</td>
+                        <td class="label-cell">BOM</td>
+                        <td class="input-cell" style="text-align:center;">
+                            <lightning-input type="checkbox" checked={bom} onchange={handleChecklistCheckboxChange}
+                                data-field="bom" variant="label-hidden">
+                            </lightning-input>
+                        </td>
+                        <td class="input-cell">
+                            <lightning-input type="file" multiple onchange={handleChecklistFiles} data-field="bomFiles"
+                                variant="label-hidden">
+                            </lightning-input>
+                            <div>{bomFileNames}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell">{moduleDatasheetSrNo}</td>
+                        <td class="label-cell">Module Datasheet</td>
+                        <td class="input-cell" style="text-align:center;">
+                            <lightning-input type="checkbox" checked={moduleDatasheet}
+                                onchange={handleChecklistCheckboxChange} data-field="moduleDatasheet"
+                                variant="label-hidden">
+                            </lightning-input>
+                        </td>
+                        <td class="input-cell">
+                            <lightning-input type="file" multiple onchange={handleChecklistFiles}
+                                data-field="moduleDatasheetFiles" variant="label-hidden">
+                            </lightning-input>
+                            <div>{moduleDatasheetFileNames}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="sr-cell">{reliabilityTestingPlanSrNo}</td>
+                        <td class="label-cell">Reliability Testing Plan</td>
+                        <td class="input-cell" style="text-align:center;">
+                            <lightning-input type="checkbox" checked={reliabilityTestingPlan}
+                                onchange={handleChecklistCheckboxChange} data-field="reliabilityTestingPlan"
+                                variant="label-hidden">
+                            </lightning-input>
+                        </td>
+                        <td class="input-cell">
+                            <lightning-input type="file" multiple onchange={handleChecklistFiles}
+                                data-field="reliabilityTestingPlanFiles" variant="label-hidden">
+                            </lightning-input>
+                            <div>{reliabilityTestingPlanFileNames}</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </template>
+
+        <div slot="footer">
+            <template if:true={isFirstStep}>
+
+                <template if:true={showContactCustomerPopup}>
+                    <section class="custom-popup-backdrop" onclick={closeContactCustomerPopup}></section>
+                    <section class="custom-popup">
+                        <div class="custom-popup-header">
+                            <span>Select Contact Person Name of customer</span>
+                            <button class="custom-popup-close" onclick={closeContactCustomerPopup}>×</button>
+                        </div>
+                        <div class="custom-popup-body">
+                            <template for:each={contactOptions} for:item="opt">
+                                <div key={opt.value} class="custom-popup-option" data-value={opt.value}
+                                    onclick={handleContactCustomerSelect}>
+                                    {opt.label}
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <template if:true={showCustomizeLogoPopup}>
+                    <section class="custom-popup-backdrop" onclick={closeCustomizeLogoPopup}></section>
+                    <section class="custom-popup">
+                        <div class="custom-popup-header">
+                            <span>Select Customize Logo</span>
+                            <button class="custom-popup-close" onclick={closeCustomizeLogoPopup}>×</button>
+                        </div>
+                        <div class="custom-popup-body">
+                            <template for:each={yesNoOptions} for:item="opt">
+                                <div key={opt.value} class="custom-popup-option" data-value={opt.value}
+                                    onclick={handleCustomizeLogoSelect}>
+                                    {opt.label}
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <template if:true={showThirdPartyInsurancePopup}>
+                    <section class="custom-popup-backdrop" onclick={closeThirdPartyInsurancePopup}></section>
+                    <section class="custom-popup">
+                        <div class="custom-popup-header">
+                            <span>Select Third Party Insurance</span>
+                            <button class="custom-popup-close" onclick={closeThirdPartyInsurancePopup}>×</button>
+                        </div>
+                        <div class="custom-popup-body">
+                            <template for:each={yesNoOptions} for:item="opt">
+                                <div key={opt.value} class="custom-popup-option" data-value={opt.value}
+                                    onclick={handleThirdPartyInsuranceSelect}>
+                                    {opt.label}
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <template if:true={showPaymentTermPopup}>
+                    <section class="custom-popup-backdrop" onclick={closePaymentTermPopup}></section>
+                    <section class="custom-popup">
+                        <div class="custom-popup-header">
+                            <span>Select Payment Terms</span>
+                            <button class="custom-popup-close" onclick={closePaymentTermPopup}>×</button>
+                        </div>
+                        <div class="custom-popup-body">
+                            <template for:each={paymentTermOptions} for:item="opt">
+                                <div key={opt.value} class="custom-popup-option" data-value={opt.value}
+                                    onclick={handlePaymentTermSelect}>
+                                    {opt.label}
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <template if:true={showIncotermPopup}>
+                    <section class="custom-popup-backdrop" onclick={closeIncotermPopup}></section>
+                    <section class="custom-popup">
+                        <div class="custom-popup-header">
+                            <span>Select Incoterms</span>
+                            <button class="custom-popup-close" onclick={closeIncotermPopup}>×</button>
+                        </div>
+                        <div class="custom-popup-body">
+                            <template for:each={incotermOptions} for:item="opt">
+                                <div key={opt.value} class="custom-popup-option" data-value={opt.value}
+                                    onclick={handleIncotermSelect}>
+                                    {opt.label}
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <template if:true={showConcealmentPeriodPopup}>
+                    <section class="custom-popup-backdrop" onclick={closeConcealmentPeriodPopup}></section>
+                    <section class="custom-popup">
+                        <div class="custom-popup-header">
+                            <span>Select Concealment Period</span>
+                            <button class="custom-popup-close" onclick={closeConcealmentPeriodPopup}>×</button>
+                        </div>
+                        <div class="custom-popup-body">
+                            <template for:each={concealmentPeriodOptions} for:item="opt">
+                                <div key={opt.value} class="custom-popup-option" data-value={opt.value}
+                                    onclick={handleConcealmentPeriodSelect}>
+                                    {opt.label}
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <template if:true={showLiquidityDamagePopup}>
+                    <section class="custom-popup-backdrop" onclick={closeLiquidityDamagePopup}></section>
+                    <section class="custom-popup">
+                        <div class="custom-popup-header">
+                            <span>Select Liquidity Damage</span>
+                            <button class="custom-popup-close" onclick={closeLiquidityDamagePopup}>×</button>
+                        </div>
+
+                        <div class="custom-popup-body">
+                            <template for:each={liquidityDamageOptions} for:item="opt">
+                                <div key={opt.value} class="custom-popup-option" data-value={opt.value}
+                                    onclick={handleLiquidityDamageSelect}>
+                                    {opt.label}
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <lightning-button label="Cancel" onclick={handleCancel}>
+                </lightning-button>
+
+                <lightning-button variant="brand" label="Save & Next" class="slds-m-left_small" onclick={handleSave}
+                    disabled={isLoading}>
+                </lightning-button>
+            </template>
+
+            <template if:true={isSecondStep}>
+                <!--<lightning-button
+                    label="Back"
+                    onclick={handleBackToFirstStep}>
+                </lightning-button>-->
+
+                <lightning-button variant="brand" label="Final Save" class="slds-m-left_small"
+                    onclick={handleChecklistSave} disabled={isLoading}>
+                </lightning-button>
+            </template>
+        </div>
+    </lightning-quick-action-panel>
+</template>

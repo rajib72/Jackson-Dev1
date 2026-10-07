@@ -1,0 +1,342 @@
+<template>
+    <section
+        role="dialog"
+        tabindex="-1"
+        aria-modal="true"
+        aria-labelledby="modal-heading"
+        class="slds-modal slds-fade-in-open custom-modal">
+
+        <div class="slds-modal__container custom-modal-container">
+
+            <header class="custom-modal-header">
+                <h2
+                    id="modal-heading"
+                    class="custom-modal-title">
+                    New Case
+                </h2>
+            </header>
+
+            <div class="custom-modal-body">
+
+                <div class="required-information">
+                    <span class="required-star">*</span>
+                    <span>= Required Information</span>
+                </div>
+
+                <lightning-record-edit-form
+                    object-api-name="Case"
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}
+                    onerror={handleError}>
+
+                    <!-- Case - Basic Information -->
+                    <div class="section-header">
+                        <span class="section-title">
+                            Case - Basic Information
+                        </span>
+                    </div>
+
+                    <!-- Customer Information -->
+                    <div class="section-header">
+                        <span class="section-title">
+                            Customer Information
+                        </span>
+                    </div>
+
+                    <div class="section-body">
+                        <div class="two-column">
+
+                            <div class="column">
+                                <lightning-input-field
+                                    field-name="AccountId"
+                                    value={accountId}
+                                    onchange={handleAccountChange}>
+                                </lightning-input-field>
+                            </div>
+
+                            <div class="column">
+                                <lightning-combobox
+                                    name="contact"
+                                    label="Contact Name"
+                                    value={contactId}
+                                    placeholder="--None--"
+                                    options={contactOptions}
+                                    onchange={handleContactChange}
+                                    disabled={contactDisabled}>
+                                </lightning-combobox>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Reported Issue -->
+                    <div class="section-header">
+                        <span class="section-title">
+                            Case - Reported Issue – Voice of Customer
+                        </span>
+                    </div>
+
+                    <div class="section-body">
+
+                        <div class="form-field">
+                            <lightning-input-field
+                                field-name="Complaint_Type__c"
+                                onchange={handleComplaintTypeChange}>
+                            </lightning-input-field>
+                        </div>
+
+                        <template if:true={showOtherComplaintType}>
+                            <div class="other-field">
+                                <lightning-input
+                                    type="text"
+                                    label="Other Complaint Type"
+                                    value={otherComplaintType}
+                                    onchange={handleOtherComplaintTypeChange}>
+                                </lightning-input>
+                            </div>
+                        </template>
+
+                        <div class="form-field">
+                            <lightning-input-field
+                                field-name="Subject">
+                            </lightning-input-field>
+                        </div>
+
+                        <div class="form-field">
+                            <lightning-input-field
+                                field-name="Description">
+                            </lightning-input-field>
+                        </div>
+
+                        <div class="form-field">
+                            <lightning-input-field
+                                field-name="Reported_Qty__c">
+                            </lightning-input-field>
+                        </div>
+
+                        <div class="form-field">
+                            <lightning-input-field
+                                field-name="End_Client_Sub_Client_and_Location__c">
+                            </lightning-input-field>
+                        </div>
+
+                        <div class="form-field">
+                            <lightning-input-field
+                                field-name="States__c">
+                            </lightning-input-field>
+                        </div>
+
+                        <div class="form-field">
+                            <lightning-input-field
+                                field-name="Region__c">
+                            </lightning-input-field>
+                        </div>
+
+                    </div>
+
+                    <!-- Product Information -->
+                    <div class="section-header">
+                        <span class="section-title">
+                            Case - Product Information - Installer Type - Customer Persona
+                        </span>
+                    </div>
+
+                    <div class="section-body">
+
+                        <!-- Product Category -->
+                        <div class="two-column product-row">
+
+                            <div class="column">
+                                <lightning-input-field
+                                    field-name="Product_Category__c"
+                                    onchange={handleProductCategoryChange}>
+                                </lightning-input-field>
+                            </div>
+
+                            <div class="column">
+                                <template if:true={showOtherProductCategory}>
+                                    <div class="other-field">
+                                        <lightning-input
+                                            type="text"
+                                            label="Other Product Category"
+                                            value={otherProductCategory}
+                                            onchange={handleOtherProductCategoryChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                            </div>
+
+                        </div>
+
+                        <!-- Installer Type -->
+                        <div class="two-column product-row">
+
+                            <div class="column">
+                                <lightning-input-field
+                                    field-name="Installer_Type__c"
+                                    onchange={handleInstallerTypeChange}>
+                                </lightning-input-field>
+                            </div>
+
+                            <div class="column">
+                                <template if:true={showOtherInstallerType}>
+                                    <div class="other-field">
+                                        <lightning-input
+                                            type="text"
+                                            label="Other Installer Type"
+                                            value={otherInstallerType}
+                                            onchange={handleOtherInstallerTypeChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                            </div>
+
+                        </div>
+
+                        <!-- Customer Persona -->
+                        <div class="two-column product-row">
+
+                            <div class="column">
+                                <lightning-input-field
+                                    field-name="Customer_Persona__c"
+                                    onchange={handleCustomerPersonaChange}>
+                                </lightning-input-field>
+                            </div>
+
+                            <div class="column">
+                                <template if:true={showOtherCustomerPersona}>
+                                    <div class="other-field">
+                                        <lightning-input
+                                            type="text"
+                                            label="Other Customer Persona"
+                                            value={otherCustomerPersona}
+                                            onchange={handleOtherCustomerPersonaChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="section-header">
+                        <span class="section-title">
+                            Additional Information
+                        </span>
+                    </div>
+
+                    <div class="section-body">
+
+                        <div class="two-column">
+
+                            <div class="column">
+                                <lightning-input-field
+                                    field-name="Origin"
+                                    required>
+                                </lightning-input-field>
+                            </div>
+
+                            <div class="column">
+                                <lightning-input-field
+                                    field-name="Status"
+                                    value="New"
+                                    disabled>
+                                </lightning-input-field>
+                            </div>
+
+                        </div>
+
+                        <div class="priority-field">
+                            <lightning-input-field
+                                field-name="Priority"
+                                value="Medium">
+                            </lightning-input-field>
+                        </div>
+
+                    </div>
+
+                    <!-- Hidden Salesforce Fields -->
+
+                    <div class="hidden-record-field">
+                        <lightning-input-field
+                            field-name="ContactId"
+                            value={contactId}>
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="hidden-record-field">
+                        <lightning-input-field
+                            field-name="Other_Complain_Type__c"
+                            value={otherComplaintType}>
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="hidden-record-field">
+                        <lightning-input-field
+                            field-name="Other_Product_Category__c"
+                            value={otherProductCategory}>
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="hidden-record-field">
+                        <lightning-input-field
+                            field-name="Other_Installer_Type__c"
+                            value={otherInstallerType}>
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="hidden-record-field">
+                        <lightning-input-field
+                            field-name="Other_Customer_Persona__c"
+                            value={otherCustomerPersona}>
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="hidden-record-field">
+                        <lightning-input-field
+                            field-name="Buisness_Segment__c"
+                            value={businessSegment}>
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="hidden-record-field">
+                        <lightning-input-field
+                            field-name="Internal_Business_Team__c"
+                            value={internalBusinessTeam}>
+                        </lightning-input-field>
+                    </div>
+
+                    <button
+                        class="hidden-submit"
+                        type="submit">
+                    </button>
+
+                </lightning-record-edit-form>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="custom-modal-footer">
+
+                <lightning-button
+                    label="Cancel"
+                    variant="neutral"
+                    onclick={handleCancel}>
+                </lightning-button>
+
+                <lightning-button
+                    label="Save"
+                    variant="brand"
+                    onclick={handleSave}
+                    disabled={isSaving}>
+                </lightning-button>
+
+            </footer>
+
+        </div>
+    </section>
+
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

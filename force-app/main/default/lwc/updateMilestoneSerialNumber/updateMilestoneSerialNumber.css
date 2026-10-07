@@ -1,0 +1,79 @@
+/* Makes the overall card look cleaner */
+.main-container {
+    background-color: #fafaf9;
+    border-radius: 4px;
+}
+
+/* Modern header styling */
+.table-header {
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #bd3516;
+    border-bottom-color: #dddbda;
+}
+
+/* Premium Row Styling with a subtle left accent bar */
+.milestone-row {
+    
+    background-color: #ffffff;
+    border: 4px solid #38393a85;
+    border-left: 4px solid #d8e6f3;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+}
+
+/* Adds a floating shadow and highlights the left bar on hover */
+.milestone-row:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+    border-left: 4px solid #0176d3; /* Vibrant Salesforce Blue on hover */
+    border-color: #c9def1;
+}
+
+/* Slightly bolder, larger text for the milestone names */
+.milestone-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #060606;
+}
+
+/* Soft, modern pill shape for the Read Only badge */
+.custom-badge {
+    background-color: #fff5f5;
+    color: #c23934;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1px solid #fedcdb;
+}
+
+/* Makes the input fields look softer and more integrated */
+.custom-input {
+    --sds-c-input-radius-border: 6px;
+    --sds-c-input-color-border: #cccccc;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Increases the size of the Update button without breaking standard SLDS geometry */
+.large-update-button {
+    transform: scale(1.15); /* Scales the button up by 15% */
+    transform-origin: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Adds a subtle click effect to the large button */
+.large-update-button:active {
+    transform: scale(1.1);
+}
+
+/* Makes the title stand out */
+.title-container {
+    color: #0176d3;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f3f3f3;
+}

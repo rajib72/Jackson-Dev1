@@ -1,0 +1,61 @@
+<template>
+    <lightning-quick-action-panel header="Generate Quote PDF">
+        <div class="wrapper">
+            <template if:false={isSuccess}>
+                <div class="hero">
+                    <div class="hero-icon">
+                        <lightning-icon icon-name="doctype:pdf" size="medium"></lightning-icon>
+                    </div>
+                    <div class="hero-text">
+                        <h2>Generate and Save Quote PDF</h2>
+                        <p>
+                            Click the button below to generate the latest Quote PDF and save it to this Quote record.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-title">Note</div>
+                    <div class="info-text">
+                        After generation, the PDF will be available in the
+                        <strong>Quote record → Related tab → Files</strong> section.
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={isSuccess}>
+                <div class="success-state">
+                    <lightning-icon icon-name="utility:success" size="large" alternative-text="Success"></lightning-icon>
+                    <h2>PDF generated successfully</h2>
+                    <p>
+                        The PDF has been saved in
+                        <strong>Quote → Related → Files</strong>.
+                    </p>
+                    <p class="redirect-text">Redirecting to Quote detail page...</p>
+                </div>
+            </template>
+        </div>
+
+        <div slot="footer" class="footer-actions">
+            <template if:false={isSuccess}>
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleCancel}
+                    disabled={isLoading}>
+                </lightning-button>
+
+                <lightning-button
+                    class="generate-btn"
+                    variant="brand"
+                    label={buttonLabel}
+                    onclick={handleGenerate}
+                    disabled={isLoading}>
+                </lightning-button>
+            </template>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Generating PDF" size="medium"></lightning-spinner>
+        </template>
+    </lightning-quick-action-panel>
+</template>

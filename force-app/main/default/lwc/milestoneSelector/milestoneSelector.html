@@ -1,0 +1,67 @@
+<template>
+    <lightning-card>
+
+        <div class="slds-align_absolute-center slds-text-heading_medium slds-p-bottom_medium title-container">
+           <h2 slot="title" style="font-weight: 800; font-size: 24px; color: #0176d3; margin-top: 5px;">
+              Selection Milestone Table
+           </h2>
+        </div>
+        
+        <div class="slds-p-around_medium">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </template>
+            
+            <template if:false={isLoading}>
+                <div class="slds-align_absolute-center slds-text-heading_medium slds-p-bottom_medium title-container">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_medium">
+            
+                        <lightning-icon 
+                            icon-name="utility:record" 
+                            size="xx-small" 
+                            class="slds-m-right_x-small">
+                        </lightning-icon>
+            
+                        <p style="font-size: 16px; font-weight: bold; color: #df470d;">
+                            Select the milestones you want to add to this project. Already added milestones are checked.
+                        </p>
+            
+                    </div>
+                </div>   
+                
+                <div style="max-height: 400px; overflow-y: auto; overflow-x: hidden;" class="slds-p-right_small">
+                    
+                    <template for:each={milestonesList} for:item="ms">
+                        <div key={ms.value} style="border-bottom: 1px solid #f3f3f3;" class="slds-grid slds-grid_vertical-align-center slds-p-vertical_small">
+                            
+                            <div style="min-width: 30px; font-weight: bold; font-size: 14px; color: #514f4d;" class="slds-m-right_small slds-text-align_right">
+                                {ms.displayIndex}.
+                            </div>
+                            
+                            <lightning-input
+                                type="checkbox"
+                                checked={ms.isChecked}
+                                disabled={ms.isExisting}
+                                data-id={ms.value}
+                                onchange={handleCheckboxChange}
+                                variant="label-hidden"
+                                class="slds-m-right_small">
+                            </lightning-input>
+                            
+                            <div class="milestone-name-box">
+                                {ms.label}
+                            </div>
+                            
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+        <div slot="footer" class="slds-align_absolute-center">
+            <lightning-button label="Cancel" onclick={closeModal} class="slds-m-right_small"></lightning-button>
+            <lightning-button variant="brand" label="Add Milestone" onclick={handleAddMilestone} disabled={isLoading}></lightning-button>
+        </div>
+
+    </lightning-card>
+</template>

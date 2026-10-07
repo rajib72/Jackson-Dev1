@@ -1,0 +1,28 @@
+<template>
+    <div class="path-wrapper">
+
+        <!-- HEADER (Professional) -->
+        <div class="header-bar">
+            <div class="header-left">
+                <div class="header-title">KAM Opportunity Sub Stage Update Path</div>
+                <div class="header-subtitle">Auto-updated based on approval status</div>
+            </div>
+
+            <div class="header-right">
+                <span class="pill">
+                    Current: <span class="pill-strong">{currentLabel}</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- PATH (No scrollbar, wraps into rows) -->
+        <div class="path-grid">
+            <template for:each={steps} for:item="s">
+                <div key={s.value} class={s.css} title={s.label}>
+                    <span class="label">{s.label}</span>
+                </div>
+            </template>
+        </div>
+
+    </div>
+</template>

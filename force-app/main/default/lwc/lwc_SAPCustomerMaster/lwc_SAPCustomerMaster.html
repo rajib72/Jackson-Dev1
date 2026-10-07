@@ -1,0 +1,126 @@
+<template>
+    <lightning-card>
+        <div class="main-container">
+
+            <!-- Header -->
+            <div class="header-section">
+                <div>
+                    <h1 class="page-title">SAP Customer Master Sync</h1>
+                    <p class="page-subtitle">Fetch customer master records from SAP and create/update them in Salesforce</p>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-card">
+                <div class="section-title">Filter Criteria</div>
+
+                <div class="filter-grid">
+                    <div class="input-box">
+                        <lightning-input
+                            type="date"
+                            name="fromDate"
+                            label="From Date"
+                            value={fromDate}
+                            onchange={handleChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="input-box">
+                        <lightning-input
+                            type="date"
+                            name="toDate"
+                            label="To Date"
+                            value={toDate}
+                            onchange={handleChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="button-box">
+                        <lightning-button
+                            label="Fetch Data"
+                            variant="brand"
+                            onclick={handleFetchAndSync}
+                            disabled={isLoading}
+                            class="action-btn">
+                        </lightning-button>
+
+                        <lightning-button
+                            label="Refresh"
+                            variant="neutral"
+                            onclick={handleRefresh}
+                            disabled={isLoading}
+                            class="action-btn">
+                        </lightning-button>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spinner -->
+            <template if:true={isLoading}>
+                <div class="spinner-wrapper">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Summary Section -->
+            <template if:true={summary}>
+                <div class="summary-section">
+                    <div class="summary-header">
+                        <span class="summary-title">Processing Summary</span>
+                    </div>
+
+                    <div class="summary-message">
+                        {summary.message}
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card total">
+                            <div class="stat-label">Total Received</div>
+                            <div class="stat-value">{summary.totalReceived}</div>
+                        </div>
+
+                        <div class="stat-card created">
+                            <div class="stat-label">Created</div>
+                            <div class="stat-value">{summary.insertedCount}</div>
+                        </div>
+
+                        <div class="stat-card updated">
+                            <div class="stat-label">Updated</div>
+                            <div class="stat-value">{summary.updatedCount}</div>
+                        </div>
+
+                        <div class="stat-card skipped">
+                            <div class="stat-label">Skipped</div>
+                            <div class="stat-value">{summary.skippedCount}</div>
+                        </div>
+
+                        <div class="stat-card error">
+                            <div class="stat-label">Errors</div>
+                            <div class="stat-value">{summary.failedCount}</div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+			<!-- Result Table -->
+            <template if:true={hasResults}>
+                <div class="table-section slds-m-top_medium">
+                <div class="table-card">
+                    <div class="table-title">Processed Records</div>
+                    
+                    <div class="table-wrapper">
+                        <lightning-datatable
+                            key-field="rowId"
+                            data={results}
+                            columns={columns}
+                            hide-checkbox-column="true"
+                            show-row-number-column="true">
+                        </lightning-datatable>
+                    </div>
+                </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

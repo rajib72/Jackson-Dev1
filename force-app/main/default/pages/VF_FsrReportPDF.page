@@ -1,0 +1,332 @@
+<apex:page standardController="Field_Service_Report_FSR__c" extensions="FSR_Signature_Extension" renderAs="pdf" showHeader="false" applyHtmlTag="false">
+<html>
+<head>
+<style>
+    @page { 
+        size: A4; 
+        margin: 6mm; 
+    }
+    
+    body { 
+        font-family: Arial, sans-serif; 
+        font-size: 10px; 
+        color: #000;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Master Table ensures all outer and inner borders perfectly align */
+    .master-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+
+    .master-table td {
+        border: 1px solid black;
+        padding: 4px;
+        vertical-align: middle;
+    }
+
+    /* Used for nesting tables without doubling borders */
+    .nested-table {
+        width: 100%;
+        border-collapse: collapse;
+        height: 100%;
+    }
+    
+    .nested-table td {
+        border: none;
+    }
+
+    /* Replicates the light grey row headers from the image */
+    .header-row {
+        background-color: #e8e8e8;
+        font-weight: bold;
+    }
+
+    /* Typography Utilities */
+    .label {
+        font-size: 10px;
+    }
+
+    .checkbox {
+        border: 1px solid black;
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        text-align: center;
+        font-size: 11px; 
+        font-family: 'Arial Unicode MS'; /* CRITICAL for the ✔ symbol */
+        line-height: 12px;
+        background-color: #fff;
+        vertical-align: middle;
+    }
+</style>
+</head>
+
+<body>
+
+<table style="width: 100%; border: none; margin-bottom: 5px; border-collapse: collapse;">
+    <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 40%; text-align: center; font-size: 18px; font-weight: bold;">Field Service Report</td>
+        <td style="width: 30%; text-align: right; font-size: 20px; font-weight: bold;">JAKSON</td>
+    </tr>
+</table>
+
+<table class="master-table">
+    <tr>
+        <td colspan="2" style="width: 50%;">Email Id-Service.support@jakson.com / Toll Free No.:1800 103 2600</td>
+        <td style="width: 25%;">FSR Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;
+            <apex:outputText value="{0,date,dd/MM/yyyy}">
+                <apex:param value="{!Field_Service_Report_FSR__c.FSR_Date__c}" />
+            </apex:outputText>
+        </td>
+        <td style="width: 25%;">FSR No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{!Field_Service_Report_FSR__c.FSR_No__c}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2">Customer Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{!Field_Service_Report_FSR__c.Customer_Name__c}</td>
+        <td colspan="2">Complaint No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{!Field_Service_Report_FSR__c.Complaint_No__c}</td>
+    </tr>
+    <tr>
+        <td colspan="2">Site Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{!Field_Service_Report_FSR__c.Site_Address__c}</td>
+        <td colspan="2">Complaint Date &nbsp;&nbsp;&nbsp;: &nbsp;
+            <apex:outputText value="{0,date,dd/MM/yyyy}">
+                <apex:param value="{!Field_Service_Report_FSR__c.Complaint_Date__c}" />
+            </apex:outputText>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Mobile No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{!Field_Service_Report_FSR__c.Mobile_No__c}</td>
+        <td colspan="2">Invoice No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{!Field_Service_Report_FSR__c.Invoice_No__c}</td>
+    </tr>
+    <tr>
+        <td colspan="2">Email ID &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{!Field_Service_Report_FSR__c.Email_ID__c}</td>
+        <td colspan="2">Invoice Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;
+            <apex:outputText value="{0,date,dd/MM/yyyy}">
+                <apex:param value="{!Field_Service_Report_FSR__c.Invoice_Date__c}" />
+            </apex:outputText>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Distributor Name &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{!Field_Service_Report_FSR__c.Distributor_Name__c}</td>
+        <td colspan="2">Installation Date &nbsp;&nbsp;: &nbsp;
+            <apex:outputText value="{0,date,dd/MM/yyyy}">
+                <apex:param value="{!Field_Service_Report_FSR__c.Installation_Commissioning_Date__c}" />
+            </apex:outputText>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="width: 15%;">System Type &nbsp;&nbsp;&nbsp;&nbsp;:</td>
+        <td style="width: 35%; padding: 0;">
+            <table class="nested-table">
+                <tr>
+                    <td style="width: 60%; border-bottom: 1px solid black; border-right: 1px solid black; padding: 2px 4px;">Off Grid</td>
+                    <td style="width: 40%; border-bottom: 1px solid black; text-align: center; padding: 2px;"><span class="checkbox">{!IF(Field_Service_Report_FSR__c.System_Type__c == 'Off Grid','✔','')}</span></td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid black; padding: 2px 4px;">On Grid</td>
+                    <td style="text-align: center; padding: 2px;"><span class="checkbox">{!IF(Field_Service_Report_FSR__c.System_Type__c == 'On Grid','✔','')}</span></td>
+                </tr>
+            </table>
+        </td>
+        <td style="width: 15%;">Warranty Status :</td>
+        <td style="width: 35%;">
+            IW <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Warranty_Status__c == 'IW','✔','')}</span> &nbsp;&nbsp;&nbsp;
+            OW <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Warranty_Status__c == 'OW','✔','')}</span> &nbsp;&nbsp;&nbsp;
+            AMC <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Warranty_Status__c == 'AMC','✔','')}</span>
+        </td>
+    </tr>
+
+    <tr class="header-row"><td colspan="4">Inverter Detail :</td></tr>
+    <tr>
+        <td>Inverter Rating(KW): <br/>{!Field_Service_Report_FSR__c.Inverter_Rating_KW__c}</td>
+        <td colspan="2">Serial No.: <br/>{!Field_Service_Report_FSR__c.Serial_No__c}</td>
+        <td>Charging Current: <br/>{!Field_Service_Report_FSR__c.Charging_Current__c}</td>
+    </tr>
+
+    <tr class="header-row"><td colspan="4">Battery Detail :</td></tr>
+    <tr>
+        <td colspan="2">Total Nos.of Battery Installed with Inverter: <br/>{!Field_Service_Report_FSR__c.Total_Nos_of_Battery_Installed_with_Inv__c}</td>
+        <td>Battery Capacity(AH): <br/>{!Field_Service_Report_FSR__c.Battery_Capacity_AH__c}</td>
+        <td>
+            Electrolyte Level: OK <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Electrolyte_Level__c == 'OK','✔','')}</span> &nbsp; Not OK <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Electrolyte_Level__c == 'Not OK','✔','')}</span>
+        </td>
+    </tr>
+    <tr class="header-row"><td colspan="4">Sp.Gravity: OK / Not OK &nbsp;&nbsp; {!Field_Service_Report_FSR__c.Sp_Gravity__c}</td></tr>
+
+    <tr class="header-row"><td colspan="4">PV Module Detail :</td></tr>
+    <tr>
+        <td style="line-height: 1.6;">
+            Total Module: &nbsp;&nbsp;{!Field_Service_Report_FSR__c.Total_Modules__c}<br/>
+            String Voc: &nbsp;&nbsp;{!Field_Service_Report_FSR__c.String_Voc__c}<br/>
+            String Imp: &nbsp;&nbsp;{!Field_Service_Report_FSR__c.String_Imp__c}
+        </td>
+        <td colspan="2" style="line-height: 1.6;">
+            Panel Rating (Wp): &nbsp;&nbsp;{!Field_Service_Report_FSR__c.Panel_Rating_Wp__c}<br/>
+            String Vmp: &nbsp;&nbsp;{!Field_Service_Report_FSR__c.String_Vmp__c}<br/>
+            No. of Modules in a String: &nbsp;&nbsp;{!Field_Service_Report_FSR__c.No_of_Modules_in_a_String__c}
+        </td>
+        <td style="line-height: 1.6;">
+            Cleanliness of Panels: Ok <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Cleanliness_of_Panels__c == 'OK', '✔', '')}</span> Not OK <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Cleanliness_of_Panels__c == 'Not OK', '✔', '')}</span><br/>
+            Shadow Status : &nbsp;&nbsp; Yes <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Shadow_Status__c == 'Yes', '✔', '')}</span> No <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Shadow_Status__c == 'No', '✔', '')}</span>
+        </td>
+    </tr>
+
+    <tr class="header-row"><td colspan="4">Protection Device Installation at Site :</td></tr>
+    <tr>
+        <td colspan="4">
+            LA <span class="checkbox">{!IF(Field_Service_Report_FSR__c.LA__c,'✔','')}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            ACDB <span class="checkbox">{!IF(Field_Service_Report_FSR__c.ACDB__c,'✔','')}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            ACSPD <span class="checkbox">{!IF(Field_Service_Report_FSR__c.ACSPD__c,'✔','')}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            DCDB <span class="checkbox">{!IF(Field_Service_Report_FSR__c.DCDB__c,'✔','')}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            DCSPD <span class="checkbox">{!IF(Field_Service_Report_FSR__c.DCDB__c,'✔','')}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Earthing: &nbsp;&nbsp;{!Field_Service_Report_FSR__c.Earthing__c}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="4" style="padding: 0;">
+            <table class="nested-table">
+                <tr class="header-row" style="border-bottom: 1px solid black;">
+                    <td style="width: 20%; border-right: 1px solid black; padding: 4px;">Wiring Detail :<br/>(Sq.mm)</td>
+                    <td style="width: 20%; border-right: 1px solid black; text-align: center; padding: 4px;">Panel to AJB</td>
+                    <td style="width: 20%; border-right: 1px solid black; text-align: center; padding: 4px;">AJB to Inverter</td>
+                    <td style="width: 20%; border-right: 1px solid black; text-align: center; padding: 4px;">Inv.to ACDB &amp; Grid</td>
+                    <td style="width: 20%; text-align: center; padding: 4px;">Inv.to Battery</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid black; padding: 4px;"></td>
+                    <td style="border-right: 1px solid black; text-align: center; padding: 4px;">Rec: {!Field_Service_Report_FSR__c.Panel_to_AJB_Received__c} &nbsp;&nbsp; Use: {!Field_Service_Report_FSR__c.Panel_to_AJB_Used__c}</td>
+                    <td style="border-right: 1px solid black; text-align: center; padding: 4px;">Rec: {!Field_Service_Report_FSR__c.AJB_to_Inverter_Received__c} &nbsp;&nbsp; Use: {!Field_Service_Report_FSR__c.AJB_to_Inverter_Used__c}</td>
+                    <td style="border-right: 1px solid black; text-align: center; padding: 4px;">Rec: {!Field_Service_Report_FSR__c.Inverter_to_ACDB_Received__c} &nbsp;&nbsp; Use: {!Field_Service_Report_FSR__c.Inverter_to_ACDB_Used__c}</td>
+                    <td style="text-align: center; padding: 4px;">Rec: {!Field_Service_Report_FSR__c.Inverter_to_Battery_Received__c} &nbsp;&nbsp; Use: {!Field_Service_Report_FSR__c.Inverter_to_Battery_Used__c}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr class="header-row">
+        <td colspan="2">Generation Detail :</td>
+        <td colspan="2">Load Detail :</td>
+    </tr>
+    <tr>
+        <td>Voltage: <br/>{!Field_Service_Report_FSR__c.Voltage__c}</td>
+        <td>Current: <br/>{!Field_Service_Report_FSR__c.Current__c}</td>
+        <td>Total Load(KW): <br/>{!Field_Service_Report_FSR__c.Total_Load_KW__c}</td>
+        <td>Load Type :<br/>{!Field_Service_Report_FSR__c.Load_Type__c}</td>
+    </tr>
+
+    <tr>
+        <td colspan="4" style="height: 40px; vertical-align: top;">
+            Problem Reported by Customer :<br/><br/>
+            {!Field_Service_Report_FSR__c.Problem_Reported_by_Customer__c}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="height: 40px; vertical-align: top; line-height: 1.8;">
+            Problem Observed by Engineer: &nbsp;
+            Inverter <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Problem_Observed_by_Engineer__c == 'Inverter', '✔', '')}</span> &nbsp;&nbsp; 
+            Battery <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Problem_Observed_by_Engineer__c == 'Battery', '✔', '')}</span> &nbsp;&nbsp; 
+            PV Module <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Problem_Observed_by_Engineer__c == 'PV Module', '✔', '')}</span> &nbsp;&nbsp; 
+            Installation related <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Problem_Observed_by_Engineer__c == 'Installation Related', '✔', '')}</span> &nbsp;&nbsp; 
+            Maintenance related <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Problem_Observed_by_Engineer__c == 'Maintenance Related', '✔', '')}</span> &nbsp;&nbsp; 
+            Others <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Problem_Observed_by_Engineer__c == 'Others', '✔', '')}</span><br/><br/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="height: 60px; vertical-align: top;">
+            Action Taken by Engineer:<br/><br/>
+            {!Field_Service_Report_FSR__c.Action_Taken_by_Engineer__c}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="height: 35px; vertical-align: top;">
+            Final Closure Remarks:<br/>
+            {!Field_Service_Report_FSR__c.Final_Closure_Remarks__c}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="height: 35px; vertical-align: top;">
+            Customer Remarks:<br/>
+            {!Field_Service_Report_FSR__c.Customer_Remarks__c}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="1" style="vertical-align: top;">
+            Spares Details<br/>(Used/Req.)<br/><br/>
+            {!Field_Service_Report_FSR__c.Spares_Details_Used_Required__c}
+        </td>
+        <td colspan="2" style="vertical-align: top; text-align: left;">
+            Complete Product details with S.N. in replacement scenario (FOC/RGP)<br/><br/>
+            <b>{!Field_Service_Report_FSR__c.Product_details_with_S_N_In_Replacement__c}</b>
+        </td>
+        <td colspan="1" style="padding: 0;">
+            <table class="nested-table">
+                <tr><td style="border-bottom: 1px solid black; padding: 4px; vertical-align: top;">Spare Charges<br/>Amt.(Rs.) &nbsp; <b>{!Field_Service_Report_FSR__c.Spare_Charges_Amount__c}</b></td></tr>
+                <tr><td style="padding: 4px; vertical-align: top;">Service Charges<br/>Amt.(Rs.) &nbsp; <b>{!Field_Service_Report_FSR__c.Service_Charges_Amount__c}</b></td></tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            Call Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Closed: <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Call_Status__c=='Closed','✔','')}</span> &nbsp;&nbsp;&nbsp; 
+            Pending: <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Call_Status__c=='Pending','✔','')}</span>
+        </td>
+        <td colspan="2">
+            Resolution Type-&gt; &nbsp;&nbsp;
+            Telephonic <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Resolution_Type__c=='Telephonic','✔','')}</span> &nbsp;&nbsp;&nbsp; 
+            On-site <span class="checkbox">{!IF(Field_Service_Report_FSR__c.Resolution_Type__c=='On-site','✔','')}</span>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" style="height: 80px; vertical-align: top; padding: 4px;">
+            <div>Customer Signature &amp; Stamp:</div>
+            <apex:outputPanel rendered="{!NOT(ISBLANK(customerSigId))}">
+                <div style="text-align: center; margin-top: 5px;">
+                    <apex:image url="/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&versionId={!customerSigId}" 
+                                width="180" height="90" style="display: block; margin: 0 auto;" />
+                </div>
+            </apex:outputPanel>
+        </td>
+        <td colspan="2" style="vertical-align: top; padding: 0;">
+            <table class="nested-table">
+                <tr>
+                    <td style="width: 50%; border-right: 1px solid black; border-bottom: 1px solid black; padding: 4px; vertical-align: top;">
+                        Engineer Name:<br/><br/>{!Field_Service_Report_FSR__c.Engineer_Name__c}
+                    </td>
+                    <td style="width: 50%; border-bottom: 1px solid black; padding: 4px; vertical-align: top;">
+                        Mobile No.<br/><br/>{!Field_Service_Report_FSR__c.Engineer_Mobile_No__c}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 60px; vertical-align: top; padding: 4px;">
+                        <div>Signature &amp; date:</div>
+                        <apex:outputPanel rendered="{!NOT(ISBLANK(engineerSigId))}">
+                            <div style="text-align: center; margin-top: 5px;">
+                                <apex:image url="/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&versionId={!engineerSigId}" 
+                                            width="120" height="60" style="display: block; margin: 0 auto;" />
+                            </div>
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="text-align: center; font-size: 9px; padding: 2px;">
+            Address :Jakson Engineers Limited ,Plot No.-25,Udyog Kendra 2, Ecotech III,Greater Noida, UP-201306
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
+</apex:page>

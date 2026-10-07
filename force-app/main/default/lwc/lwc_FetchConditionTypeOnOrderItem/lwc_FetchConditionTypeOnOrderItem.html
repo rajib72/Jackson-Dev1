@@ -1,0 +1,240 @@
+<template>
+    <lightning-card>
+        <div class="wrapper">
+
+            <!-- Header -->
+            <div class="header-section">
+                <div class="icon-box">
+                    <lightning-icon
+                        icon-name="standard:service_contract"
+                        size="medium"
+                        alternative-text="Condition Selection">
+                    </lightning-icon>
+                </div>
+
+                <div class="title-box">
+                    <h1 class="main-title">
+                        Condition Selection
+                    </h1>
+
+                    <p class="sub-title">
+                        Fetch condition values from SAP and save the selected
+                        condition on this Order Item.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Fetch Button -->
+            <div class="action-bar">
+                <lightning-button
+                    label="Fetch Conditions"
+                    icon-name="utility:refresh"
+                    variant="brand"
+                    onclick={handleFetch}
+                    disabled={isLoading}>
+                </lightning-button>
+            </div>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="spinner-box">
+                    <lightning-spinner
+                        alternative-text="Loading condition values..."
+                        size="medium">
+                    </lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Searchable Condition Area -->
+            <template if:true={showDropdownArea}>
+                <div class="form-card">
+
+                    <div class="condition-search-container">
+
+                        <!-- Dropdown positioning anchor -->
+                        <div
+                            class="condition-input-anchor"
+                            role="combobox"
+                            aria-haspopup="listbox"
+                            aria-expanded={isDropdownOpen}>
+
+                            <lightning-input
+                                type="search"
+                                name="conditionSearch"
+                                label="Available Conditions"
+                                value={searchKey}
+                                placeholder="Search by Condition Code or Description"
+                                autocomplete="off"
+                                disabled={isLoading}
+                                onchange={handleConditionSearch}
+                                onfocus={handleSearchFocus}
+                                onblur={handleSearchBlur}>
+                            </lightning-input>
+
+                            <!-- Matching Conditions -->
+                            <template if:true={showConditionDropdown}>
+                                <div
+                                    class="condition-dropdown"
+                                    role="listbox"
+                                    onmousedown={handleDropdownMouseDown}>
+
+                                    <ul
+                                        class="condition-list"
+                                        role="presentation">
+
+                                        <template
+                                            for:each={filteredConditionOptions}
+                                            for:item="option">
+
+                                            <li
+                                                key={option.key}
+                                                class="condition-list-item"
+                                                role="presentation">
+
+                                                <button
+                                                    type="button"
+                                                    class="condition-option-button"
+                                                    role="option"
+                                                    data-key={option.key}
+                                                    onclick={handleConditionSelect}>
+
+                                                    <span class="condition-option-content">
+
+                                                        <span class="condition-code">
+                                                            {option.value}
+                                                        </span>
+
+                                                        <template if:true={option.description}>
+                                                            <span class="condition-description">
+                                                                {option.description}
+                                                            </span>
+                                                        </template>
+
+                                                    </span>
+                                                </button>
+                                            </li>
+                                        </template>
+
+                                    </ul>
+                                </div>
+                            </template>
+                        </div>
+
+                        <p class="search-help-text">
+                            Search using the Condition Code or any part of the
+                            Condition Description.
+                        </p>
+
+                        <!-- No Matching Result -->
+                        <template if:true={showNoSearchResults}>
+                            <div class="no-results-box">
+                                <lightning-icon
+                                    icon-name="utility:search"
+                                    size="x-small"
+                                    alternative-text="No result">
+                                </lightning-icon>
+
+                                <span>
+                                    No conditions found matching
+                                    <strong>“{searchKey}”</strong>.
+                                </span>
+                            </div>
+                        </template>
+
+                    </div>
+
+                    <!-- Selected Condition Preview -->
+                    <div class="preview-card">
+                        <div class="preview-title">
+                            Selected Condition
+                        </div>
+
+                        <template if:true={selectedValue}>
+                            <div class="preview-row">
+                                <span class="preview-label">
+                                    Condition Type
+                                </span>
+
+                                <span class="preview-value">
+                                    {selectedValue}
+                                </span>
+                            </div>
+
+                            <div class="preview-row">
+                                <span class="preview-label">
+                                    Description
+                                </span>
+
+                                <span class="preview-value">
+                                    {selectedDescription}
+                                </span>
+                            </div>
+                        </template>
+
+                        <template if:false={selectedValue}>
+                            <div class="empty-value">
+                                No condition selected yet
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="button-row">
+                        <lightning-button
+                            label="Save"
+                            icon-name="utility:save"
+                            variant="brand"
+                            onclick={handleSave}
+                            disabled={isSaveDisabled}>
+                        </lightning-button>
+                    </div>
+
+                </div>
+            </template>
+
+            <!-- Empty SAP Response -->
+            <template if:true={showEmptyMessage}>
+                <div class="message warning-box">
+                    <lightning-icon
+                        icon-name="utility:warning"
+                        size="x-small"
+                        alternative-text="Warning">
+                    </lightning-icon>
+
+                    <span>
+                        No condition values found from SAP.
+                    </span>
+                </div>
+            </template>
+
+            <!-- Success Message -->
+            <template if:true={showSuccess}>
+                <div class="message success-box">
+                    <lightning-icon
+                        icon-name="utility:success"
+                        size="x-small"
+                        variant="success"
+                        alternative-text="Success">
+                    </lightning-icon>
+
+                    <span>{successMessage}</span>
+                </div>
+            </template>
+
+            <!-- Error Message -->
+            <template if:true={errorMessage}>
+                <div class="message error-box">
+                    <lightning-icon
+                        icon-name="utility:error"
+                        size="x-small"
+                        variant="error"
+                        alternative-text="Error">
+                    </lightning-icon>
+
+                    <span>{errorMessage}</span>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

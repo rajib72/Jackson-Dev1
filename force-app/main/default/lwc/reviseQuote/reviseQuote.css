@@ -1,0 +1,354 @@
+:host {
+    display: block;
+}
+
+.content-wrap {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.section-box {
+    background: #ffffff;
+    border: 1px solid #d8e2ee;
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+    margin-bottom: 1rem;
+    overflow: visible;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid #d8e2ee;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #16325c;
+    margin-bottom: 1rem;
+    padding: 0.65rem 0.85rem;
+    background: #f4f7fb;
+    border-radius: 12px;
+    border: 1px solid #e3ebf5;
+}
+
+.quote-summary-banner {
+    background: linear-gradient(135deg, #16325c 0%, #1f5fa8 100%);
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 6px 18px rgba(31, 95, 168, 0.18);
+}
+
+.quote-summary-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.quote-summary-subtitle {
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+.field-grid {
+    row-gap: 0.75rem;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.custom-table thead th {
+    background: linear-gradient(135deg, #1f5fa8 0%, #4a90d9 100%);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 12px 10px;
+    border: 1px solid #c7d9ea;
+    text-align: left;
+    font-size: 13px;
+}
+
+.custom-table tbody td {
+    border: 1px solid #dfe8f1;
+    padding: 10px;
+    vertical-align: middle;
+    background: #ffffff;
+}
+
+.custom-table tbody tr:nth-child(even) td {
+    background: #f8fbff;
+}
+
+.total-cell {
+    font-weight: 700;
+    color: #16325c;
+}
+
+.footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1rem;
+}
+
+.preview-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #eef4fb;
+    color: #16325c;
+    border: 1px solid #cddff1;
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 0.35rem;
+}
+
+lightning-input,
+lightning-textarea {
+    --slds-c-input-radius-border: 12px;
+    --slds-c-textarea-radius-border: 12px;
+}
+
+/* =========================
+   Quote line item desktop
+   ========================= */
+
+.quote-items-table {
+    min-width: 1350px;
+}
+
+.quote-items-table thead th {
+    text-align: center;
+    white-space: nowrap;
+    font-size: 14px;
+    padding: 14px 10px;
+}
+
+.quote-items-table tbody td {
+    background: #ffffff;
+    vertical-align: middle;
+}
+
+.quote-items-table tbody tr:nth-child(even) td {
+    background: #f8fbff;
+}
+
+.quote-items-table .cell-center {
+    text-align: center;
+}
+
+.quote-items-table .material-cell {
+    min-width: 420px;
+}
+
+.quote-items-table .material-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1f2d3d;
+    word-break: break-word;
+}
+
+.quote-items-table .uom-text {
+    text-align: center;
+    font-weight: 700;
+    color: #16325c;
+}
+
+.quote-items-table .helper-msg {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.quote-items-table .helper-warning {
+    color: #a66b00;
+}
+
+.quote-items-table .helper-error {
+    color: #c23934;
+}
+
+.quote-items-table .disabled-row td {
+    opacity: 0.72;
+    background: #f3f4f6 !important;
+}
+
+.quote-items-table lightning-input,
+.quote-items-table lightning-combobox {
+    display: block;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .content-wrap {
+        padding: 0.75rem;
+    }
+
+    .quote-summary-title {
+        font-size: 18px;
+    }
+
+    .section-box {
+        padding: 0.85rem;
+        border-radius: 14px;
+    }
+
+    .section-title {
+        font-size: 16px;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .footer-actions {
+        flex-direction: column-reverse;
+    }
+
+    .footer-actions lightning-button {
+        width: 100%;
+    }
+
+    .table-wrapper {
+        overflow-x: visible;
+        overflow-y: visible;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    .custom-table {
+        display: block;
+        width: 100%;
+        min-width: 100%;
+        border: none;
+    }
+
+    .custom-table thead {
+        display: none;
+    }
+
+    .custom-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .custom-table tbody tr {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.85rem;
+        border: 1px solid #d8e2ee;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+    }
+
+    .custom-table tbody td {
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+        text-align: left !important;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        border-bottom: 1px solid #dfe8f1;
+        padding: 10px 12px;
+        position: relative;
+        background: #ffffff !important;
+    }
+
+    .custom-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .custom-table tbody td::before {
+        display: block;
+        font-weight: 700;
+        color: #16325c;
+        margin-bottom: 6px;
+    }
+
+    .quote-items-table {
+        min-width: 100%;
+    }
+
+    .quote-items-table tbody td:nth-child(1)::before {
+        content: "Select";
+    }
+
+    .quote-items-table tbody td:nth-child(2)::before {
+        content: "Material Description";
+    }
+
+    .quote-items-table tbody td:nth-child(3)::before {
+        content: "Nos";
+    }
+
+    .quote-items-table tbody td:nth-child(4)::before {
+        content: "Project Capacity";
+    }
+
+    .quote-items-table tbody td:nth-child(5)::before {
+        content: "UOM";
+    }
+
+    .quote-items-table tbody td:nth-child(6)::before {
+        content: "Price/Wp";
+    }
+
+    .quote-items-table tbody td:nth-child(7)::before {
+        content: "Total";
+    }
+
+    .quote-items-table tbody td:nth-child(8)::before {
+        content: "GST";
+    }
+
+    .quote-items-table tbody td:nth-child(9)::before {
+        content: "Grand Total";
+    }
+
+    .quote-items-table .material-cell {
+        min-width: auto;
+    }
+
+    .quote-items-table .material-text {
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .quote-items-table .uom-text {
+        text-align: left;
+    }
+
+    .quote-items-table .cell-center {
+        text-align: left;
+    }
+
+    .quote-items-table .helper-msg {
+        margin-top: 6px;
+        font-size: 12px;
+    }
+
+    .quote-items-table .disabled-row td {
+        opacity: 1;
+        background: #f8fafc !important;
+    }
+
+    .quote-items-table lightning-input,
+    .quote-items-table lightning-combobox {
+        width: 100%;
+    }
+}

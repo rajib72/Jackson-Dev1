@@ -1,0 +1,233 @@
+<template>
+
+    <!-- Success Screen -->
+    <template if:true={isSubmitted}>
+        <div class="success-wrapper">
+            <lightning-card>
+                <div class="success-container">
+                    <h2>Your Agreement has been created successfully!</h2>
+                    <p>Thank you. The agreement has been created and linked to the Partner record.</p>
+                </div>
+            </lightning-card>
+        </div>
+    </template>
+
+    <!-- Form -->
+    <template if:false={isSubmitted}>
+        <div class="form-wrapper">
+            <lightning-card title="Jakson SRT - Partner Agreement Form">
+
+                <!-- Agreement Overview -->
+                <div class="section">
+                    <h2 class="section-title">Agreement Overview</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Agreement Details Name" data-field="Name" value={agr.Name}
+                                onchange={handleChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-combobox label="Agreement Type" data-field="Agreement_Type__c"
+                                value={agr.Agreement_Type__c} options={typeOptions} placeholder="Select Agreement Type"
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input type="date" label="Agreement Date" data-field="Agreement_Date__c"
+                                value={agr.Agreement_Date__c} onchange={handleChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input type="date" label="Agreement Start Date"
+                                data-field="Agreement_Start_Date__c" value={agr.Agreement_Start_Date__c}
+                                onchange={handleChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input type="date" label="Agreement End Date" data-field="Agreement_End_Date__c"
+                                value={agr.Agreement_End_Date__c} onchange={handleChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-input type="checkbox" label="Agreement Signed" data-field="Agreement_Signed__c"
+                                checked={agr.Agreement_Signed__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Payout Configuration -->
+                <div class="section">
+                    <h2 class="section-title">Payout Configuration</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input label="Base Payout Percentage" type="number"
+                                data-field="Base_Payout_Percentage__c" value={agr.Base_Payout_Percentage__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input label="Price Per Wp" type="number" data-field="Price_Per_Wp__c"
+                                value={agr.Price_Per_Wp__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input label="Minimum Project Size" type="number"
+                                data-field="Minimum_Project_Size__c" value={agr.Minimum_Project_Size__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Performance Bonus -->
+                <div class="section">
+                    <h2 class="section-title">Performance Bonus</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input label="Bonus for 3 Orders" type="currency"
+                                data-field="Bonus_for_3_Orders__c" value={agr.Bonus_for_3_Orders__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input label="Bonus for 5 Orders" type="currency"
+                                data-field="Bonus_for_5_Orders__c" value={agr.Bonus_for_5_Orders__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input label="Orders Completed Count" type="number"
+                                data-field="Orders_Completed_Count__c" value={agr.Orders_Completed_Count__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <!-- NEW: Performance Bonus Eligible checkbox -->
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-input type="checkbox" label="Performance Bonus Eligible"
+                                data-field="Performance_Bonus_Eligible__c" checked={agr.Performance_Bonus_Eligible__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Tax & Compliance -->
+                <div class="section">
+                    <h2 class="section-title">Tax & Compliance</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Partner GST Number" data-field="Partner_GST_Number__c"
+                                value={agr.Partner_GST_Number__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Partner PAN Number" data-field="Partner_PAN_Number__c"
+                                value={agr.Partner_PAN_Number__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input type="checkbox" label="GST Applicable" data-field="GST_Applicable__c"
+                                checked={agr.GST_Applicable__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input type="checkbox" label="TDS Applicable" data-field="TDS_Applicable__c"
+                                checked={agr.TDS_Applicable__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Signatory Details -->
+                <div class="section">
+                    <h2 class="section-title">Signatory Details</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Partner Authorized Signatory"
+                                data-field="Partner_Authorized_Signatory__c" value={agr.Partner_Authorized_Signatory__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Partner Signed Date" type="date" data-field="Partner_Signed_Date__c"
+                                value={agr.Partner_Signed_Date__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Jakson Signatory Name" data-field="Jakson_Signatory_Name__c"
+                                value={agr.Jakson_Signatory_Name__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Jakson Signed Date" type="date" data-field="Jakson_Signed_Date__c"
+                                value={agr.Jakson_Signed_Date__c} onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- File Uploads -->
+                <div class="section">
+                    <h2 class="section-title">Upload Documents</h2>
+
+                    <lightning-input type="file" label="Upload Supporting Documents" multiple
+                        onchange={handleDocSelection}>
+                    </lightning-input>
+
+                    <template if:true={docFileNames}>
+                        <ul>
+                            <template for:each={docFileNames} for:item="name">
+                                <li key={name}>{name}</li>
+                            </template>
+                        </ul>
+                    </template>
+
+                    <div style="margin-top:12px">
+                        <lightning-input type="file" label="Upload Signature (required)"
+                            onchange={handleSignatureSelection}>
+                        </lightning-input>
+
+                        <template if:true={signatureFileName}>
+                            <p>{signatureFileName}</p>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="submit-section">
+                    <lightning-button label="Save Agreement" variant="brand" onclick={handleSave}>
+                    </lightning-button>
+                </div>
+
+            </lightning-card>
+        </div>
+    </template>
+
+</template>

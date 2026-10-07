@@ -1,0 +1,22 @@
+<apex:page standardStylesheets="true"
+    sidebar="false"
+    showHeader="false"
+    controller="PartnerRegistrationVFController">
+
+    <apex:includeLightning />
+
+    <div id="lwcContainer"></div>
+
+    <script>
+        var partnerId = "{!partnerId}";
+
+        $Lightning.use("c:PartnerRegistrationOutApp", function() {
+            $Lightning.createComponent(
+                "c:partnerRegistrationForm",
+                { recordId: partnerId },
+                "lwcContainer"
+            );
+        });
+    </script>
+
+</apex:page>

@@ -1,0 +1,267 @@
+<template>
+
+    <lightning-quick-action-panel header="L1 Assignment">
+
+        <!-- =========================================================
+             LOADING
+             ========================================================= -->
+        <template if:true={isLoading}>
+            <div class="spinner-container">
+                <lightning-spinner
+                    alternative-text="Processing L1 Assignment"
+                    size="medium">
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <div class="content">
+
+            <!-- =====================================================
+                 ASSIGN TO
+                 ===================================================== -->
+            <section class="section-card assignment-section">
+
+                <div class="simple-section-header">
+                    <div class="section-title">
+                        Assign To
+                    </div>
+                </div>
+
+                <div class="assignment-body">
+
+                    <lightning-combobox
+                        name="l1User"
+                        label="User"
+                        placeholder="Select User"
+                        value={selectedUserId}
+                        options={userOptions}
+                        onchange={handleUserChange}
+                        required>
+                    </lightning-combobox>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 CASE DETAILS
+                 ===================================================== -->
+            <section class="section-card">
+
+                <div class="simple-section-header">
+                    <div class="section-title">
+                        Case Details
+                    </div>
+                </div>
+
+                <div class="case-details-grid">
+
+                    <!-- CASE NUMBER -->
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Case No
+                        </div>
+
+                        <div class="detail-value">
+                            {caseDetails.caseNumber}
+                        </div>
+
+                    </div>
+
+
+                    <!-- SRT CASE NUMBER -->
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            SRT Case No
+                        </div>
+
+                        <div class="detail-value">
+                            {caseDetails.srtCaseNumber}
+                        </div>
+
+                    </div>
+
+
+                    <!-- SUBJECT -->
+                    <div class="detail-item full-width">
+
+                        <div class="detail-label">
+                            Subject
+                        </div>
+
+                        <div class="detail-value">
+                            {caseDetails.subject}
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Status
+                        </div>
+
+                        <div class="detail-value status-value">
+                            {caseDetails.status}
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRIORITY -->
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Priority
+                        </div>
+
+                        <div class="detail-value">
+                            {caseDetails.priority}
+                        </div>
+
+                    </div>
+
+
+                    <!-- CUSTOMER -->
+                    <div class="detail-item full-width">
+
+                        <div class="detail-label">
+                            Customer
+                        </div>
+
+                        <div class="detail-value">
+                            {caseDetails.accountName}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 ASSET DETAILS
+                 ===================================================== -->
+            <section class="section-card">
+
+                <div class="simple-section-header">
+                    <div class="section-title">
+                        Asset Details
+                    </div>
+                </div>
+
+
+                <template if:true={hasAssets}>
+
+                    <div class="asset-table-wrapper">
+
+                        <table class="asset-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Asset Name
+                                    </th>
+
+                                    <th>
+                                        Site Name
+                                    </th>
+
+                                    <th>
+                                        PV Module Rating/Model No
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                <template
+                                    for:each={assets}
+                                    for:item="asset">
+
+                                    <tr key={asset.assetId}>
+
+                                        <td class="asset-name">
+                                            {asset.assetName}
+                                        </td>
+
+                                        <td>
+                                            {asset.siteName}
+                                        </td>
+
+                                        <td>
+                                            {asset.pvModuleRatingModel}
+                                        </td>
+
+                                    </tr>
+
+                                </template>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </template>
+
+
+                <template if:false={hasAssets}>
+
+                    <div class="empty-state">
+
+                        <lightning-icon
+                            icon-name="utility:info"
+                            size="x-small">
+                        </lightning-icon>
+
+                        <span>
+                            No Asset is currently related to this Case.
+                        </span>
+
+                    </div>
+
+                </template>
+
+            </section>
+
+        </div>
+
+
+        <!-- =========================================================
+             FOOTER
+             ========================================================= -->
+        <div
+            slot="footer"
+            class="footer-actions">
+
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}
+                disabled={isLoading}>
+            </lightning-button>
+
+            <lightning-button
+                variant="brand"
+                label="Assignment"
+                icon-name="utility:user"
+                onclick={handleAssignment}
+                disabled={isAssignmentDisabled}>
+            </lightning-button>
+
+        </div>
+
+    </lightning-quick-action-panel>
+
+</template>

@@ -1,0 +1,35 @@
+<template>
+    <div class="asset-wrapper">
+        <div class="asset-card">
+
+            <!-- Header -->
+            <div class="asset-header">
+                <div>
+                    <h2 class="asset-title">Tag Assets</h2>
+                    <p class="asset-subtitle">Select the relevant assets to associate with this case.</p>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="table-section">
+                <lightning-datatable
+                    key-field="Id"
+                    data={assetData}
+                    columns={columns}
+                    onrowselection={handleRowSelection}
+                    class="custom-datatable">
+                </lightning-datatable>
+            </div>
+
+            <!-- Footer -->
+            <div class="asset-footer">
+                <lightning-button
+                    label="Save"
+                    variant="brand"
+                    onclick={handleSave}>
+                </lightning-button>
+            </div>
+
+        </div>
+    </div>
+</template>

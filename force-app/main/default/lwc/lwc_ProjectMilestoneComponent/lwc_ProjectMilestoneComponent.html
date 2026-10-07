@@ -1,0 +1,319 @@
+<template>
+    <div class="page">
+
+        <!-- Top Header -->
+        <div class="top-header">
+            <div class="title-area">
+                <div class="app-icon">
+                    <span>📈</span>
+                </div>
+                <h1>Project Milestone Progress Tracker</h1>
+            </div>
+
+            <div class="header-actions">
+                <button class="icon-btn" onclick={handleReset}>↻</button>
+                <div class="divider"></div>
+                <span class="last-updated">Last updated: 08 May 2026 10:30 AM</span>
+                <button class="icon-btn">⋮</button>
+            </div>
+        </div>
+
+        <!-- Working Frontend Filters -->
+        <div class="filters">
+
+            <div class="filter-item project-filter">
+                <label>Project</label>
+                <select class="custom-select" value={selectedProject} onchange={handleProjectChange}>
+                    <template for:each={projectOptions} for:item="item">
+                        <option key={item.value} value={item.value}>{item.label}</option>
+                    </template>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Milestone</label>
+                <select class="custom-select" value={selectedMilestone} onchange={handleMilestoneChange}>
+                    <template for:each={milestoneOptions} for:item="item">
+                        <option key={item.value} value={item.value}>{item.label}</option>
+                    </template>
+                </select>
+            </div>
+
+            <div class="filter-item small-filter">
+                <label>Stage</label>
+                <select class="custom-select" value={selectedStage} onchange={handleStageChange}>
+                    <template for:each={stageOptions} for:item="item">
+                        <option key={item.value} value={item.value}>{item.label}</option>
+                    </template>
+                </select>
+            </div>
+
+            <div class="filter-item date-filter">
+                <label>Date Range</label>
+                <select class="custom-select date-select" value={selectedDateRange} onchange={handleDateRangeChange}>
+                    <template for:each={dateRangeOptions} for:item="item">
+                        <option key={item.value} value={item.value}>{item.label}</option>
+                    </template>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- Main Body -->
+        <div class="layout">
+
+            <!-- Left Card -->
+            <aside class="summary-card">
+                <div class="milestone-box">
+                    <div class="flag-icon">⚑</div>
+                    <div>
+                        <div class="muted">Milestone Name</div>
+                        <div class="milestone-title">{currentMilestoneLabel}</div>
+                    </div>
+                </div>
+
+                <h3>Overall Progress</h3>
+
+                <div class="progress-section">
+                    <div class="donut" style={progressStyle}>
+                        <div class="donut-inner">
+                            <strong>{progressValue}%</strong>
+                        </div>
+                    </div>
+                    <div class="progress-text">
+                        of milestone<br />completed
+                    </div>
+                </div>
+
+                <div class="line"></div>
+
+                <div class="info-row">
+                    <div class="small-icon">▷</div>
+                    <div>
+                        <span>Current Stage</span>
+                        <strong>{currentProcess}</strong>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="small-icon">▣</div>
+                    <div>
+                        <span>Milestone Start Date</span>
+                        <strong>{startDate}</strong>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="small-icon">▣</div>
+                    <div>
+                        <span>Milestone End Date</span>
+                        <strong>{endDate}</strong>
+                    </div>
+                </div>
+
+                <div class="note-box">
+                    <span>ⓘ</span>
+                    <p>{noteText}</p>
+                </div>
+            </aside>
+
+            <!-- Center Area -->
+            <main class="center-area">
+
+                <!-- Timeline Card -->
+                <section class="timeline-card">
+                    <div class="timeline-header">
+                        <div class="process-heading">Process</div>
+
+                        <div class="months">
+                            <div>{firstMonth}</div>
+                            <div>{secondMonth}</div>
+                        </div>
+                    </div>
+
+                    <div class="date-row">
+                        <div></div>
+                        <div class="date-grid">
+                            <template for:each={dateMarkers} for:item="marker">
+                                <span key={marker}>{marker}</span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="chart-body">
+                        <div class="today-line">
+                            <span>Today</span>
+                        </div>
+
+                        <template if:true={hasProcessRows}>
+                            <template for:each={filteredProcessRows} for:item="row">
+                                <div key={row.name} class={row.rowClass}>
+                                    <div class="process-cell">
+                                        <strong>{row.name}</strong>
+                                        <span>{row.date}</span>
+                                    </div>
+
+                                    <div class="bar-cell">
+                                        <div class={row.barClass} style={row.style}>
+                                            <span class={row.markerClass}>{row.icon}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+
+                        <template if:false={hasProcessRows}>
+                            <div class="no-data">No process found for selected filter.</div>
+                        </template>
+                    </div>
+
+                    <div class="legend-row">
+                        <div><span class="legend-dot completed-dot"></span>Completed</div>
+                        <div><span class="legend-dot current-dot"></span>Current</div>
+                        <div><span class="legend-dot upcoming-dot"></span>Upcoming</div>
+                        <div><span class="legend-dot delayed-dot"></span>Delayed</div>
+                    </div>
+                </section>
+
+                <!-- Table Card -->
+                <section class="task-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Process</th>
+                                <th>Task Name</th>
+                                <th>Due Date ⌄</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <template if:true={hasTaskRows}>
+                                <template for:each={filteredTaskRows} for:item="task">
+                                    <tr key={task.id}>
+                                        <td>
+                                            <span class={task.leftColor}></span>
+                                            <strong>{task.process}</strong>
+                                        </td>
+                                        <td>{task.name}</td>
+                                        <td>
+                                            <span class="date-icon">▣</span>
+                                            {task.dueDate}
+                                        </td>
+                                        <td>
+                                            <span class={task.statusClass}>
+                                                {task.statusIcon} {task.status}
+                                            </span>
+                                        </td>
+                                        <td class="menu">⋮</td>
+                                    </tr>
+                                </template>
+                            </template>
+
+                            <template if:false={hasTaskRows}>
+                                <tr>
+                                    <td colspan="5" class="empty-table">No task found for selected filter.</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+
+                    <div class="table-footer">
+                        <span>{taskCountText}</span>
+
+                        <div class="pagination">
+                            <span>|‹</span>
+                            <span>‹</span>
+                            <button>1</button>
+                            <span>›</span>
+                            <span>›|</span>
+                        </div>
+
+                        <div class="rows-count">
+                            Rows per page:
+                            <span>10 ⌄</span>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- Right Side -->
+            <aside class="right-area">
+
+                <section class="upcoming-card">
+                    <h3>
+                        <span>▣</span>
+                        Upcoming &amp; Overdue Tasks
+                    </h3>
+
+                    <template if:true={hasUpcomingTasks}>
+                        <template for:each={filteredUpcomingTasks} for:item="task">
+                            <div key={task.id} class="upcoming-row">
+                                <div class={task.iconClass}>{task.icon}</div>
+
+                                <div class="upcoming-name">
+                                    <strong>{task.name}</strong>
+                                    <span>{task.process}</span>
+                                </div>
+
+                                <div class={task.dateClass}>
+                                    <strong>{task.date}</strong>
+                                    <span>{task.status}</span>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+
+                    <template if:false={hasUpcomingTasks}>
+                        <div class="right-empty">No upcoming task found.</div>
+                    </template>
+
+                    <div class="view-all">
+                        View all tasks
+                        <span>›</span>
+                    </div>
+                </section>
+
+                <section class="legend-card">
+                    <h3>Legend</h3>
+
+                    <div class="legend-item">
+                        <span class="legend-icon green">✓</span>
+                        <div>
+                            <strong>Completed</strong>
+                            <small>Process/Task completed</small>
+                        </div>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-icon blue">●</span>
+                        <div>
+                            <strong>Current</strong>
+                            <small>Currently active process</small>
+                        </div>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-icon orange">●</span>
+                        <div>
+                            <strong>Upcoming</strong>
+                            <small>Yet to start</small>
+                        </div>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-icon red">⚑</span>
+                        <div>
+                            <strong>Delayed</strong>
+                            <small>Behind schedule / At risk</small>
+                        </div>
+                    </div>
+                </section>
+
+            </aside>
+
+        </div>
+    </div>
+</template>

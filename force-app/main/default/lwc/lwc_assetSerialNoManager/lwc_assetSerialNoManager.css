@@ -1,0 +1,36 @@
+.header-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.footer-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #d8dde6;
+}
+
+.custom-table th {
+    background: #f3f6f9;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.custom-table td {
+    vertical-align: middle;
+}
+
+.empty-message {
+    padding: 18px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px dashed #c9c9c9;
+    border-radius: 8px;
+    color: #444;
+}

@@ -1,0 +1,23 @@
+<apex:component controller="TechnicalExpertAssignedEmailController"
+    access="global">
+<apex:attribute name="workOrderRecordId"
+        type="Id"
+        assignTo="{!workOrderId}"
+        description="Work Order Id"/>
+
+    <p>
+        <strong>Technical Expert:</strong>
+        <apex:outputText value="{!engineerName}"/>
+        <br/>
+
+        <strong>Contact Number:</strong>
+        <apex:outputText value="{!engineerPhone}"/>
+        <br/>
+
+        <strong>Assignment Date:</strong>
+        <apex:outputText value="{0,date,dd-MM-yyyy}">
+            <apex:param value="{!assignmentDate}"/>
+        </apex:outputText>
+    </p>
+
+</apex:component>

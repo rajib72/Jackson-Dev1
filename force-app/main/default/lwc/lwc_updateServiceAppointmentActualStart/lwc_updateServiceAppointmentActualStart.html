@@ -1,0 +1,50 @@
+<template>
+    <lightning-quick-action-panel header="Update Actual Start Date/Time">
+        <div class="wrapper">
+            <template if:true={isLoading}>
+                <div class="spinner-container">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <div class="card-box">
+                    <div class="icon-box">
+                        <lightning-icon icon-name="standard:service_appointment" size="medium"></lightning-icon>
+                    </div>
+
+                    <div class="title-section">
+                        <h2 class="main-title">Actual Start Date/Time</h2>
+                        <p class="sub-text">
+                            The current date and time is shown below and will be saved to this Service Appointment.
+                        </p>
+                    </div>
+
+                    <div class="field-section">
+                        <lightning-input
+                            type="datetime"
+                            label="Actual Start Date/Time"
+                            value={currentDateTime}
+                            disabled>
+                        </lightning-input>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <div slot="footer" class="footer-section">
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}
+                class="slds-m-right_small">
+            </lightning-button>
+
+            <lightning-button
+                variant="brand"
+                label="Update"
+                onclick={handleUpdate}
+                disabled={isLoading}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

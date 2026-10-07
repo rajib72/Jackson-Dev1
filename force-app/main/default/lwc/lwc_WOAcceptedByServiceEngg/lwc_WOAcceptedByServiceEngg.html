@@ -1,0 +1,31 @@
+<template>
+    <lightning-quick-action-panel header="Accept by Service Engineer">
+        <div class="slds-p-around_medium quick-action-body">
+            <div class="form-box">
+                <div class="field-label">Work Order Acceptance</div>
+
+                <lightning-input
+                    type="checkbox"
+                    label="Accepted By Service Engineer"
+                    checked={acceptedValue}
+                    onchange={handleCheckboxChange}>
+                </lightning-input>
+            </div>
+        </div>
+
+        <div slot="footer">
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}>
+            </lightning-button>
+
+            <lightning-button
+                variant="brand"
+                label="Save"
+                class="footer-btn-space"
+                onclick={handleSave}
+                disabled={isSaving}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

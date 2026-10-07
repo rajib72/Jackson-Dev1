@@ -1,0 +1,62 @@
+.container {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1rem;
+}
+
+.header {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.header h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #16325c;
+    margin-bottom: 0.25rem;
+}
+
+.header p {
+    font-size: 0.92rem;
+    color: #5c6b7a;
+    margin: 0;
+}
+
+.body {
+    padding: 0.5rem 0 1rem 0;
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.btn-space {
+    margin-right: 0.25rem;
+}
+
+@media only screen and (max-width: 480px) {
+    .container {
+        padding: 0.85rem;
+        border-radius: 12px;
+    }
+
+    .header h2 {
+        font-size: 1.05rem;
+    }
+
+    .header p {
+        font-size: 0.85rem;
+    }
+
+    .footer {
+        flex-direction: column-reverse;
+    }
+
+    .footer lightning-button {
+        width: 100%;
+    }
+}

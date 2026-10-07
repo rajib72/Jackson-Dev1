@@ -1,0 +1,211 @@
+<template>
+    <lightning-card>
+        <div class="wrapper">
+
+            <div class="title-panel">
+                <h2 class="title-text">ADD QUOTE LINE ITEM</h2>
+            </div>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <template if:true={processedProducts.length}>
+                <div class="content-section">
+
+                    <div class="desktop-view">
+                        <div class="desktop-table-wrap">
+                            <table class="desktop-table">
+                                <colgroup>
+                                    <col style="width:5%">
+                                    <col style="width:25%">
+                                    <col style="width:9%">
+                                    <col style="width:12%">
+                                    <col style="width:8%">
+                                    <col style="width:11%">
+                                    <col style="width:11%">
+                                    <col style="width:5%">
+                                    <col style="width:14%">
+                                </colgroup>
+
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Material Description</th>
+                                        <th>Nos</th>
+                                        <th>Project Capacity</th>
+                                        <th>UOM</th>
+                                        <th>Price/Wp </th>
+                                        <th>Total</th>
+                                        <th>GST</th>
+                                        <th>Grand Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <template for:each={processedProducts} for:item="product">
+                                        <tr key={product.rowKey} class={product.rowClass}>
+                                            <td class="cell-center">
+                                                <lightning-input type="checkbox" variant="label-hidden"
+                                                    data-rowkey={product.rowKey} checked={product.selected}
+                                                    disabled={product.disableSelection} onchange={handleCheckboxChange}>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <div class="text-wrap">
+                                                    {product.productRatingBin} WP - {product.moduleTechnology} -
+                                                    {product.cableLength} mm (Cable length) - {product.productSubType} -
+                                                    {product.moduleType}
+                                                </div>
+                                                <template if:true={product.alreadyAdded}>
+                                                    <div class="helper-msg helper-warning">Already added in quote</div>
+                                                </template>
+                                                <template if:true={product.missingPricebookEntry}>
+                                                    <div class="helper-msg helper-error">Not in Quote Price Book</div>
+                                                </template>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    value={product.nos} disabled>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    data-rowkey={product.rowKey} value={product.projectCapacity}
+                                                    step="0.01" min="0.01" disabled={product.disableSelection}
+                                                    onchange={handleProjectCapacityChange}>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <div class="uom-text">{product.uom}</div>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    data-rowkey={product.rowKey} value={product.unitPrice} step="0.01"
+                                                    min="0" disabled={product.disableSelection}
+                                                    onchange={handleUnitPriceChange}>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    value={product.total} disabled>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="text" variant="label-hidden"
+                                                    value={product.gstDisplay} disabled>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    value={product.grandTotal} disabled>
+                                                </lightning-input>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mobile-view mobile-scroll-wrap">
+                        <template for:each={processedProducts} for:item="product">
+                            <div key={product.rowKey} class="mobile-card">
+                                <div class="mobile-card-header">
+                                    <div class="mobile-card-title">
+                                        {product.productRatingBin} WP - {product.moduleTechnology} -
+                                        {product.cableLength} (Cable length) - {product.productSubType} -
+                                        {product.moduleType}
+                                    </div>
+                                    <lightning-input type="checkbox" variant="label-hidden" data-rowkey={product.rowKey}
+                                        checked={product.selected} disabled={product.disableSelection}
+                                        onchange={handleCheckboxChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <template if:true={product.alreadyAdded}>
+                                    <div class="helper-msg helper-warning mobile-helper">Already added in quote</div>
+                                </template>
+                                <template if:true={product.missingPricebookEntry}>
+                                    <div class="helper-msg helper-error mobile-helper">Not in Quote Price Book</div>
+                                </template>
+
+                                <div class="mobile-grid">
+                                    <div class="mobile-field">
+                                        <div class="mobile-label">Nos</div>
+                                        <lightning-input type="number" variant="label-hidden" value={product.nos}
+                                            disabled></lightning-input>
+                                    </div>
+
+                                    <div class="mobile-field">
+                                        <div class="mobile-label">Project Capacity</div>
+                                        <lightning-input type="number" variant="label-hidden"
+                                            data-rowkey={product.rowKey} value={product.projectCapacity} step="0.01"
+                                            min="0" disabled={product.disableSelection}
+                                            onchange={handleProjectCapacityChange}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <div class="mobile-field">
+                                        <div class="mobile-label">UOM</div>
+                                        <div class="uom-text">{product.uom}</div>
+                                    </div>
+
+                                    <div class="mobile-field">
+                                        <div class="mobile-label">Sales Price</div>
+                                        <lightning-input type="number" variant="label-hidden"
+                                            data-rowkey={product.rowKey} value={product.unitPrice} step="0.01" min="0"
+                                            disabled={product.disableSelection} onchange={handleUnitPriceChange}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <div class="mobile-field">
+                                        <div class="mobile-label">Total</div>
+                                        <lightning-input type="number" variant="label-hidden" value={product.total}
+                                            disabled></lightning-input>
+                                    </div>
+
+                                    <div class="mobile-field">
+                                        <div class="mobile-label">GST</div>
+                                        <lightning-input type="text" variant="label-hidden" value={product.gstDisplay}
+                                            disabled></lightning-input>
+                                    </div>
+
+                                    <div class="mobile-field">
+                                        <div class="mobile-label">Grand Total</div>
+                                        <lightning-input type="number" variant="label-hidden" value={product.grandTotal}
+                                            disabled></lightning-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="footer-actions">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button variant="brand" label="Save" onclick={handleSave} disabled={isLoading}>
+                    </lightning-button>
+                </div>
+            </template>
+
+            <template if:false={processedProducts.length}>
+                <template if:false={isLoading}>
+                    <div class="empty-state">
+                        No Opportunity Products found.
+                    </div>
+                </template>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

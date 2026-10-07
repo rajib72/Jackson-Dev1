@@ -1,0 +1,223 @@
+<template>
+    <lightning-card>
+        <div class="wrapper">
+
+            <!-- Header -->
+            <div class="header-section">
+                <div class="icon-box">
+                    <lightning-icon
+                        icon-name="standard:orders"
+                        size="medium"
+                        alternative-text="Route Selection">
+                    </lightning-icon>
+                </div>
+
+                <div class="title-box">
+                    <h1 class="main-title">
+                        Route Selection
+                    </h1>
+
+                    <p class="sub-title">
+                        Fetch route values from SAP and save the selected route
+                        on this Order Item.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="spinner-box">
+                    <lightning-spinner
+                        alternative-text="Loading"
+                        size="medium">
+                    </lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Fetch Routes -->
+            <div class="action-bar">
+                <lightning-button
+                    label="Fetch Routes"
+                    variant="brand"
+                    icon-name="utility:refresh"
+                    onclick={handleFetchRoutes}
+                    disabled={isLoading}>
+                </lightning-button>
+            </div>
+
+            <!-- Searchable Route Selector -->
+            <template if:true={showRouteSelector}>
+                <div class="form-card">
+
+                    <div class="route-search-container">
+
+                        <!-- Dropdown anchor -->
+                        <div
+                            class="route-input-anchor"
+                            role="combobox"
+                            aria-haspopup="listbox"
+                            aria-expanded={isDropdownOpen}>
+
+                            <lightning-input
+                                type="search"
+                                name="routeSearch"
+                                label="Available Routes"
+                                value={searchKey}
+                                placeholder="Search by Route Code or Description"
+                                autocomplete="off"
+                                disabled={isLoading}
+                                onchange={handleRouteSearch}
+                                onfocus={handleSearchFocus}
+                                onblur={handleSearchBlur}>
+                            </lightning-input>
+
+                            <!-- Search Result Dropdown -->
+                            <template if:true={showRouteDropdown}>
+                                <div
+                                    class="route-dropdown"
+                                    role="listbox"
+                                    onmousedown={handleDropdownMouseDown}>
+
+                                    <ul
+                                        class="route-list"
+                                        role="presentation">
+
+                                        <template
+                                            for:each={filteredRouteOptions}
+                                            for:item="option">
+
+                                            <li
+                                                key={option.key}
+                                                class="route-list-item"
+                                                role="presentation">
+
+                                                <button
+                                                    type="button"
+                                                    class="route-option-button"
+                                                    role="option"
+                                                    data-value={option.value}
+                                                    onclick={handleRouteSelect}>
+
+                                                    <span class="route-option-content">
+
+                                                        <span class="route-code">
+                                                            {option.route}
+                                                        </span>
+
+                                                        <template if:true={option.description}>
+                                                            <span class="route-description">
+                                                                {option.description}
+                                                            </span>
+                                                        </template>
+
+                                                    </span>
+                                                </button>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
+                        </div>
+
+                        <p class="search-help-text">
+                            Search using the Route Code or any part of the
+                            Route Description.
+                        </p>
+
+                        <!-- No Search Results -->
+                        <template if:true={showNoSearchResults}>
+                            <div class="no-results-box">
+
+                                <lightning-icon
+                                    icon-name="utility:search"
+                                    size="x-small"
+                                    alternative-text="No results">
+                                </lightning-icon>
+
+                                <span>
+                                    No routes found matching
+                                    <strong>“{searchKey}”</strong>.
+                                </span>
+
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Selected Route Preview -->
+                    <template if:true={selectedRoute}>
+                        <div class="preview-box">
+
+                            <div class="preview-heading">
+                                Selected Route
+                            </div>
+
+                            <div class="preview-row">
+                                <span class="preview-label">
+                                    Route
+                                </span>
+
+                                <span class="preview-value">
+                                    {selectedRoute}
+                                </span>
+                            </div>
+
+                            <div class="preview-row">
+                                <span class="preview-label">
+                                    Route Description
+                                </span>
+
+                                <span class="preview-value">
+                                    {selectedRouteDescription}
+                                </span>
+                            </div>
+
+                        </div>
+                    </template>
+
+                    <!-- Save Button -->
+                    <div class="button-row">
+                        <lightning-button
+                            label="Save"
+                            variant="success"
+                            icon-name="utility:save"
+                            onclick={handleSave}
+                            disabled={disableSave}>
+                        </lightning-button>
+                    </div>
+
+                </div>
+            </template>
+
+            <!-- Success Message -->
+            <template if:true={message}>
+                <div class="message success-box">
+
+                    <lightning-icon
+                        icon-name="utility:success"
+                        size="x-small"
+                        variant="success"
+                        alternative-text="Success">
+                    </lightning-icon>
+
+                    <span>{message}</span>
+                </div>
+            </template>
+
+            <!-- Error Message -->
+            <template if:true={errorMessage}>
+                <div class="message error-box">
+
+                    <lightning-icon
+                        icon-name="utility:error"
+                        size="x-small"
+                        variant="error"
+                        alternative-text="Error">
+                    </lightning-icon>
+
+                    <span>{errorMessage}</span>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

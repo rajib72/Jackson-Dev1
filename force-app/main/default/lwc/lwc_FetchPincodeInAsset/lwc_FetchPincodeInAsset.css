@@ -1,0 +1,5 @@
+.table-wrap {
+    max-height: 400px;
+    overflow: auto;
+    width: auto;
+}

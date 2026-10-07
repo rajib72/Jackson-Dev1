@@ -1,0 +1,58 @@
+.success-wrapper {
+    padding: 40px 20px;
+    background: #f4f6f9;
+}
+
+.success-container {
+    text-align: center;
+    padding: 40px;
+}
+
+.success-container h2 {
+    color: #2e844a;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+.form-wrapper {
+    padding: 30px 20px;
+    background: #f4f6f9;
+}
+
+.section {
+    margin: 25px auto;
+    padding: 25px;
+    border: 1px solid #d8dde6;
+    border-radius: 10px;
+    max-width: 1100px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #16325c;
+}
+
+.section-description {
+    margin-bottom: 15px;
+    color: #444;
+    font-size: 14px;
+}
+
+.upload-wrapper {
+    margin-top: 15px;
+}
+
+.submit-section {
+    text-align: center;
+    margin: 40px 0;
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+    .section {
+        padding: 15px;
+    }
+}

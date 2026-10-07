@@ -1,0 +1,58 @@
+<template>
+    <lightning-quick-action-panel header="Refer Work Order to Service Coordinator">
+        <div class="slds-p-around_medium body-section slds-is-relative">
+            
+            <template lwc:if={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <template lwc:elseif={showError}>
+                <div class="slds-text-align_center">
+                    <div class="slds-text-color_error slds-text-heading_small slds-m-bottom_medium">
+                        <strong>THIS BUTTON IS NOT ACCESSIBLE</strong>
+                    </div>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <div class="info-box slds-m-bottom_medium">
+                    <p class="info-text">
+                        Please check the checkbox below to refer this Work Order to the Service Coordinator.
+                    </p>
+                </div>
+
+                <lightning-input
+                    type="checkbox"
+                    label="Refer WO to Service Coordinator"
+                    checked={referValue}
+                    onchange={handleCheckboxChange}>
+                </lightning-input>
+            </template>
+        </div>
+
+        <div slot="footer" class="slds-modal__footer_custom">
+            <template lwc:if={isLoading}>
+                </template>
+            <template lwc:elseif={showError}>
+                <lightning-button
+                    label="Close"
+                    onclick={handleCancel}>
+                </lightning-button>
+            </template>
+            <template lwc:else>
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleCancel}
+                    class="slds-m-right_small">
+                </lightning-button>
+
+                <lightning-button
+                    variant="brand"
+                    label="Update"
+                    onclick={handleSave}
+                    disabled={isLoading}>
+                </lightning-button>
+            </template>
+        </div>
+    </lightning-quick-action-panel>
+</template>

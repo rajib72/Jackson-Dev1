@@ -1,0 +1,210 @@
+<template>
+    <lightning-quick-action-panel header="Select Item Category">
+
+        <div class="main-container">
+
+            <!-- Loading -->
+            <template if:true={isLoading}>
+                <div class="spinner-box">
+                    <lightning-spinner
+                        alternative-text="Loading item categories..."
+                        size="medium">
+                    </lightning-spinner>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+
+                <!-- Error -->
+                <template if:true={hasError}>
+                    <div class="error-box">
+                        <lightning-icon
+                            icon-name="utility:error"
+                            size="small"
+                            variant="error"
+                            alternative-text="Error">
+                        </lightning-icon>
+
+                        <span>{errorMessage}</span>
+                    </div>
+                </template>
+
+                <!-- Item Category Selection -->
+                <template if:true={hasOptions}>
+
+                    <div class="info-box">
+                        <lightning-icon
+                            icon-name="utility:info"
+                            size="small"
+                            alternative-text="Information">
+                        </lightning-icon>
+
+                        <span>
+                            Search and select one Item Category received from SAP.
+                        </span>
+                    </div>
+
+                    <div class="field-section">
+
+                        <div class="search-container">
+
+                            <!-- Dropdown position anchor -->
+                            <div
+                                class="search-input-anchor"
+                                role="combobox"
+                                aria-haspopup="listbox"
+                                aria-expanded={isDropdownOpen}>
+
+                                <lightning-input
+                                    type="search"
+                                    name="itemCategorySearch"
+                                    label="Item Category"
+                                    value={searchKey}
+                                    placeholder="Search Item Category"
+                                    autocomplete="off"
+                                    disabled={isSaving}
+                                    onchange={handleCategorySearch}
+                                    onfocus={handleSearchFocus}
+                                    onblur={handleSearchBlur}>
+                                </lightning-input>
+
+                                <!-- Search Results -->
+                                <template if:true={showDropdown}>
+                                    <div
+                                        class="category-dropdown"
+                                        role="listbox"
+                                        onmousedown={handleDropdownMouseDown}>
+
+                                        <ul
+                                            class="category-list"
+                                            role="presentation">
+
+                                            <template
+                                                for:each={filteredItemCategoryOptions}
+                                                for:item="option">
+
+                                                <li
+                                                    key={option.key}
+                                                    class="category-list-item"
+                                                    role="presentation">
+
+                                                    <button
+                                                        type="button"
+                                                        class="category-option-button"
+                                                        role="option"
+                                                        data-value={option.value}
+                                                        onclick={handleCategorySelect}>
+
+                                                        <span class="category-option-content">
+                                                            <span class="category-code">
+                                                                {option.label}
+                                                            </span>
+                                                        </span>
+
+                                                    </button>
+                                                </li>
+                                            </template>
+
+                                        </ul>
+                                    </div>
+                                </template>
+
+                            </div>
+
+                            <p class="search-help-text">
+                                Type any part of the Item Category code to filter
+                                the available values.
+                            </p>
+
+                            <!-- No Results -->
+                            <template if:true={showNoResults}>
+                                <div class="no-results-box">
+                                    <lightning-icon
+                                        icon-name="utility:search"
+                                        size="x-small"
+                                        alternative-text="No results">
+                                    </lightning-icon>
+
+                                    <span>
+                                        No Item Category found matching
+                                        <strong>“{searchKey}”</strong>.
+                                    </span>
+                                </div>
+                            </template>
+
+                        </div>
+                    </div>
+
+                    <!-- Selected Value Preview -->
+                    <div class="preview-card">
+                        <div class="preview-title">
+                            Selected Item Category
+                        </div>
+
+                        <template if:true={selectedItemCategory}>
+                            <div class="selected-value">
+                                {selectedItemCategory}
+                            </div>
+                        </template>
+
+                        <template if:false={selectedItemCategory}>
+                            <div class="empty-value">
+                                No value selected yet
+                            </div>
+                        </template>
+                    </div>
+
+                </template>
+
+                <!-- Empty Result -->
+                <template if:false={hasOptions}>
+                    <template if:false={hasError}>
+                        <div class="empty-box">
+                            <lightning-icon
+                                icon-name="utility:warning"
+                                size="small"
+                                alternative-text="Warning">
+                            </lightning-icon>
+
+                            <span>
+                                No Item Category found from SAP.
+                            </span>
+                        </div>
+                    </template>
+                </template>
+
+            </template>
+
+        </div>
+
+        <!-- Footer -->
+        <div slot="footer">
+
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}
+                disabled={isSaving}>
+            </lightning-button>
+
+            <lightning-button
+                class="slds-m-left_small"
+                label="Refresh"
+                variant="neutral"
+                icon-name="utility:refresh"
+                onclick={loadItemCategories}
+                disabled={isRefreshDisabled}>
+            </lightning-button>
+
+            <lightning-button
+                class="slds-m-left_small"
+                label="Save"
+                variant="brand"
+                icon-name="utility:save"
+                onclick={handleSave}
+                disabled={isSaveDisabled}>
+            </lightning-button>
+
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

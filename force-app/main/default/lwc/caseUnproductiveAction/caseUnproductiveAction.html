@@ -1,0 +1,67 @@
+<template>
+
+    <lightning-quick-action-panel header="Mark Case Unproductive">
+
+        <lightning-record-edit-form
+            record-id={recordId}
+            object-api-name="Case"
+            onsubmit={handleSubmit}
+            onsuccess={handleSuccess}
+            onerror={handleError}>
+
+            <div class="slds-p-around_medium">
+
+                <p class="slds-m-bottom_medium">
+                    Please provide the required details before
+                    marking this Case as Unproductive.
+                </p>
+
+                <lightning-messages>
+                </lightning-messages>
+
+                <!-- Unproductive Reason -->
+                <lightning-input-field
+                    field-name="Unproductive_Reason__c"
+                    required
+                    disabled={isSaving}>
+                </lightning-input-field>
+
+                <!-- Unproductive Remark -->
+                <lightning-input-field
+                    field-name="Unproductive_Remark__c"
+                    required
+                    disabled={isSaving}>
+                </lightning-input-field>
+
+            </div>
+
+            <template if:true={isSaving}>
+                <lightning-spinner
+                    alternative-text="Updating Case..."
+                    size="small">
+                </lightning-spinner>
+            </template>
+
+            <div class="slds-modal__footer">
+
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleCancel}
+                    disabled={isSaving}
+                    class="slds-m-right_small">
+                </lightning-button>
+
+                <lightning-button
+                    type="submit"
+                    variant="brand"
+                    label="Mark Unproductive"
+                    disabled={isSaving}>
+                </lightning-button>
+
+            </div>
+
+        </lightning-record-edit-form>
+
+    </lightning-quick-action-panel>
+
+</template>

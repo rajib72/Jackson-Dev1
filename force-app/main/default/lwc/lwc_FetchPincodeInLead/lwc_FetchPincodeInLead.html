@@ -1,0 +1,106 @@
+<template>
+    <lightning-quick-action-panel header="Get Post Office Details">
+        <div class="content-container">
+            <lightning-input
+                type="text"
+                label="Pincode"
+                value={pincode}>
+            </lightning-input>
+
+            <template if:true={message}>
+                <div class="slds-m-top_medium message-box">
+                    {message}
+                </div>
+            </template>
+
+            <template if:true={showNoPincodeMessage}>
+                <div class="slds-m-top_medium slds-text-color_error">
+                    Postal Code is blank or invalid on this Lead.
+                </div>
+            </template>
+
+            <template if:true={hasRows}>
+                <!-- Desktop and tablet layout -->
+                <div class="slds-m-top_medium table-wrap desktop-view">
+                    <lightning-datatable
+                        key-field="uniqueKey"
+                        data={rows}
+                        columns={columns}
+                        max-row-selection="1"
+                        selected-rows={selectedRowKeys}
+                        onrowselection={handleRowSelection}>
+                    </lightning-datatable>
+                </div>
+
+                <!-- Mobile layout -->
+                <div
+                    class="slds-m-top_medium mobile-view"
+                    role="radiogroup"
+                    aria-label="Select Post Office">
+
+                    <template for:each={rows} for:item="row">
+                        <div
+                            key={row.uniqueKey}
+                            class={row.cardClass}>
+
+                            <div class="mobile-card-header">
+                                <lightning-input
+                                    type="radio"
+                                    name="postOfficeSelection"
+                                    label={row.name}
+                                    checked={row.isSelected}
+                                    data-key={row.uniqueKey}
+                                    onchange={handleMobileSelection}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="mobile-card-body">
+                                <div class="detail-row">
+                                    <span class="detail-label">Division</span>
+                                    <span class="detail-value">{row.division}</span>
+                                </div>
+
+                                <div class="detail-row">
+                                    <span class="detail-label">Region</span>
+                                    <span class="detail-value">{row.region}</span>
+                                </div>
+
+                                <div class="detail-row">
+                                    <span class="detail-label">State</span>
+                                    <span class="detail-value">{row.state}</span>
+                                </div>
+
+                                <div class="detail-row">
+                                    <span class="detail-label">Country</span>
+                                    <span class="detail-value">{row.country}</span>
+                                </div>
+
+                                <div class="detail-row">
+                                    <span class="detail-label">Pincode</span>
+                                    <span class="detail-value">{row.pincode}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="slds-m-top_medium update-button-container">
+                    <button
+                        type="button"
+                        class="slds-button slds-button_success update-button"
+                        onclick={handleUpdate}
+                        disabled={disableUpdate}>
+                        Update Lead
+                    </button>
+                </div>
+            </template>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner
+                alternative-text="Loading"
+                size="medium">
+            </lightning-spinner>
+        </template>
+    </lightning-quick-action-panel>
+</template>

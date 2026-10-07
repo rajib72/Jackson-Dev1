@@ -1,0 +1,81 @@
+<template>
+    <lightning-card title="Asset Serial Numbers" icon-name="standard:asset_object">
+        <div class="slds-p-around_medium">
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </template>
+
+            <div class="header-section">
+                <lightning-button
+                    label="Add Row"
+                    icon-name="utility:add"
+                    variant="brand"
+                    onclick={handleAddRow}>
+                </lightning-button>
+            </div>
+
+            <template if:true={serialRows.length}>
+                <div class="table-container">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">SL No.</th>
+                                <th>Serial No.</th>
+                                <th style="width: 120px;">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <template for:each={serialRows} for:item="row" for:index="index">
+                                <tr key={row.rowKey}>
+                                    <td>
+                                        {row.displayIndex}
+                                    </td>
+
+                                    <td>
+                                        <lightning-input
+                                            type="text"
+                                            variant="label-hidden"
+                                            placeholder="Enter Serial No."
+                                            value={row.Name}
+                                            data-index={index}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </td>
+
+                                    <td>
+                                        <lightning-button-icon
+                                            icon-name="utility:delete"
+                                            alternative-text="Delete"
+                                            title="Delete Row"
+                                            variant="border-filled"
+                                            data-index={index}
+                                            onclick={handleDeleteRow}>
+                                        </lightning-button-icon>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+
+            <template if:false={serialRows.length}>
+                <div class="empty-message">
+                    No serial number added. Click <strong>Add Row</strong> to add serial numbers.
+                </div>
+            </template>
+
+            <div class="footer-section">
+                <lightning-button
+                    label="Save"
+                    variant="brand"
+                    icon-name="utility:save"
+                    onclick={handleSave}>
+                </lightning-button>
+            </div>
+
+        </div>
+    </lightning-card>
+</template>

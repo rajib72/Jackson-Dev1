@@ -1,0 +1,502 @@
+<template>
+
+    <div class="component-container">
+
+
+        <!-- ================================================= -->
+        <!-- LOADING -->
+        <!-- ================================================= -->
+
+        <template if:true={isLoading}>
+
+            <div class="loading-container">
+
+                <lightning-spinner
+                    alternative-text="Loading Product Request"
+                    size="medium">
+                </lightning-spinner>
+
+            </div>
+
+        </template>
+
+
+        <!-- ================================================= -->
+        <!-- STEP 1 - RECORD TYPE -->
+        <!-- ================================================= -->
+
+        <template if:true={isRecordTypeStep}>
+
+            <div class="header">
+
+                <h1>
+                    New Product Request
+                </h1>
+
+            </div>
+
+
+            <div class="content">
+
+                <div class="section-title">
+
+                    Select a record type
+
+                </div>
+
+
+                <div class="record-type-container">
+
+                    <lightning-radio-group
+
+                        name="recordType"
+
+                        label="Select a record type"
+
+                        options={recordTypes}
+
+                        value={selectedRecordTypeId}
+
+                        type="radio"
+
+                        onchange={handleRecordTypeChange}>
+
+                    </lightning-radio-group>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <div class="footer">
+
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleCancel}>
+                </lightning-button>
+
+
+                <lightning-button
+                    variant="brand"
+                    label="Next"
+                    disabled={isNextDisabled}
+                    onclick={handleNext}>
+                </lightning-button>
+
+            </div>
+
+        </template>
+
+
+        <!-- ================================================= -->
+        <!-- STEP 2 - MAIN FORM -->
+        <!-- ================================================= -->
+
+        <template if:true={isFormStep}>
+
+
+            <!-- Header -->
+
+            <div class="header">
+
+                <h1>
+                    {formTitle}
+                </h1>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- PRODUCT REQUEST TYPE -->
+            <!-- ================================================= -->
+
+            <section>
+
+                <div class="section-header">
+
+                    Product Request Type
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Product Request Type -->
+
+                    <div class="field">
+
+                        <lightning-input
+
+                            label="Product Request Type"
+
+                            value={selectedRequestType}
+
+                            disabled>
+
+                        </lightning-input>
+
+                    </div>
+
+
+                    <!-- Record Type -->
+
+                    <div class="field">
+
+                        <lightning-input
+
+                            label="Record Type"
+
+                            value={selectedRequestType}
+
+                            disabled>
+
+                        </lightning-input>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- INFORMATION -->
+            <!-- ================================================= -->
+
+            <section>
+
+                <div class="section-header">
+
+                    Information
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Work Order -->
+
+                    <div class="field">
+
+                        <lightning-input
+
+                            label="Work Order"
+
+                            value={workOrderNumber}
+
+                            disabled>
+
+                        </lightning-input>
+
+                    </div>
+
+
+                    <!-- FOC / PAID / RGP STATUS -->
+
+                    <div class="field">
+
+                        <lightning-input
+
+                            label={selectedStatusLabel}
+
+                            value={statusValue}
+
+                            disabled>
+
+                        </lightning-input>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Destination Location -->
+
+                <div class="field full-width">
+
+                    <lightning-combobox
+
+                        name="destinationLocation"
+
+                        label="Destination Location"
+
+                        value={destinationLocationId}
+
+                        placeholder="Select Location"
+
+                        options={locations}
+
+                        required
+
+                        onchange={handleDestinationLocationChange}>
+
+                    </lightning-combobox>
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="field full-width">
+
+                    <lightning-textarea
+
+                        name="description"
+
+                        label="Description"
+
+                        value={description}
+
+                        onchange={handleDescriptionChange}>
+
+                    </lightning-textarea>
+
+                </div>
+
+
+                <!-- Final Expected Delivery Date -->
+
+                <div class="field">
+
+                    <lightning-input
+
+                        type="datetime"
+
+                        name="needByDate"
+
+                        label="Final Expected Delivery Date"
+
+                        value={needByDate}
+
+                        required
+
+                        onchange={handleNeedByDateChange}>
+
+                    </lightning-input>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- SHIP TO ADDRESS -->
+            <!-- ================================================= -->
+
+            <section>
+
+                <div class="section-header">
+
+                    Ship To Address
+
+                </div>
+
+
+                <div class="field full-width">
+
+                    <lightning-combobox
+
+                        name="shipAddress"
+
+                        label="Ship To Address"
+
+                        value={selectedWoliId}
+
+                        placeholder="Select Asset / Address"
+
+                        options={shipAddresses}
+
+                        required
+
+                        onchange={handleShipAddressChange}>
+
+                    </lightning-combobox>
+
+                </div>
+
+
+                <!-- ================================================= -->
+                <!-- SELECTED ADDRESS PREVIEW -->
+                <!-- ================================================= -->
+
+                <template if:true={selectedWoliId}>
+
+                    <div class="address-preview">
+
+
+                        <div class="address-title">
+
+                            Selected Ship To Address
+
+                        </div>
+
+
+                        <template if:true={siteName}>
+
+                            <div>
+
+                                <strong>
+                                    Site Name:
+                                </strong>
+
+                                {siteName}
+
+                            </div>
+
+                        </template>
+
+
+                        <template if:true={street}>
+
+                            <div>
+
+                                <strong>
+                                    Street Address:
+                                </strong>
+
+                                {street}
+
+                            </div>
+
+                        </template>
+
+
+                        <template if:true={city}>
+
+                            <div>
+
+                                <strong>
+                                    City:
+                                </strong>
+
+                                {city}
+
+                            </div>
+
+                        </template>
+
+
+                        <template if:true={state}>
+
+                            <div>
+
+                                <strong>
+                                    State:
+                                </strong>
+
+                                {state}
+
+                            </div>
+
+                        </template>
+
+
+                        <template if:true={pinCode}>
+
+                            <div>
+
+                                <strong>
+                                    Pin Code:
+                                </strong>
+
+                                {pinCode}
+
+                            </div>
+
+                        </template>
+
+
+                        <template if:true={country}>
+
+                            <div>
+
+                                <strong>
+                                    Country:
+                                </strong>
+
+                                {country}
+
+                            </div>
+
+                        </template>
+
+                    </div>
+
+                </template>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- FOOTER -->
+            <!-- ================================================= -->
+
+            <div class="footer">
+
+
+                <lightning-button
+
+                    label="Back"
+
+                    onclick={handleBack}
+
+                    disabled={isSaving}>
+
+                </lightning-button>
+
+
+                <lightning-button
+
+                    label="Cancel"
+
+                    onclick={handleCancel}
+
+                    disabled={isSaving}>
+
+                </lightning-button>
+
+
+                <lightning-button
+
+                    variant="brand"
+
+                    label="Save"
+
+                    onclick={handleSave}
+
+                    disabled={isSaveDisabled}>
+
+                </lightning-button>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- SAVING -->
+            <!-- ================================================= -->
+
+            <template if:true={isSaving}>
+
+                <div class="saving-overlay">
+
+                    <lightning-spinner
+
+                        alternative-text="Creating Product Request"
+
+                        size="medium">
+
+                    </lightning-spinner>
+
+                </div>
+
+            </template>
+
+        </template>
+
+    </div>
+
+</template>

@@ -1,0 +1,296 @@
+<template>
+    <lightning-record-edit-form object-api-name="Diagnosis__c" onsuccess={handleSuccess} onerror={handleError}>
+
+        <lightning-quick-action-panel header="New Diagnosis">
+
+            <template lwc:if={isLoading}>
+                <div class="slds-p-around_xlarge slds-is-relative">
+                    <lightning-spinner alternative-text="Loading validation..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template lwc:elseif={showError}>
+                <div class="slds-p-around_large slds-text-align_center">
+                    <div class="slds-text-color_error slds-text-heading_small slds-m-bottom_medium">
+                        <strong>THIS BUTTON IS NOT ACCESSIBLE</strong>
+                    </div>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">Information</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Work_Order__c" value={recordId} disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Case__c" value={caseId} disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">Problem Reported by Customer</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" padding="horizontal-small">
+                                <lightning-input-field field-name="System_Type__c" onchange={handleFieldChange}
+                                    required></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="horizontal-small">
+                                <lightning-input-field field-name="Warranty_Status__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="horizontal-small">
+                                <lightning-input-field field-name="Problem_Reported_by_Customer__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">Inverter Detail</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Inverter_Rating__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Charging_Current__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Serial_No__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+                <template lwc:if={isOffGrid}>
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title slds-theme_shade">
+                            <span class="slds-truncate slds-p-horizontal_small">Battery Detail</span>
+                        </h3>
+                        <div class="slds-section__content">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input-field field-name="Total_Nos_of_Battery_Installed_with_Inv__c">
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input-field field-name="Electrolyte_Level__c"></lightning-input-field>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input-field field-name="Battery_Capacity__c"></lightning-input-field>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input-field field-name="Sp_Gravity__c"></lightning-input-field>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                </template>
+
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">PV Module Detail</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Total_Module__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Panel_Rating_Wp__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="No_of_module_in_a_string__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Cleanliness_of_Panel__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="String_VOC__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="String_VMP__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="String_Imp__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Shadow_Status__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">Protection Device Installation At Site</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="LA__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="ACDB__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="ACSPD__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="DCDB__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="DLSPD__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Earthing_LA__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Earthing_AC__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Earthing_DC__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">Wiring Detail:</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Panel_to_AJB_Rec__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Panel_to_AJB_Used__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="AJB_to_Inverter__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="AJB_to_Inverter_Used__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Inverter_to_Battery_Received__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Inverter_to_Battery_Used__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Inverter_to_ACDB_Rec__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Inverter_to_ACDB_Used__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">Generational Detail</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Voltage__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Current__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+                <template lwc:if={isOffGrid}>
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title slds-theme_shade">
+                            <span class="slds-truncate slds-p-horizontal_small">Load Detail</span>
+                        </h3>
+                        <div class="slds-section__content">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input-field field-name="Total_Load_KW__c"></lightning-input-field>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" padding="horizontal-small">
+                                    <lightning-input-field field-name="Load_Type_Fan_Light__c"></lightning-input-field>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                </template>
+
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">Problem Observed by Engineer</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Inverter__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Battery__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="PV_Module__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Installation_Related__c"></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="horizontal-small">
+                                <lightning-input-field field-name="Others__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small">Action Taken by Engineer</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" padding="horizontal-small">
+                                <lightning-input-field field-name="Action_Taken_by_Engineer__c"></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+
+            </template>
+
+            <div slot="footer">
+                <template lwc:if={isLoading}>
+                </template>
+                <template lwc:elseif={showError}>
+                    <lightning-button label="Close" onclick={handleCancel}></lightning-button>
+                </template>
+                <template lwc:else>
+                    <lightning-button label="Cancel" onclick={handleCancel} class="slds-m-right_small">
+                    </lightning-button>
+                    <lightning-button label="Save" variant="brand" type="submit"></lightning-button>
+                </template>
+            </div>
+
+        </lightning-quick-action-panel>
+    </lightning-record-edit-form>
+</template>

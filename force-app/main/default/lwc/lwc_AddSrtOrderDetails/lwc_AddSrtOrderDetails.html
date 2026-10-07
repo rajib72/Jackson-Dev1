@@ -1,0 +1,175 @@
+<template>
+    <lightning-card>
+        <div class="main-wrapper">
+
+            <template if:true={isLoading}>
+                <div class="spinner-wrapper">
+                    <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <div class="header-card">
+                <div class="icon-circle">
+                    <lightning-icon icon-name="standard:orders" size="small"></lightning-icon>
+                </div>
+
+                <div>
+                    <h1>Add SRT Order Details</h1>
+                    <p>Select Incoterms and update Sales Office / Sales Group on this Order.</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <div class="section-title">
+                    <lightning-icon icon-name="utility:search" size="x-small"></lightning-icon>
+                    <span>Incoterms Selection</span>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_7-of-12 input-gap">
+                        <label class="custom-label">
+                            <abbr class="slds-required" title="required">*</abbr>
+                            Incoterms
+                        </label>
+
+                        <div class="lookup-wrapper">
+
+                            <template if:false={hasSelectedIncoterm}>
+                                <lightning-input
+                                    type="search"
+                                    variant="label-hidden"
+                                    value={incotermSearchKey}
+                                    placeholder="Type to search Incoterms..."
+                                    onchange={handleIncotermSearchInput}
+                                    onkeyup={handleIncotermSearchInput}
+                                    onfocus={handleIncotermFocus}
+                                    onblur={handleSearchBlur}>
+                                </lightning-input>
+
+                                <template if:true={showIncotermDropdown}>
+                                    <div class="custom-dropdown">
+                                        <template if:true={hasIncotermOptions}>
+                                            <template for:each={incotermOptions} for:item="item">
+                                                <div
+                                                    key={item.id}
+                                                    class="dropdown-item"
+                                                    data-id={item.id}
+                                                    onmousedown={handleIncotermSelect}>
+
+                                                    <div class="radio-circle"></div>
+
+                                                    <div class="option-text">
+                                                        <div class="option-code">{item.label}</div>
+                                                        <div class="option-detail">{item.detail}</div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </template>
+
+                                        <template if:false={hasIncotermOptions}>
+                                            <div class="no-result">
+                                                No matching Incoterms found
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </template>
+
+                            <template if:true={hasSelectedIncoterm}>
+                                <div class="selected-pill">
+                                    <div class="selected-main">
+                                        <span class="selected-code">{selectedIncoterm.label}</span>
+                                        <span class="selected-detail">{selectedIncoterm.detail}</span>
+                                    </div>
+
+                                    <lightning-button-icon
+                                        icon-name="utility:close"
+                                        variant="bare"
+                                        alternative-text="Clear"
+                                        title="Clear"
+                                        onclick={clearIncoterm}>
+                                    </lightning-button-icon>
+                                </div>
+                            </template>
+
+                        </div>
+
+                        <template if:true={incotermError}>
+                            <div class="error-text">{incotermError}</div>
+                        </template>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12 input-gap">
+                        <div class="search-help-box">
+                            <div class="help-title">
+                                <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                                <span>Search Help</span>
+                            </div>
+
+                            <p>
+                                Type Incoterms code or description. Select one value from the result list.
+                            </p>
+
+                            <template if:true={hasSelectedIncoterm}>
+                                <div class="selected-help">
+                                    <span>Selected Value</span>
+                                    <strong>{selectedIncoterm.value}</strong>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-card">
+                <div class="section-title">
+                    <lightning-icon icon-name="utility:form" size="x-small"></lightning-icon>
+                    <span>Sales Details</span>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 input-gap">
+                        <lightning-input
+                            type="text"
+                            label="Sales Office"
+                            value={salesOffice}
+                            required
+                            onchange={handleSalesOfficeChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 input-gap">
+                        <lightning-input
+                            type="text"
+                            label="Sales Group"
+                            value={salesGroup}
+                            required
+                            onchange={handleSalesGroupChange}>
+                        </lightning-input>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="footer-actions">
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleCancel}
+                    disabled={isSaving}>
+                </lightning-button>
+
+                <lightning-button
+                    class="save-btn"
+                    variant="brand"
+                    label={saveButtonLabel}
+                    onclick={handleSave}
+                    disabled={disableSave}>
+                </lightning-button>
+            </div>
+
+        </div>
+    </lightning-card>
+</template>

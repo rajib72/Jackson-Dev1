@@ -1,0 +1,62 @@
+.container-box {
+    min-height: 400px; 
+}
+
+.search-wrapper {
+    position: relative;
+}
+
+.dropdown-box {
+    position: absolute;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #d8dde6;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    max-height: 350px; 
+    overflow-y: auto;
+    z-index: 9999;
+    margin-top: 0.25rem;
+}
+
+.dropdown-item {
+    padding: 0.75rem;
+    border-bottom: 1px solid #f3f3f3;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.dropdown-item:hover {
+    background: #f4f6f9;
+}
+
+.selected-item {
+    background: #e8f3ff;
+    border-left: 4px solid #0176d3;
+}
+
+.emp-code {
+    font-weight: 700;
+    color: #032d60;
+    font-size: 0.95rem;
+}
+
+.emp-name {
+    color: #444;
+    margin-top: 0.15rem;
+    font-size: 0.87rem;
+}
+
+.no-records {
+    padding: 0.75rem;
+    color: #c23934;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.selected-box {
+    background: #f8f9fb;
+    border: 1px solid #d8dde6;
+    border-radius: 0.5rem;
+    padding: 0.9rem;
+}

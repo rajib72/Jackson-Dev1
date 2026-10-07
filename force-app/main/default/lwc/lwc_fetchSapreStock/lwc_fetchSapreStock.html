@@ -1,0 +1,70 @@
+<template>
+    <lightning-card title="SAP Spare Request" icon-name="standard:product_request_line_item">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <div class="wrapper">
+            <div class="top-section">
+                <div class="input-box">
+                    <lightning-input
+                        type="text"
+                        label="Material Code"
+                        value={materialCode}
+                        onchange={handleMaterialCodeChange}
+                    >
+                    </lightning-input>
+                </div>
+
+                <div class="button-group">
+                    <lightning-button
+                        label="Fetch"
+                        variant="brand"
+                        onclick={handleFetch}
+                        disabled={disableFetch}
+                    >
+                    </lightning-button>
+
+                    <lightning-button
+                        label="Update Price"
+                        variant="success"
+                        onclick={handleUpdatePrice}
+                        disabled={disableUpdate}
+                    >
+                    </lightning-button>
+
+                    <lightning-button
+                        label="Refresh"
+                        variant="neutral"
+                        onclick={handleRefresh}
+                    >
+                    </lightning-button>
+                </div>
+            </div>
+
+            <div class="info-strip">
+                <div><strong>Current Salesforce Price:</strong> {currentPrice}</div>
+                <div><strong>Selected Rows:</strong> {selectedCount}</div>
+            </div>
+
+            <template if:true={showTable}>
+                <div class="table-box">
+                    <lightning-datatable
+                        key-field="rowId"
+                        data={tableData}
+                        columns={columns}
+                        onrowselection={handleRowSelection}
+                        max-row-selection="1"
+                        show-row-number-column>
+                    </lightning-datatable>
+                </div>
+            </template>
+
+            <template if:true={noDataFound}>
+                <div class="empty-state">
+                    No records found for the entered Material Code.
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,4 @@
+<aura:component implements="lightning:isUrlAddressable,flexipage:availableForAllPageTypes,force:appHostable"
+                access="global">
+    <c:caseCreationFormLWC />
+</aura:component>

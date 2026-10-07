@@ -1,0 +1,41 @@
+.custom-header {
+    background-color: #005fb2; /* Matches SAP/Salesforce standard blue */
+    border-radius: 4px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.metric-box {
+    padding: 1.5rem 1rem;
+    border-radius: 4px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.metric-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+/* Specific background colors targeting your screenshot */
+.bg-blue {
+    background-color: #006eb3;
+}
+
+.bg-green {
+    background-color: #2e844a;
+}
+
+.bg-orange {
+    background-color: #e28b25;
+}
+
+.bg-red {
+    background-color: #ba2323;
+}

@@ -1,0 +1,32 @@
+<apex:component controller="SiteVisitScheduledEmailController"
+    access="global">
+
+    <apex:attribute name="workOrderRecordId"
+        type="Id"
+        assignTo="{!workOrderId}"
+        description="Work Order Id"/>
+
+    <p>
+        <strong>Case Number:</strong>
+        <apex:outputText value="{!caseNumber}"/>
+        <br/>
+
+        <strong>Service Appointment:</strong>
+        <apex:outputText value="{!appointmentNumber}"/>
+        <br/>
+
+        <strong>Expected Visit Date:</strong>
+        <apex:outputText value="{0,date,dd-MM-yyyy}">
+            <apex:param value="{!expectedVisitDate}"/>
+        </apex:outputText>
+        <br/>
+
+        <strong>Technical Expert Name:</strong>
+        <apex:outputText value="{!engineerName}"/>
+        <br/>
+
+        <strong>Contact Number:</strong>
+        <apex:outputText value="{!engineerPhone}"/>
+    </p>
+
+</apex:component>

@@ -1,0 +1,304 @@
+<template>
+    <lightning-card>
+        
+        <div class="slds-p-around_medium">
+
+            <!-- Search Row -->
+            <div class="slds-grid slds-gutters slds-wrap slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                    <lightning-input type="search" 
+                        placeholder="Account Name / Contact Mobile/Phone / Asset Serial No / Invoice No"
+                        value={searchKey} onchange={handleChange} onkeyup={handleKeyUp}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-align_absolute-center">
+                    <lightning-button variant="brand" label="Search" onclick={handleSearch}
+                        class="slds-m-right_small"></lightning-button>
+                    <lightning-button variant="neutral" label="Clear" onclick={handleClear}></lightning-button>
+                </div>
+            </div>
+
+            <!-- Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </template>
+
+            <!-- No Result -->
+            <template if:true={showNoResult}>
+                <div class="slds-text-color_weak slds-m-top_small slds-m-bottom_medium">
+                    No matching Account/Contact/Asset found. Please enter Account, Contact and Case details below.
+                </div>
+            </template>
+
+            <!-- Account selection list -->
+            <template if:true={showAccountPicklist}>
+                <div class="slds-m-top_small slds-m-bottom_small">
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">Select Account</div>
+                    <lightning-datatable key-field="id" data={accountResults} columns={accountColumns}
+                        max-row-selection="1" selected-rows={selectedAccountRows}
+                        onrowselection={handleAccountRowSelect}>
+                    </lightning-datatable>
+                </div>
+            </template>
+
+            <!-- Existing Account flow -->
+            <template if:true={hasAccount}>
+
+                <!-- Account summary -->
+                <div class="slds-box slds-theme_default slds-m-top_small">
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">{accountSectionLabel}</div>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <p><b>Account:</b> {account.name}</p>
+                            <p><b>Phone:</b> {account.phone}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <p><b>City:</b> {account.billingCity}</p>
+                            <p><b>State:</b> {account.billingState}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contacts -->
+                <div class="slds-m-top_medium">
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">
+                        {contactSectionLabel} (Select one - Mandatory)
+                    </div>
+
+                    <template if:true={contacts.length}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width:80px;">Select</th>
+                                    <th>Contact Name</th>
+                                    <th>Mobile</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={contacts} for:item="c">
+                                    <tr key={c.id}>
+                                        <td>
+                                            <input type="radio" name="contactRadio" value={c.id}
+                                                data-id={c.id}
+                                                checked={c.isSelected}
+                                                onchange={handleContactRadioChange} />
+                                        </td>
+                                        <td>{c.name}</td>
+                                        <td>{c.mobilePhone}</td>
+                                        <td>{c.phone}</td>
+                                        <td>{c.email}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+
+                    <template if:true={showContactRequiredMsg}>
+                        <div class="slds-text-color_error slds-m-top_x-small">
+                            Please select a Contact.
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Assets -->
+                <div class="slds-m-top_medium">
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">
+                        {assetSectionLabel} (Optional, Multiple allowed)
+                    </div>
+
+                    <template if:true={assets.length}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width:80px;">Select</th>
+                                    <th>Asset</th>
+                                    <th>Serial No</th>
+                                    <th>Invoice No</th>
+                                    <th>Product</th>
+                                    <th>Contact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={assets} for:item="a">
+                                    <tr key={a.id}>
+                                        <td>
+                                            <lightning-input type="checkbox" name="assetCheckbox" data-id={a.id}
+                                                checked={a.isSelected} onchange={handleAssetCheckboxChange}>
+                                            </lightning-input>
+                                        </td>
+                                        <td>{a.name}</td>
+                                        <td>{a.serialNumber}</td>
+                                        <td>{a.invoiceNumber}</td>
+                                        <td>{a.productName}</td>
+                                        <td>{a.contactName}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                </div>
+            </template>
+
+            <!-- NEW: No-result create Account + Contact -->
+            <template if:true={showCreateNewFlow}>
+                <div class="slds-box slds-theme_default slds-m-top_medium">
+                    <div class="slds-text-heading_small slds-m-bottom_small"><b>Create New Account</b></div>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Account Name" value={newAccountName}
+                                onchange={handleNewAccountName} required></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Account Phone" value={newAccountPhone}
+                                onchange={handleNewAccountPhone}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Billing City" value={newAccountBillingCity}
+                                onchange={handleNewAccountBillingCity}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Billing State" value={newAccountBillingState}
+                                onchange={handleNewAccountBillingState}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-input label="Billing Street" value={newAccountBillingStreet}
+                                onchange={handleNewAccountBillingStreet}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Billing Postal Code" value={newAccountBillingPostalCode}
+                                onchange={handleNewAccountBillingPostalCode}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Billing Country" value={newAccountBillingCountry}
+                                onchange={handleNewAccountBillingCountry}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-box slds-theme_default slds-m-top_medium">
+                    <div class="slds-text-heading_small slds-m-bottom_small"><b>Create Related Contact</b></div>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="First Name" value={newContactFirstName}
+                                onchange={handleNewContactFirstName}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Last Name" value={newContactLastName}
+                                onchange={handleNewContactLastName} required></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Phone" value={newContactPhone}
+                                onchange={handleNewContactPhone}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Mobile" value={newContactMobilePhone}
+                                onchange={handleNewContactMobilePhone}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input type="email" label="Email" value={newContactEmail}
+                                onchange={handleNewContactEmail}></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Department" value={newContactDepartment}
+                                onchange={handleNewContactDepartment}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Case Form -->
+            <template if:true={showCaseSection}>
+                <div class="slds-m-top_medium slds-box slds-theme_default">
+                    <div class="slds-text-heading_small slds-m-bottom_small"><b>Case Creation</b></div>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Case Subject" value={subject} onchange={handleSubject}
+                                required></lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Case Origin" value={originVal} options={originOptions}
+                                onchange={handleOrigin} required></lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Complaint Type" value={complaintTypeVal} options={complaintTypeOptions}
+                                onchange={handleComplaintType}></lightning-combobox>
+                        </div>
+
+                        <template if:true={showOtherComplaintType}>
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-textarea label="Other Complaint Type" value={otherComplaintTypeVal}
+                                    onchange={handleOtherComplaintType} required></lightning-textarea>
+                            </div>
+                        </template>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Product Category" value={productCategoryVal}
+                                options={productCategoryOptions} onchange={handleProductCategory}></lightning-combobox>
+                        </div>
+
+                        <template if:true={showOtherProductCategory}>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                <lightning-input label="Other Product Category" value={otherProductCategoryVal}
+                                    onchange={handleOtherProductCategory} required></lightning-input>
+                            </div>
+                        </template>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Installer Type" value={installerTypeVal}
+                                options={installerTypeOptions} onchange={handleInstallerType}></lightning-combobox>
+                        </div>
+
+                       <!-- <template if:true={showOtherInstaller}>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                <lightning-input label="Other Installer Type" value={otherInstallerVal}
+                                    onchange={handleOtherInstaller} required></lightning-input>
+                            </div>
+                        </template>-->
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Customer Persona" value={customerPersonaVal}
+                                options={customerPersonaOptions} onchange={handleCustomerPersona}></lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-textarea label="Description" value={description} onchange={handleDescription}
+                                required></lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-textarea label="Voice of Customer (VOC)" value={vocText}
+                                onchange={handleVocText}></lightning-textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="slds-m-top_medium slds-align_absolute-center">
+                        <lightning-button variant="brand" label="Create Case" onclick={handleCreateCase}
+                            disabled={disableCreateCase}></lightning-button>
+                    </div>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,11 @@
+<aura:component
+    implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader"
+    access="global">
+
+    <aura:attribute name="recordId" type="String"/>
+
+    <c:reassignToSalesTeamSRT
+        recordId="{!v.recordId}"
+        onclosequickaction="{!c.handleClose}" />
+
+</aura:component>

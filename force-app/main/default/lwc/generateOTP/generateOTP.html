@@ -1,0 +1,28 @@
+<template>
+    <lightning-quick-action-panel header="Generate OTP">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Generating OTP" size="medium"></lightning-spinner>
+        </template>
+
+        <div class="slds-p-around_medium">
+            <p>
+                Click below to generate a 4-digit OTP, save it to this FSR record,
+                set expiry for 15 minutes, and send it to the customer's email.
+            </p>
+        </div>
+
+        <div slot="footer">
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}>
+            </lightning-button>
+
+            <lightning-button
+                variant="brand"
+                label="Generate & Send OTP"
+                onclick={handleGenerateOtp}
+                class="slds-m-left_small">
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

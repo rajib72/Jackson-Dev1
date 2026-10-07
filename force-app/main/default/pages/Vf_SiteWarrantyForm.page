@@ -1,0 +1,22 @@
+<apex:page controller="WarrantySiteController" showHeader="false" sidebar="false" standardStylesheets="true">
+    <apex:form >
+        <apex:pageBlock title="Warranty Registration">
+            <apex:pageMessages />
+            
+            <apex:pageBlockSection columns="1">
+                
+                <apex:inputField value="{!w.Serial_No__c}" required="true"/>
+                <apex:inputField value="{!a.Status}" required="true"/>
+                <!--<apex:inputField value="{!w.Mobile__c}" required="true"/>
+<apex:inputField value="{!w.Account__c}" required="true"/>
+<apex:inputField value="{!w.Email__c}"/>
+<apex:inputField value="{!w.Serial_No__c}" required="true"/>
+<apex:inputField value="{!w.Purchase_Date__c}" required="true"/>-->
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Submit" action="{!save}" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

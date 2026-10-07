@@ -1,0 +1,347 @@
+<template>
+    <lightning-quick-action-panel header="Push Solar Service Order to SAP">
+
+        <template if:true={isLoading}>
+            <div class="loading-container">
+                <lightning-spinner
+                    alternative-text="Processing"
+                    size="medium">
+                </lightning-spinner>
+
+                <p class="loading-text">
+                    {loadingMessage}
+                </p>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+
+            <!-- Unexpected Apex or LWC error -->
+            <template if:true={errorMessage}>
+                <section class="status-panel error-panel">
+                    <div class="status-icon">
+                        <lightning-icon
+                            icon-name="utility:error"
+                            size="small"
+                            variant="error">
+                        </lightning-icon>
+                    </div>
+
+                    <div>
+                        <h2 class="status-title">
+                            Unable to process the Service Order
+                        </h2>
+
+                        <p class="status-message">
+                            {errorMessage}
+                        </p>
+                    </div>
+                </section>
+            </template>
+
+            <!-- Validation result -->
+            <template if:true={showValidation}>
+
+                <div class="order-heading">
+                    <div>
+                        <p class="eyebrow">
+                            SERVICE ORDER
+                        </p>
+
+                        <h2 class="order-number">
+                            {orderNumber}
+                        </h2>
+                    </div>
+
+                    <template if:true={isReadyToPush}>
+                        <lightning-badge
+                            label="Ready for SAP"
+                            class="ready-badge">
+                        </lightning-badge>
+                    </template>
+
+                    <template if:true={hasValidationErrors}>
+                        <lightning-badge
+                            label="Information Missing"
+                            class="missing-badge">
+                        </lightning-badge>
+                    </template>
+                </div>
+
+                <!-- Valid Service Order -->
+                <template if:true={isReadyToPush}>
+                    <section class="status-panel success-panel">
+                        <div class="status-icon">
+                            <lightning-icon
+                                icon-name="utility:success"
+                                size="small"
+                                variant="success">
+                            </lightning-icon>
+                        </div>
+
+                        <div>
+                            <h2 class="status-title">
+                                All mandatory fields are available
+                            </h2>
+
+                            <p class="status-message">
+                                The Service Order and all related Order Items
+                                contain the mandatory information required for
+                                the SAP integration.
+                            </p>
+                        </div>
+                    </section>
+                </template>
+
+                <!-- Invalid Service Order -->
+                <template if:true={hasValidationErrors}>
+                    <section class="status-panel warning-panel">
+                        <div class="status-icon">
+                            <lightning-icon
+                                icon-name="utility:warning"
+                                size="small">
+                            </lightning-icon>
+                        </div>
+
+                        <div>
+                            <h2 class="status-title">
+                                Complete the following mandatory fields
+                            </h2>
+
+                            <p class="status-message">
+                                The Service Order cannot be pushed to SAP until
+                                all fields listed below are populated.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Blocking errors -->
+                    <template if:true={hasBlockingErrors}>
+                        <section class="validation-section">
+                            <div class="section-heading">
+                                <lightning-icon
+                                    icon-name="utility:block_visitor"
+                                    size="x-small">
+                                </lightning-icon>
+
+                                <div>
+                                    <h3>Blocking Issues</h3>
+                                </div>
+                            </div>
+
+                            <ul class="error-list">
+                                <template
+                                    for:each={validationData.blockingErrors}
+                                    for:item="blockingError">
+
+                                    <li key={blockingError}>
+                                        {blockingError}
+                                    </li>
+                                </template>
+                            </ul>
+                        </section>
+                    </template>
+
+                    <!-- Missing Order fields -->
+                    <template if:true={hasOrderMissingFields}>
+                        <section class="validation-section">
+                            <div class="section-heading">
+                                <lightning-icon
+                                    icon-name="standard:orders"
+                                    size="small">
+                                </lightning-icon>
+
+                                <div>
+                                    <h3>Missing Service Order Fields</h3>
+
+                                    <p>
+                                        Populate these fields on the Service Order.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="field-grid">
+                                <template
+                                    for:each={validationData.orderMissingFields}
+                                    for:item="field">
+
+                                    <div
+                                        key={field.apiName}
+                                        class="missing-field-card">
+
+                                        <span class="field-label">
+                                            {field.label}
+                                        </span>
+
+                                        <span class="field-api-name">
+                                            {field.apiName}
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </section>
+                    </template>
+
+                    <!-- Missing Order Item fields -->
+                    <template if:true={hasOrderItemIssues}>
+                        <section class="validation-section">
+                            <div class="section-heading">
+                                <lightning-icon
+                                    icon-name="standard:product_item"
+                                    size="small">
+                                </lightning-icon>
+
+                                <div>
+                                    <h3>Missing Order Item Fields</h3>
+
+                                    <p>
+                                        Each Order Item below shows its exact
+                                        missing mandatory fields.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="item-list">
+                                <template
+                                    for:each={orderItemRows}
+                                    for:item="item">
+
+                                    <article
+                                        key={item.orderItemId}
+                                        class="item-card">
+
+                                        <div class="item-header">
+                                            <div>
+                                                <span class="item-label">
+                                                    ORDER ITEM
+                                                </span>
+
+                                                <a
+                                                    href={item.recordUrl}
+                                                    target="_blank"
+                                                    class="item-number">
+
+                                                    {item.orderItemNumber}
+                                                </a>
+                                            </div>
+
+                                            <lightning-badge
+                                                label={item.missingCountLabel}>
+                                            </lightning-badge>
+                                        </div>
+
+                                        <div class="item-fields">
+                                            <template
+                                                for:each={item.missingFields}
+                                                for:item="field">
+
+                                                <div
+                                                    key={field.apiName}
+                                                    class="item-field">
+
+                                                    <lightning-icon
+                                                        icon-name="utility:error"
+                                                        size="xx-small"
+                                                        variant="error">
+                                                    </lightning-icon>
+
+                                                    <div>
+                                                        <span class="field-label">
+                                                            {field.label}
+                                                        </span>
+
+                                                        <span class="field-api-name">
+                                                            {field.apiName}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </article>
+                                </template>
+                            </div>
+                        </section>
+                    </template>
+                </template>
+            </template>
+
+            <!-- SAP result -->
+            <template if:true={hasResult}>
+                <template if:true={result.isSuccess}>
+                    <section class="result-panel result-success">
+                        <lightning-icon
+                            icon-name="utility:success"
+                            size="large"
+                            variant="success">
+                        </lightning-icon>
+
+                        <h2>
+                            Service Order pushed successfully
+                        </h2>
+
+                        <p>
+                            {result.responseMessage}
+                        </p>
+
+                        <template if:true={result.statusCode}>
+                            <span class="status-code">
+                                HTTP Status: {result.statusCode}
+                            </span>
+                        </template>
+                    </section>
+                </template>
+
+                <template if:false={result.isSuccess}>
+                    <section class="result-panel result-error">
+                        <lightning-icon
+                            icon-name="utility:error"
+                            size="large"
+                            variant="error">
+                        </lightning-icon>
+
+                        <h2>
+                            SAP integration failed
+                        </h2>
+
+                        <template if:true={result.statusCode}>
+                            <span class="status-code">
+                                HTTP Status: {result.statusCode}
+                            </span>
+                        </template>
+
+                        <div class="response-message">
+                            {result.responseMessage}
+                        </div>
+                    </section>
+                </template>
+            </template>
+        </template>
+
+        <div slot="footer" class="footer-actions">
+            <lightning-button
+                label="Close"
+                onclick={handleClose}
+                disabled={isLoading}>
+            </lightning-button>
+
+            <template if:true={showRecheckButton}>
+                <lightning-button
+                    label="Recheck Fields"
+                    icon-name="utility:refresh"
+                    onclick={handleRecheck}
+                    disabled={isLoading}>
+                </lightning-button>
+            </template>
+
+            <template if:true={isReadyToPush}>
+                <lightning-button
+                    variant="brand"
+                    label="Push to SAP"
+                    icon-name="utility:send"
+                    onclick={handlePushToSAP}
+                    disabled={isLoading}>
+                </lightning-button>
+            </template>
+        </div>
+    </lightning-quick-action-panel>
+</template>

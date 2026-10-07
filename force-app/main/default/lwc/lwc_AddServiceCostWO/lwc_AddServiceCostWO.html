@@ -1,0 +1,218 @@
+<template>
+    <lightning-quick-action-panel header="Create Service Cost Details">
+
+        <!-- Loading -->
+        <template lwc:if={isLoading}>
+            <div class="spinner-container">
+                <lightning-spinner
+                    alternative-text="Checking Work Order Details..."
+                    size="medium">
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Validation Check Error -->
+        <template lwc:elseif={hasValidationError}>
+            <div class="slds-p-around_medium slds-text-align_center">
+                <div class="slds-text-color_error slds-text-heading_small slds-m-bottom_medium">
+                    <strong>
+                        {validationErrorMessage}
+                    </strong>
+                </div>
+
+                <lightning-button
+                    variant="neutral"
+                    label="Close"
+                    onclick={handleCancel}>
+                </lightning-button>
+            </div>
+        </template>
+
+        <!-- Existing Form -->
+        <template lwc:elseif={canCreateServiceCost}>
+            <div class="main-container">
+
+                <div class="info-box">
+                    <div class="info-title">
+                        Service Cost Entry
+                    </div>
+
+                    <div class="info-subtitle">
+                        Add estimated cost details for this Work Order.
+                    </div>
+                </div>
+
+                <lightning-record-edit-form
+                    object-api-name="Service_Cost_Details__c"
+                    onsuccess={handleSuccess}
+                    onsubmit={handleSubmit}
+                    onerror={handleError}>
+
+                    <lightning-messages>
+                    </lightning-messages>
+
+                    <div class="form-section">
+
+                        <lightning-input-field
+                            field-name="Cost_Type__c"
+                            required>
+                        </lightning-input-field>
+
+                        <lightning-input-field
+                            field-name="Estimated_Cost__c"
+                            required>
+                        </lightning-input-field>
+
+                        <lightning-input-field
+                            field-name="Description__c">
+                        </lightning-input-field>
+
+                    </div>
+
+                    <div class="button-section">
+
+                        <lightning-button
+                            variant="neutral"
+                            label="Cancel"
+                            onclick={handleCancel}>
+                        </lightning-button>
+
+                        <lightning-button
+                            class="save-btn"
+                            variant="brand"
+                            type="submit"
+                            label="Save">
+                        </lightning-button>
+
+                    </div>
+
+                </lightning-record-edit-form>
+            </div>
+        </template>
+
+        <!-- Existing Service Cost Found -->
+        <template lwc:elseif={showExistingServiceCostMessage}>
+            <div class="slds-p-around_medium slds-text-align_center">
+
+                <div class="blocked-icon">
+                    <lightning-icon
+                        icon-name="utility:error"
+                        alternative-text="Service Cost Already Exists"
+                        variant="error"
+                        size="medium">
+                    </lightning-icon>
+                </div>
+
+                <div class="slds-text-color_error slds-text-heading_small slds-m-bottom_small">
+                    <strong>
+                        SERVICE COST ALREADY EXISTS
+                    </strong>
+                </div>
+
+                <div class="slds-m-bottom_medium">
+                    One Service Cost is already approved.
+                    You cannot create another Service Cost.
+                </div>
+
+                <lightning-button
+                    variant="neutral"
+                    label="Close"
+                    onclick={handleCancel}>
+                </lightning-button>
+
+            </div>
+        </template>
+
+        <!-- Existing Site Visit Validation -->
+        <template lwc:else>
+            <div class="slds-p-around_medium slds-text-align_center">
+
+                <div class="slds-text-color_error slds-text-heading_small slds-m-bottom_medium">
+                    <strong>
+                        THIS BUTTON WILL ONLY WORK IF THE EXECUTION MODE IS SITE VISIT
+                    </strong>
+                </div>
+
+                <lightning-button
+                    variant="neutral"
+                    label="Close"
+                    onclick={handleCancel}>
+                </lightning-button>
+
+            </div>
+        </template>
+
+    </lightning-quick-action-panel>
+</template>
+
+<!-- <template>
+    <lightning-quick-action-panel header="Create Service Cost Details">
+        <template lwc:if={isLoading}>
+            <lightning-spinner alternative-text="Checking Work Order Details..." size="medium"></lightning-spinner>
+        </template>
+
+        <template lwc:elseif={isSiteVisit}>
+            <div class="main-container">
+                <div class="info-box">
+                    <div class="info-title">Service Cost Entry</div>
+                    <div class="info-subtitle">
+                        Add estimated cost details for this Work Order.
+                    </div>
+                </div>
+
+                <lightning-record-edit-form
+                    object-api-name="Service_Cost_Details__c"
+                    onsuccess={handleSuccess}
+                    onsubmit={handleSubmit}
+                    onerror={handleError}
+                >
+                    <lightning-messages></lightning-messages>
+
+                    <div class="form-section">
+                        <lightning-input-field
+                            field-name="Cost_Type__c"
+                            required>
+                        </lightning-input-field>
+
+                        <lightning-input-field
+                            field-name="Estimated_Cost__c"
+                            required>
+                        </lightning-input-field>
+
+                        <lightning-input-field
+                            field-name="Description__c">
+                        </lightning-input-field>
+                    </div>
+
+                    <div class="button-section">
+                        <lightning-button
+                            variant="neutral"
+                            label="Cancel"
+                            onclick={handleCancel}>
+                        </lightning-button>
+
+                        <lightning-button
+                            class="save-btn"
+                            variant="brand"
+                            type="submit"
+                            label="Save">
+                        </lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <div class="slds-p-around_medium slds-text-align_center">
+                <div class="slds-text-color_error slds-text-heading_small slds-m-bottom_medium">
+                    <strong>THIS BUTTON WILL ONLY WORK IF THE EXECUTION MODE IS SITE VISIT</strong>
+                </div>
+                <lightning-button
+                    variant="neutral"
+                    label="Close"
+                    onclick={handleCancel}>
+                </lightning-button>
+            </div>
+        </template>
+    </lightning-quick-action-panel>
+</template> -->

@@ -1,0 +1,24 @@
+<apex:page standardStylesheets="true"
+    sidebar="false"
+    showHeader="false"
+    controller="PartnerAgreementVFController">
+
+    <apex:includeLightning />
+
+    <div id="lwcContainer"></div>
+
+    <script>
+        
+        var partnerId = "{!partnerId}";
+
+        $Lightning.use("c:PartnerAgreementOutApp", function() {
+            // create the aura wrapper component and pass recordId
+            $Lightning.createComponent(
+                "c:partnerAgreementForm",
+                { recordId: partnerId },
+                "lwcContainer"
+            );
+        });
+    </script>
+
+</apex:page>

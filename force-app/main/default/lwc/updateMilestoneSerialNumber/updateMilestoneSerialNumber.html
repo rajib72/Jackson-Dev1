@@ -1,0 +1,72 @@
+<template>
+    <lightning-card class="premium-card">
+        
+        <div class="slds-p-around_medium main-container">
+            
+            <div class="slds-align_absolute-center slds-text-heading_medium slds-p-bottom_medium title-container">
+                <div style="border: 1px solid #c9c9c9; border-radius: 10px; padding: 12px 24px; background-color: #0931f736; display: flex; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <strong style="color: #040506fa; font-size: 25px;">Update Milestone Serial Number</strong>
+                </div>
+            </div>
+
+            <div class="slds-grid slds-border_bottom slds-p-bottom_small slds-m-bottom_medium table-header slds-hide_max-small">
+                <div class="slds-col slds-size_1-of-2 slds-grid slds-grid_align-center slds-grid_vertical-align-center">
+                    <lightning-icon icon-name="utility:record" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                    <strong>Milestone Name</strong>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-grid slds-grid_align-center slds-grid_vertical-align-center">
+                    <lightning-icon icon-name="utility:record" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                    <strong>Serial Number</strong>
+                </div>
+            </div>
+
+            <template if:true={displayMilestones}>
+                <div class="list-container slds-p-bottom_medium">
+                    <template for:each={displayMilestones} for:item="milestone">
+                        
+                        <div key={milestone.Id} class="slds-grid slds-wrap slds-p-around_medium slds-m-bottom_small milestone-row slds-grid_vertical-align-center">
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_1-of-2 slds-p-bottom_x-small slds-small-p-bottom_none slds-grid slds-grid_vertical-align-center slds-grid_align-center">
+                                <span class="milestone-name">{milestone.Milestone_Name__c}</span>
+                                
+                                <template if:true={milestone.isReadOnly}>
+                                    
+                                </template>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-small-size_1-of-2 slds-grid slds-grid_align-center">
+                                <div style="width: 70%;"> 
+                                    <lightning-input 
+                                        type="number" 
+                                        variant="label-hidden"
+                                        value={milestone.currentSerial} 
+                                        data-id={milestone.Id}
+                                        disabled={milestone.isReadOnly}
+                                        onchange={handleInputChange}
+                                        class="custom-input">
+                                    </lightning-input>
+                                </div>
+                            </div>
+
+                        </div>
+                    </template>
+                </div>
+            </template>
+            
+            <template if:true={error}>
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-top_medium slds-border_radius premium-error" role="alert">
+                    <h2>{error}</h2>
+                </div>
+            </template>
+        </div>
+
+        <div slot="footer" class="slds-align_absolute-center slds-p-bottom_medium">
+            <lightning-button 
+                label="Update" 
+                variant="brand" 
+                onclick={handleUpdate}
+                class="large-update-button">
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>

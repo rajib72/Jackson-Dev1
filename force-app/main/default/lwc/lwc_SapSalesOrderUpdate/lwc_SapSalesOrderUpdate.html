@@ -1,0 +1,32 @@
+<template>
+    <lightning-card title="SAP Update Request" icon-name="standard:orders">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium slds-text-align_center">
+            
+            <p class="slds-m-bottom_medium slds-text-heading_small slds-text-color_weak">
+                Push recent modifications for this Order directly to SAP.
+            </p>
+
+            <template if:true={responseMessage}>
+                <div class={alertClass} role="alert">
+                    <span class="slds-assistive-text">Alert</span>
+                    <h2>{responseMessage}</h2>
+                </div>
+            </template>
+
+            <div class="slds-m-top_medium">
+                <lightning-button 
+                    variant="brand" 
+                    label="Update Order in SAP" 
+                    title="Send Update via API" 
+                    icon-name="utility:sync"
+                    onclick={handleUpdate} 
+                    disabled={isLoading}>
+                </lightning-button>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Connecting to SAP..." size="medium"></lightning-spinner>
+        </template>
+    </lightning-card>
+</template>

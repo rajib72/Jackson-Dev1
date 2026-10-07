@@ -1,0 +1,454 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+
+/* =========================================================
+   MAIN WRAPPER
+   ========================================================= */
+
+.path-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 1.15rem 1.25rem 1.25rem;
+    background: #ffffff;
+    border-radius: 0.65rem;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.path-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.path-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #181818;
+    letter-spacing: 0.01rem;
+}
+
+.current-status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+
+    padding: 0.3rem 0.85rem;
+
+    border-radius: 999px;
+
+    background: #eef4ff;
+    border: 1px solid #b8d6ff;
+
+    color: #0b5cab;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   HORIZONTAL SCROLL AREA
+   ========================================================= */
+
+.path-scroll {
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 0.25rem 0 0.6rem;
+
+    box-sizing: border-box;
+
+    scroll-behavior: smooth;
+}
+
+
+/* Chrome / Edge scrollbar */
+
+.path-scroll::-webkit-scrollbar {
+    height: 7px;
+}
+
+.path-scroll::-webkit-scrollbar-track {
+    background: #f3f3f3;
+    border-radius: 10px;
+}
+
+.path-scroll::-webkit-scrollbar-thumb {
+    background: #b7b7b7;
+    border-radius: 10px;
+}
+
+.path-scroll::-webkit-scrollbar-thumb:hover {
+    background: #8f8f8f;
+}
+
+
+/* =========================================================
+   STATUS PATH
+   ========================================================= */
+
+.status-path {
+    display: flex;
+    align-items: stretch;
+
+    /*
+     * Very important:
+     * Don't force all 16 statuses into 100% width.
+     */
+    width: max-content;
+
+    gap: 1.15rem;
+
+    padding: 0.25rem 0.15rem;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   EACH STATUS
+   ========================================================= */
+
+.step-container {
+    position: relative;
+
+    /*
+     * Fixed readable width.
+     */
+    flex: 0 0 165px;
+
+    width: 165px;
+
+    scroll-snap-align: start;
+}
+
+
+/* =========================================================
+   CONNECTOR LINE
+   ========================================================= */
+
+.step-container:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 100%;
+
+    width: 1.15rem;
+    height: 2px;
+
+    background: #c9c9c9;
+
+    transform: translateY(-50%);
+
+    z-index: 0;
+}
+
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+.step-button {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.7rem;
+
+    width: 100%;
+    min-height: 66px;
+
+    padding: 0.7rem 0.8rem;
+
+    border-radius: 0.7rem;
+
+    border: 1px solid #d8dde6;
+
+    background: #f7f8fa;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease,
+        background 0.15s ease;
+}
+
+
+.step-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 3px 10px
+        rgba(0, 0, 0, 0.10);
+}
+
+
+.step-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+
+/* =========================================================
+   NUMBER CIRCLE
+   ========================================================= */
+
+.step-index {
+    display: inline-flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 2rem;
+    height: 2rem;
+
+    min-width: 2rem;
+
+    border-radius: 50%;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   STATUS LABEL
+   ========================================================= */
+
+.step-label {
+    display: block;
+
+    flex: 1;
+
+    min-width: 0;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    line-height: 1.3;
+
+    /*
+     * Prevent ugly character-by-character wrapping.
+     */
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+}
+
+
+/* =========================================================
+   COMPLETED
+   ========================================================= */
+
+.step-button.step-completed {
+    background: #edf9f1;
+    border-color: #91d9a8;
+}
+
+.step-button.step-completed:hover:not(:disabled) {
+    border-color: #5fbd7d;
+
+    box-shadow:
+        0 3px 10px
+        rgba(46, 132, 74, 0.14);
+}
+
+.step-button.step-completed .step-index {
+    background: #2e844a;
+    color: #ffffff;
+}
+
+.step-button.step-completed .step-label {
+    color: #1f3b2d;
+}
+
+.step-container.step-completed:not(:last-child)::after {
+    background: #91d9a8;
+}
+
+
+/* =========================================================
+   CURRENT
+   ========================================================= */
+
+.step-button.step-current {
+    background: linear-gradient(
+        135deg,
+        #0176d3,
+        #0b5cab
+    );
+
+    border-color: #0b5cab;
+
+    box-shadow:
+        0 4px 12px
+        rgba(1, 118, 211, 0.22);
+}
+
+.step-button.step-current:hover:not(:disabled) {
+    box-shadow:
+        0 6px 16px
+        rgba(1, 118, 211, 0.28);
+}
+
+.step-button.step-current .step-index {
+    background: #ffffff;
+    color: #0b5cab;
+}
+
+.step-button.step-current .step-label {
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   UPCOMING
+   ========================================================= */
+
+.step-button.step-upcoming {
+    background: #ffffff;
+    border-color: #d8dde6;
+}
+
+.step-button.step-upcoming:hover:not(:disabled) {
+    background: #ffffff;
+    border-color: #a8b7c7;
+}
+
+.step-button.step-upcoming .step-index {
+    background: #e5e5e5;
+    color: #4f4f4f;
+}
+
+.step-button.step-upcoming .step-label {
+    color: #3e3e3c;
+}
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.spinner-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+
+    z-index: 10;
+
+    border-radius: 0.65rem;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media only screen and (max-width: 1200px) {
+
+    .step-container {
+        flex-basis: 155px;
+        width: 155px;
+    }
+
+    .step-button {
+        min-height: 64px;
+        padding: 0.65rem 0.75rem;
+    }
+
+    .step-label {
+        font-size: 0.78rem;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media only screen and (max-width: 768px) {
+
+    .path-wrapper {
+        padding: 0.85rem;
+    }
+
+    .path-header {
+        margin-bottom: 0.75rem;
+    }
+
+    .status-path {
+        gap: 1rem;
+    }
+
+    .step-container {
+        flex-basis: 145px;
+        width: 145px;
+    }
+
+    .step-button {
+        min-height: 62px;
+
+        padding:
+            0.6rem
+            0.7rem;
+    }
+
+    .step-index {
+        width: 1.8rem;
+        height: 1.8rem;
+
+        min-width: 1.8rem;
+
+        font-size: 0.73rem;
+    }
+
+    .step-label {
+        font-size: 0.76rem;
+        line-height: 1.25;
+    }
+
+    .current-status-badge {
+        font-size: 0.73rem;
+    }
+}

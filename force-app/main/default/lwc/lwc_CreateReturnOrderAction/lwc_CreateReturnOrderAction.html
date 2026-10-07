@@ -1,0 +1,217 @@
+<template>
+    <lightning-quick-action-panel slot="header" header="Create Return Order">
+
+        <template if:false={isReady}>
+            <lightning-spinner alternative-text="Loading Data..." size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={isReady}>
+            <lightning-record-edit-form object-api-name="ReturnOrder" onsubmit={handleSubmit} onsuccess={handleSuccess}
+                onerror={handleError}>
+                <lightning-messages></lightning-messages>
+
+                <div class="slds-hide">
+                    <lightning-input-field field-name="SourceLocationId"></lightning-input-field>
+                    <lightning-input-field field-name="DestinationLocationId"></lightning-input-field>
+                    <lightning-input-field field-name="ShipFromStreet"></lightning-input-field>
+                    <lightning-input-field field-name="ShipFromCity"></lightning-input-field>
+                    <lightning-input-field field-name="ShipFromState"></lightning-input-field>
+                    <lightning-input-field field-name="ShipFromPostalCode"></lightning-input-field>
+                    <lightning-input-field field-name="ShipFromCountry"></lightning-input-field>
+                </div>
+
+                <div class="slds-form slds-p-bottom_large" role="list">
+
+                    <div class="slds-section slds-is-open slds-m-bottom_none">
+                        <h3 class="slds-section__title slds-theme_shade">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Information">Information</span>
+                        </h3>
+                        <div class="slds-section__content slds-p-horizontal_small slds-p-top_small">
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input-field field-name="ProductRequestId" value={recordId} disabled>
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input-field field-name="Status"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input-field field-name="AccountId" value={accountId} disabled>
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input-field field-name="ContactId" value={contactId} disabled>
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input-field field-name="CaseId" value={caseId} disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-section slds-is-open slds-m-top_small slds-m-bottom_none">
+                        <h3 class="slds-section__title slds-theme_shade">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Shipping Information">Shipping Information</span>
+                        </h3>
+                        <div class="slds-section__content slds-p-horizontal_small slds-p-top_small">
+                            <div class="slds-grid slds-wrap slds-gutters">
+
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <div class="slds-form-element slds-form-element_horizontal">
+                                        <label class="slds-form-element__label" style="padding-top: 5px;">Source Location</label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-combobox_container">
+                                                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open"
+                                                    aria-expanded="true" aria-haspopup="listbox" role="combobox">
+
+                                                    <lightning-input type="text" variant="label-hidden"
+                                                        data-field="source" value={sourceLocationName}
+                                                        placeholder="Search Locations..." onchange={handleSearch}
+                                                        onfocus={handleFocus} onblur={handleBlur}></lightning-input>
+
+                                                    <template if:true={showSourceDropdown}>
+                                                        <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid"
+                                                            role="listbox" style="z-index: 9999;">
+                                                            <ul class="slds-listbox slds-listbox_vertical"
+                                                                role="presentation">
+                                                                <template for:each={filteredSourceOptions}
+                                                                    for:item="loc">
+                                                                    <li key={loc.LocationId} role="presentation"
+                                                                        class="slds-listbox__item" data-field="source"
+                                                                        data-id={loc.LocationId}
+                                                                        data-name={loc.LocationName}
+                                                                        onmousedown={handleSelect}>
+                                                                        <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                                            role="option">
+                                                                            <span class="slds-media__figure slds-listbox__option-icon">
+                                                                                <lightning-icon icon-name="standard:location" size="small"></lightning-icon>
+                                                                            </span>
+                                                                            <span class="slds-media__body">
+                                                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{loc.LocationName}</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </li>
+                                                                </template>
+                                                            </ul>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <div class="slds-form-element slds-form-element_horizontal">
+                                        <label class="slds-form-element__label" style="padding-top: 5px;">Destination Location</label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-combobox_container">
+                                                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open"
+                                                    aria-expanded="true" aria-haspopup="listbox" role="combobox">
+
+                                                    <lightning-input type="text" variant="label-hidden"
+                                                        data-field="dest" value={destLocationName}
+                                                        placeholder="Search Locations..." onchange={handleSearch}
+                                                        onfocus={handleFocus} onblur={handleBlur}></lightning-input>
+
+                                                    <template if:true={showDestDropdown}>
+                                                        <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid"
+                                                            role="listbox" style="z-index: 9999;">
+                                                            <ul class="slds-listbox slds-listbox_vertical"
+                                                                role="presentation">
+                                                                <template for:each={filteredDestOptions} for:item="loc">
+                                                                    <li key={loc.LocationId} role="presentation"
+                                                                        class="slds-listbox__item" data-field="dest"
+                                                                        data-id={loc.LocationId}
+                                                                        data-name={loc.LocationName}
+                                                                        onmousedown={handleSelect}>
+                                                                        <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                                            role="option">
+                                                                            <span class="slds-media__figure slds-listbox__option-icon">
+                                                                                <lightning-icon icon-name="standard:location" size="small"></lightning-icon>
+                                                                            </span>
+                                                                            <span class="slds-media__body">
+                                                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{loc.LocationName}</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </li>
+                                                                </template>
+                                                            </ul>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input-field field-name="ShipmentType"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input-field field-name="ExpectedArrivalDate"></lightning-input-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-section slds-is-open slds-m-top_small slds-m-bottom_none">
+                        <h3 class="slds-section__title slds-theme_shade">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Ship From Address">Ship From Address</span>
+                        </h3>
+                        <div class="slds-section__content slds-p-horizontal_small slds-p-top_small">
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-textarea label="Street" value={shipFromStreet} data-field="street"
+                                        variant="label-inline" onchange={handleAddressChange}></lightning-textarea>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input label="City" value={shipFromCity} data-field="city"
+                                        variant="label-inline" onchange={handleAddressChange}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input label="State/Province" value={shipFromState} data-field="state"
+                                        variant="label-inline" onchange={handleAddressChange}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input label="Zip/Postal Code" value={shipFromZip} data-field="zip"
+                                        variant="label-inline" onchange={handleAddressChange}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-bottom_small">
+                                    <lightning-input label="Country" value={shipFromCountry} data-field="country"
+                                        variant="label-inline" onchange={handleAddressChange}></lightning-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-section slds-is-open slds-m-top_small slds-m-bottom_none">
+                        <h3 class="slds-section__title slds-theme_shade">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Description">Description</span>
+                        </h3>
+                        <div class="slds-section__content slds-p-horizontal_small slds-p-top_small">
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1 slds-p-bottom_small">
+                                    <lightning-input-field field-name="Description"></lightning-input-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <lightning-button class="hidden-submit-btn slds-hide" type="submit" label="Hidden Submit">
+                </lightning-button>
+
+            </lightning-record-edit-form>
+        </template>
+
+        <div slot="footer">
+            <lightning-button label="Cancel" onclick={closeAction} class="slds-m-right_small"></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={handleSaveClick}></lightning-button>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>

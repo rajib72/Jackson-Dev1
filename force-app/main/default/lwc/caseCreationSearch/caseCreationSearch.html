@@ -1,0 +1,2515 @@
+<template>
+    <div class="page-container">
+
+        <!-- ====================================================== -->
+        <!-- STEP 1: SEARCH                                         -->
+        <!-- ====================================================== -->
+        <template if:true={isSearchStep}>
+
+            <div class="search-panel">
+                <div class="search-grid">
+
+                    <!-- Contact Phone Number -->
+                    <div class="input-container">
+                        <label class="input-label">
+                            Phone / Mobile No
+                        </label>
+
+                        <div class="autocomplete-wrapper">
+                            <lightning-input type="tel" name="mobileNo" variant="label-hidden" value={mobileNo}
+                                placeholder="Type Contact Phone / Mobile No" pattern="[0-9]{10}" minlength="10"
+                                maxlength="10" autocomplete="off"
+                                message-when-pattern-mismatch="Enter a valid 10-digit Phone / Mobile Number."
+                                message-when-too-short="Phone / Mobile Number must contain exactly 10 digits."
+                                onchange={handleInputChange} onfocus={handleInputFocus} onblur={handleInputBlur}
+                                onkeydown={handleKeyDown} disabled={isMobileSearchDisabled}>
+                            </lightning-input>
+
+                            <template if:true={showMobileSuggestionPanel}>
+                                <div class="suggestion-panel" role="listbox">
+
+                                    <template if:true={isSuggestionLoading}>
+                                        <div class="suggestion-loading">
+                                            <lightning-spinner size="small"
+                                                alternative-text="Loading Phone suggestions">
+                                            </lightning-spinner>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={suggestionErrorMessage}>
+                                        <div class="suggestion-message suggestion-error">
+                                            {suggestionErrorMessage}
+                                        </div>
+                                    </template>
+
+                                    <template if:true={hasSuggestionOptions}>
+                                        <ul class="suggestion-list">
+                                            <template for:each={suggestionOptions} for:item="suggestion">
+
+                                                <li key={suggestion.recordId}>
+                                                    <button type="button" class="suggestion-item" role="option"
+                                                        data-record-id={suggestion.recordId}
+                                                        data-search-type={suggestion.searchType}
+                                                        data-value={suggestion.value} data-label={suggestion.label}
+                                                        onmousedown={handleSuggestionMouseDown}
+                                                        onclick={handleSuggestionSelect}>
+
+                                                        <lightning-icon icon-name={suggestion.iconName} size="small"
+                                                            alternative-text="">
+                                                        </lightning-icon>
+
+                                                        <span class="suggestion-text">
+                                                            <span class="suggestion-label">
+                                                                {suggestion.label}
+                                                            </span>
+
+                                                            <span class="suggestion-subtitle">
+                                                                {suggestion.subtitle}
+                                                            </span>
+                                                        </span>
+                                                    </button>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </template>
+
+                                    <template if:true={showSuggestionEmptyState}>
+                                        <div class="suggestion-message">
+                                            No matching Phone / Mobile Number suggestions found.
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+
+                        <template if:true={isMobileSuggestionSelected}>
+                            <div class="selection-confirmation">
+                                <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Selected">
+                                </lightning-icon>
+                                Selected
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Asset Serial Number -->
+                    <div class="input-container">
+                        <label class="input-label">
+                            Asset Serial No
+                        </label>
+
+                        <div class="autocomplete-wrapper">
+                            <lightning-input type="text" name="serialNumber" variant="label-hidden" value={serialNumber}
+                                placeholder="Type Asset Serial No" maxlength="80" autocomplete="off"
+                                onchange={handleInputChange} onfocus={handleInputFocus} onblur={handleInputBlur}
+                                onkeydown={handleKeyDown} disabled={isSerialSearchDisabled}>
+                            </lightning-input>
+
+                            <template if:true={showSerialSuggestionPanel}>
+                                <div class="suggestion-panel" role="listbox">
+
+                                    <template if:true={isSuggestionLoading}>
+                                        <div class="suggestion-loading">
+                                            <lightning-spinner size="small"
+                                                alternative-text="Loading Asset Serial Number suggestions">
+                                            </lightning-spinner>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={suggestionErrorMessage}>
+                                        <div class="suggestion-message suggestion-error">
+                                            {suggestionErrorMessage}
+                                        </div>
+                                    </template>
+
+                                    <template if:true={hasSuggestionOptions}>
+                                        <ul class="suggestion-list">
+                                            <template for:each={suggestionOptions} for:item="suggestion">
+
+                                                <li key={suggestion.recordId}>
+                                                    <button type="button" class="suggestion-item" role="option"
+                                                        data-record-id={suggestion.recordId}
+                                                        data-search-type={suggestion.searchType}
+                                                        data-value={suggestion.value} data-label={suggestion.label}
+                                                        onmousedown={handleSuggestionMouseDown}
+                                                        onclick={handleSuggestionSelect}>
+
+                                                        <lightning-icon icon-name={suggestion.iconName} size="small"
+                                                            alternative-text="">
+                                                        </lightning-icon>
+
+                                                        <span class="suggestion-text">
+                                                            <span class="suggestion-label">
+                                                                {suggestion.label}
+                                                            </span>
+
+                                                            <span class="suggestion-subtitle">
+                                                                {suggestion.subtitle}
+                                                            </span>
+                                                        </span>
+                                                    </button>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </template>
+
+                                    <template if:true={showSuggestionEmptyState}>
+                                        <div class="suggestion-message">
+                                            No matching Asset Serial Number suggestions found.
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+
+                        <template if:true={isSerialSuggestionSelected}>
+                            <div class="selection-confirmation">
+                                <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Selected">
+                                </lightning-icon>
+                                Selected
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Customer Name -->
+                    <div class="input-container">
+                        <label class="input-label">
+                            Customer Name
+                        </label>
+
+                        <div class="autocomplete-wrapper">
+                            <lightning-input type="text" name="customerName" variant="label-hidden" value={customerName}
+                                placeholder="Type Customer Name" maxlength="255" autocomplete="off"
+                                onchange={handleInputChange} onfocus={handleInputFocus} onblur={handleInputBlur}
+                                onkeydown={handleKeyDown} disabled={isCustomerSearchDisabled}>
+                            </lightning-input>
+
+                            <template if:true={showCustomerSuggestionPanel}>
+                                <div class="suggestion-panel" role="listbox">
+
+                                    <template if:true={isSuggestionLoading}>
+                                        <div class="suggestion-loading">
+                                            <lightning-spinner size="small"
+                                                alternative-text="Loading Customer Name suggestions">
+                                            </lightning-spinner>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={suggestionErrorMessage}>
+                                        <div class="suggestion-message suggestion-error">
+                                            {suggestionErrorMessage}
+                                        </div>
+                                    </template>
+
+                                    <template if:true={hasSuggestionOptions}>
+                                        <ul class="suggestion-list">
+                                            <template for:each={suggestionOptions} for:item="suggestion">
+
+                                                <li key={suggestion.recordId}>
+                                                    <button type="button" class="suggestion-item" role="option"
+                                                        data-record-id={suggestion.recordId}
+                                                        data-search-type={suggestion.searchType}
+                                                        data-value={suggestion.value} data-label={suggestion.label}
+                                                        onmousedown={handleSuggestionMouseDown}
+                                                        onclick={handleSuggestionSelect}>
+
+                                                        <lightning-icon icon-name={suggestion.iconName} size="small"
+                                                            alternative-text="">
+                                                        </lightning-icon>
+
+                                                        <span class="suggestion-text">
+                                                            <span class="suggestion-label">
+                                                                {suggestion.label}
+                                                            </span>
+
+                                                            <span class="suggestion-subtitle">
+                                                                {suggestion.subtitle}
+                                                            </span>
+                                                        </span>
+                                                    </button>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </template>
+
+                                    <template if:true={showSuggestionEmptyState}>
+                                        <div class="suggestion-message">
+                                            No existing Customer Name found. Please search using Phone / Mobile Number
+                                            instead.
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+
+                        <template if:true={isCustomerSuggestionSelected}>
+                            <div class="selection-confirmation">
+                                <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Selected">
+                                </lightning-icon>
+                                Selected
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Search Buttons -->
+                    <div class="button-container">
+                        <lightning-button label="Search" title="Search Customer and Asset Details" variant="brand"
+                            onclick={handleSearch} disabled={isSearchDisabled}>
+                        </lightning-button>
+
+                        <lightning-button label="Clear" title="Clear Search" variant="neutral" onclick={handleReset}
+                            disabled={isLoading}>
+                        </lightning-button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <template if:true={isLoading}>
+                <div class="loading-panel">
+                    <lightning-spinner alternative-text={loadingAlternativeText} size="medium">
+                    </lightning-spinner>
+
+                    <p class="loading-message">
+                        {loadingMessage}
+                    </p>
+                </div>
+            </template>
+
+            <!-- Search Error -->
+            <template if:true={showSearchError}>
+                <div class="no-result-panel">
+                    <lightning-icon icon-name="utility:error" size="small" alternative-text="Search Error">
+                    </lightning-icon>
+
+                    <span>
+                        {errorMessage}
+                    </span>
+                </div>
+            </template>
+
+            <!-- No Results -->
+            <template if:true={showNoResults}>
+                <div class="no-result-panel no-result-panel_action">
+                    <lightning-icon icon-name="utility:search" size="small" alternative-text="No Results">
+                    </lightning-icon>
+
+                    <div class="no-result-action-content">
+                        <span>
+                            {noResultMessage}
+                        </span>
+
+                        <template if:true={showCreateNewCustomerCaseButton}>
+                            <lightning-button label="Create New Account, Contact & Case"
+                                title="Create New Account, Contact and Case" variant="brand" icon-name="utility:add"
+                                onclick={handleOpenNewCustomerCase}>
+                            </lightning-button>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Search Results -->
+            <template if:true={hasResults}>
+                <div class="result-panel">
+
+                    <div class="result-header">
+                        <div>
+                            <span class="result-title">
+                                {resultTitle}
+                            </span>
+
+                            <span class="selected-result-text">
+                                {searchCriteriaText}
+                            </span>
+                        </div>
+
+                        <span class="result-count">
+                            {resultCountText}
+                        </span>
+                    </div>
+
+                    <!-- Account Details -->
+                    <div class="result-header">
+                        <div>
+                            <span class="result-title">
+                                Account Details
+                            </span>
+                        </div>
+                    </div>
+
+                    <template if:true={account}>
+                        <div class="selected-item-summary">
+                            <lightning-input type="checkbox" label="Select Account" variant="label-hidden"
+                                checked={isAccountSelected} onchange={handleAccountSelection} disabled={isLoading}>
+                            </lightning-input>
+
+                            <lightning-icon class="summary-icon" icon-name="standard:account" size="small"
+                                alternative-text="Account">
+                            </lightning-icon>
+
+                            <div class="summary-grid">
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        Account Name
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.accountName}
+                                    </span>
+                                </div>
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        Salesforce Account Number
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.salesforceAccountNumber}
+                                    </span>
+                                </div>
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        SAP Account Number
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.sapAccountNumber}
+                                    </span>
+                                </div>
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        Phone
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.phone}
+                                    </span>
+                                </div>
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        Email
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.email}
+                                    </span>
+                                </div>
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        Customer Type
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.customerType}
+                                    </span>
+                                </div>
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        Status
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.status}
+                                    </span>
+                                </div>
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        Active Status
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.activeStatus}
+                                    </span>
+                                </div>
+
+                                <div class="summary-item">
+                                    <span class="summary-label">
+                                        Billing Address
+                                    </span>
+
+                                    <span class="summary-value">
+                                        {account.billingAddress}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:false={account}>
+                        <div class="no-result-panel">
+                            <lightning-icon icon-name="utility:warning" size="small"
+                                alternative-text="Account Not Available">
+                            </lightning-icon>
+
+                            <span>
+                                The matching record is not linked to an accessible Account.
+                            </span>
+                        </div>
+                    </template>
+
+                    <!-- ================================================== -->
+                    <!-- ACCOUNT-BASED RESULT                              -->
+                    <!-- Phone Number or Customer Name Search                -->
+                    <!-- ================================================== -->
+                    <template if:true={isAccountBasedSearchResult}>
+
+                        <template if:true={isMobileSearchResult}>
+                            <!-- Matching Contacts -->
+                            <div class="result-header">
+                                <div>
+                                    <span class="result-title">
+                                        Matching Contact
+                                    </span>
+                                </div>
+
+                                <span class="result-count">
+                                    {matchedContactCount} Contact(s)
+                                </span>
+                            </div>
+
+                            <template if:true={hasMatchedContacts}>
+                                <div class="contact-card-list">
+                                    <template for:each={matchedContacts} for:item="contactRecord">
+
+                                        <div key={contactRecord.contactId} class={contactRecord.cardClass}
+                                            data-contact-id={contactRecord.contactId} onclick={handleContactCardClick}>
+
+                                            <lightning-input type="checkbox" label="Select Contact"
+                                                variant="label-hidden" data-contact-id={contactRecord.contactId}
+                                                checked={contactRecord.isSelected} onclick={handleSelectionControlClick}
+                                                onchange={handleContactCardSelection} disabled={isLoading}>
+                                            </lightning-input>
+
+                                            <lightning-icon class="summary-icon" icon-name="standard:contact"
+                                                size="small" alternative-text="Contact">
+                                            </lightning-icon>
+
+                                            <div class="summary-grid">
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Contact Name
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <a class="contact-record-link" href={contactRecord.contactUrl}
+                                                            target="_blank" onclick={handleRecordLinkClick}>
+                                                            {contactRecord.contactName}
+                                                        </a>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Phone
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-phone value={contactRecord.phone}>
+                                                        </lightning-formatted-phone>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Mobile
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-phone value={contactRecord.mobilePhone}>
+                                                        </lightning-formatted-phone>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Email
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-email value={contactRecord.email}>
+                                                        </lightning-formatted-email>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Title
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {contactRecord.title}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Department
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {contactRecord.department}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item contact-address-item">
+                                                    <span class="summary-label">
+                                                        Mailing Address
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {contactRecord.mailingAddress}
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <template if:false={hasMatchedContacts}>
+                                <div class="no-result-panel">
+                                    <lightning-icon icon-name="utility:info" size="small"
+                                        alternative-text="No Matching Contact">
+                                    </lightning-icon>
+
+                                    <span>
+                                        No matching Contact record is available.
+                                    </span>
+                                </div>
+                            </template>
+                        </template>
+
+                        <template if:true={isCustomerSearchResult}>
+                            <!-- Related Contacts -->
+                            <div class="result-header">
+                                <div>
+                                    <span class="result-title">
+                                        Related Contacts
+                                    </span>
+                                </div>
+
+                                <span class="result-count">
+                                    {contactCount} Contact(s)
+                                </span>
+                            </div>
+
+                            <template if:true={hasContacts}>
+                                <div class="contact-card-list">
+                                    <template for:each={contacts} for:item="contactRecord">
+
+                                        <div key={contactRecord.contactId} class={contactRecord.cardClass}
+                                            data-contact-id={contactRecord.contactId} onclick={handleContactCardClick}>
+
+                                            <lightning-input type="checkbox" label="Select Contact"
+                                                variant="label-hidden" data-contact-id={contactRecord.contactId}
+                                                checked={contactRecord.isSelected} onclick={handleSelectionControlClick}
+                                                onchange={handleContactCardSelection} disabled={isLoading}>
+                                            </lightning-input>
+
+                                            <lightning-icon class="summary-icon" icon-name="standard:contact"
+                                                size="small" alternative-text="Contact">
+                                            </lightning-icon>
+
+                                            <div class="summary-grid">
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Contact Name
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <a class="contact-record-link" href={contactRecord.contactUrl}
+                                                            target="_blank" onclick={handleRecordLinkClick}>
+                                                            {contactRecord.contactName}
+                                                        </a>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Phone
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-phone value={contactRecord.phone}>
+                                                        </lightning-formatted-phone>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Mobile
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-phone value={contactRecord.mobilePhone}>
+                                                        </lightning-formatted-phone>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Email
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-email value={contactRecord.email}>
+                                                        </lightning-formatted-email>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Title
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {contactRecord.title}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Department
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {contactRecord.department}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item contact-address-item">
+                                                    <span class="summary-label">
+                                                        Mailing Address
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {contactRecord.mailingAddress}
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <template if:false={hasContacts}>
+                                <div class="no-result-panel">
+                                    <lightning-icon icon-name="utility:info" size="small"
+                                        alternative-text="No Contacts">
+                                    </lightning-icon>
+
+                                    <span>
+                                        No Contact records are linked to this Account.
+                                    </span>
+                                </div>
+                            </template>
+                        </template>
+
+                        <!-- Combined Asset and Serial Number Cards -->
+                        <div class="result-header">
+                            <div>
+                                <span class="result-title">
+                                    Assets and Asset Serial Numbers
+                                </span>
+                            </div>
+
+                            <span class="result-count">
+                                {serialNumberCount} Record(s)
+                            </span>
+                        </div>
+
+                        <template if:true={hasCombinedAssetSerialCards}>
+                            <div class="asset-serial-card-list">
+                                <template for:each={combinedAssetSerialCards} for:item="combinedRecord">
+
+                                    <div key={combinedRecord.assetSerialNumberId} class={combinedRecord.cardClass}
+                                        data-serial-id={combinedRecord.assetSerialNumberId}
+                                        onclick={handleCombinedAssetSerialCardClick}>
+
+                                        <div class="asset-serial-card-selector">
+                                            <lightning-input type="checkbox" label="Select Asset Serial Number"
+                                                variant="label-hidden"
+                                                data-serial-id={combinedRecord.assetSerialNumberId}
+                                                checked={combinedRecord.isSelected}
+                                                onclick={handleSelectionControlClick}
+                                                onchange={handleCombinedAssetSerialSelection} disabled={isLoading}>
+                                            </lightning-input>
+                                        </div>
+
+                                        <lightning-icon class="asset-serial-card-icon" icon-name="standard:asset_object"
+                                            size="small" alternative-text="Asset and Serial Number">
+                                        </lightning-icon>
+
+                                        <div class="asset-serial-card-content">
+
+                                            <div class="asset-serial-card-heading">
+                                                <div>
+                                                    <span class="asset-serial-card-title">
+                                                        <a href={combinedRecord.assetUrl} target="_blank"
+                                                            onclick={handleRecordLinkClick}>
+                                                            {combinedRecord.assetName}
+                                                        </a>
+                                                    </span>
+
+                                                    <span class="asset-serial-card-subtitle">
+                                                        Asset
+                                                    </span>
+                                                </div>
+
+                                                <div class="asset-serial-number-heading">
+                                                    <span class="asset-serial-number-label">
+                                                        Asset Serial No
+                                                    </span>
+
+                                                    <a class="asset-serial-number-link"
+                                                        href={combinedRecord.assetSerialNumberUrl} target="_blank"
+                                                        onclick={handleRecordLinkClick}>
+                                                        {combinedRecord.serialNumber}
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="asset-serial-detail-grid">
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        PV Module Rating / Model No
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {combinedRecord.pvModuleRatingModelNo}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Status
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {combinedRecord.status}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Purchase Date
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-date-time
+                                                            value={combinedRecord.purchaseDate} year="numeric"
+                                                            month="short" day="2-digit" time-zone="UTC">
+                                                        </lightning-formatted-date-time>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Install Date
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-date-time
+                                                            value={combinedRecord.installDate} year="numeric"
+                                                            month="short" day="2-digit" time-zone="UTC">
+                                                        </lightning-formatted-date-time>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Invoice Number
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {combinedRecord.invoiceNumber}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Invoice Date
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-date-time
+                                                            value={combinedRecord.invoiceDate} year="numeric"
+                                                            month="short" day="2-digit" time-zone="UTC">
+                                                        </lightning-formatted-date-time>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Quantity
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-number value={combinedRecord.quantity}
+                                                            maximum-fraction-digits="2">
+                                                        </lightning-formatted-number>
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="asset-site-details-section">
+                                                <div class="asset-site-details-title">
+                                                    Site Details
+                                                </div>
+
+                                                <div class="asset-site-details-grid">
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Site Name
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.siteName}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item asset-site-address">
+                                                        <span class="summary-label">
+                                                            Street Address
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.streetAddress}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            City
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.city}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            State
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.state}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Country
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.country}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Pin Code
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.pinCode}
+                                                        </span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <template if:true={combinedRecord.hasCardWarranties}>
+                                                <div class="asset-warranty-mini-section">
+                                                    <div class="asset-warranty-mini-header">
+                                                        Asset Warranties
+                                                        <span class="asset-warranty-mini-count">
+                                                            {combinedRecord.warrantyCount}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="asset-warranty-mini-list">
+                                                        <template for:each={combinedRecord.cardWarranties}
+                                                            for:item="warrantyRecord">
+
+                                                            <div key={warrantyRecord.assetWarrantyId}
+                                                                class="asset-warranty-mini-card">
+
+                                                                <div class="asset-warranty-mini-top">
+                                                                    <a class="asset-warranty-mini-link"
+                                                                        href={warrantyRecord.assetWarrantyUrl}
+                                                                        target="_blank" onclick={handleRecordLinkClick}>
+                                                                        {warrantyRecord.assetWarrantyNumber}
+                                                                    </a>
+
+                                                                    <span class="asset-warranty-mini-type">
+                                                                        {warrantyRecord.warrantyType}
+                                                                    </span>
+                                                                </div>
+
+                                                                <div class="asset-warranty-mini-meta">
+                                                                    <span>
+                                                                        {warrantyRecord.type}
+                                                                    </span>
+
+                                                                    <span>
+                                                                        {warrantyRecord.approvalStatus}
+                                                                    </span>
+
+                                                                    <span>
+                                                                        Active:
+                                                                        {warrantyRecord.active}
+                                                                    </span>
+                                                                </div>
+
+                                                                <div class="asset-warranty-mini-dates">
+                                                                    <span class="asset-warranty-mini-date-item">
+                                                                        Start:
+                                                                        <lightning-formatted-date-time
+                                                                            value={warrantyRecord.startDate}
+                                                                            year="numeric" month="short" day="2-digit"
+                                                                            time-zone="UTC">
+                                                                        </lightning-formatted-date-time>
+                                                                    </span>
+
+                                                                    <span class="asset-warranty-mini-date-item">
+                                                                        End:
+                                                                        <lightning-formatted-date-time
+                                                                            value={warrantyRecord.endDate}
+                                                                            year="numeric" month="short" day="2-digit"
+                                                                            time-zone="UTC">
+                                                                        </lightning-formatted-date-time>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasCombinedAssetSerialCards}>
+                            <div class="no-result-panel">
+                                <lightning-icon icon-name="utility:info" size="small"
+                                    alternative-text="No Asset Serial Numbers">
+                                </lightning-icon>
+
+                                <span>
+                                    No Asset Serial Number records are linked to the related Assets.
+                                </span>
+                            </div>
+                        </template>
+
+                    </template>
+
+                    <!-- ================================================== -->
+                    <!-- SERIAL NUMBER RESULT                               -->
+                    <!-- ================================================== -->
+                    <template if:true={isSerialSearchResult}>
+
+                        <!-- Related Contacts -->
+                        <div class="result-header">
+                            <div>
+                                <span class="result-title">
+                                    Related Contacts
+                                </span>
+                            </div>
+
+                            <span class="result-count">
+                                {contactCount} Contact(s)
+                            </span>
+                        </div>
+
+                        <template if:true={hasContacts}>
+                            <div class="contact-card-list">
+                                <template for:each={contacts} for:item="contactRecord">
+
+                                    <div key={contactRecord.contactId} class={contactRecord.cardClass}
+                                        data-contact-id={contactRecord.contactId} onclick={handleContactCardClick}>
+
+                                        <lightning-input type="checkbox" label="Select Contact" variant="label-hidden"
+                                            data-contact-id={contactRecord.contactId} checked={contactRecord.isSelected}
+                                            onclick={handleSelectionControlClick} onchange={handleContactCardSelection}
+                                            disabled={isLoading}>
+                                        </lightning-input>
+
+                                        <lightning-icon class="summary-icon" icon-name="standard:contact" size="small"
+                                            alternative-text="Contact">
+                                        </lightning-icon>
+
+                                        <div class="summary-grid">
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Contact Name
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    <a class="contact-record-link" href={contactRecord.contactUrl}
+                                                        target="_blank" onclick={handleRecordLinkClick}>
+                                                        {contactRecord.contactName}
+                                                    </a>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Phone
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    <lightning-formatted-phone value={contactRecord.phone}>
+                                                    </lightning-formatted-phone>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Mobile
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    <lightning-formatted-phone value={contactRecord.mobilePhone}>
+                                                    </lightning-formatted-phone>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Email
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    <lightning-formatted-email value={contactRecord.email}>
+                                                    </lightning-formatted-email>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Title
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    {contactRecord.title}
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Department
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    {contactRecord.department}
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item contact-address-item">
+                                                <span class="summary-label">
+                                                    Mailing Address
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    {contactRecord.mailingAddress}
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasContacts}>
+                            <div class="no-result-panel">
+                                <lightning-icon icon-name="utility:info" size="small" alternative-text="No Contacts">
+                                </lightning-icon>
+
+                                <span>
+                                    No Contact records are linked to this Account.
+                                </span>
+                            </div>
+                        </template>
+
+                        <!-- Combined Asset and Serial Number Cards -->
+                        <div class="result-header">
+                            <div>
+                                <span class="result-title">
+                                    Assets and Asset Serial Numbers
+                                </span>
+                            </div>
+
+                            <span class="result-count">
+                                {serialNumberCount} Record(s)
+                            </span>
+                        </div>
+
+                        <template if:true={hasCombinedAssetSerialCards}>
+                            <div class="asset-serial-card-list">
+                                <template for:each={combinedAssetSerialCards} for:item="combinedRecord">
+
+                                    <div key={combinedRecord.assetSerialNumberId} class={combinedRecord.cardClass}
+                                        data-serial-id={combinedRecord.assetSerialNumberId}
+                                        onclick={handleCombinedAssetSerialCardClick}>
+
+                                        <div class="asset-serial-card-selector">
+                                            <lightning-input type="checkbox" label="Select Asset Serial Number"
+                                                variant="label-hidden"
+                                                data-serial-id={combinedRecord.assetSerialNumberId}
+                                                checked={combinedRecord.isSelected}
+                                                onclick={handleSelectionControlClick}
+                                                onchange={handleCombinedAssetSerialSelection} disabled={isLoading}>
+                                            </lightning-input>
+                                        </div>
+
+                                        <lightning-icon class="asset-serial-card-icon" icon-name="standard:asset_object"
+                                            size="small" alternative-text="Asset and Serial Number">
+                                        </lightning-icon>
+
+                                        <div class="asset-serial-card-content">
+
+                                            <div class="asset-serial-card-heading">
+                                                <div>
+                                                    <span class="asset-serial-card-title">
+                                                        <a href={combinedRecord.assetUrl} target="_blank"
+                                                            onclick={handleRecordLinkClick}>
+                                                            {combinedRecord.assetName}
+                                                        </a>
+                                                    </span>
+
+                                                    <span class="asset-serial-card-subtitle">
+                                                        Asset
+                                                    </span>
+                                                </div>
+
+                                                <div class="asset-serial-number-heading">
+                                                    <span class="asset-serial-number-label">
+                                                        Asset Serial No
+                                                    </span>
+
+                                                    <a class="asset-serial-number-link"
+                                                        href={combinedRecord.assetSerialNumberUrl} target="_blank"
+                                                        onclick={handleRecordLinkClick}>
+                                                        {combinedRecord.serialNumber}
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="asset-serial-detail-grid">
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        PV Module Rating / Model No
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {combinedRecord.pvModuleRatingModelNo}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Status
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {combinedRecord.status}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Purchase Date
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-date-time
+                                                            value={combinedRecord.purchaseDate} year="numeric"
+                                                            month="short" day="2-digit" time-zone="UTC">
+                                                        </lightning-formatted-date-time>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Install Date
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-date-time
+                                                            value={combinedRecord.installDate} year="numeric"
+                                                            month="short" day="2-digit" time-zone="UTC">
+                                                        </lightning-formatted-date-time>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Invoice Number
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        {combinedRecord.invoiceNumber}
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Invoice Date
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-date-time
+                                                            value={combinedRecord.invoiceDate} year="numeric"
+                                                            month="short" day="2-digit" time-zone="UTC">
+                                                        </lightning-formatted-date-time>
+                                                    </span>
+                                                </div>
+
+                                                <div class="summary-item">
+                                                    <span class="summary-label">
+                                                        Quantity
+                                                    </span>
+
+                                                    <span class="summary-value">
+                                                        <lightning-formatted-number value={combinedRecord.quantity}
+                                                            maximum-fraction-digits="2">
+                                                        </lightning-formatted-number>
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="asset-site-details-section">
+                                                <div class="asset-site-details-title">
+                                                    Site Details
+                                                </div>
+
+                                                <div class="asset-site-details-grid">
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Site Name
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.siteName}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item asset-site-address">
+                                                        <span class="summary-label">
+                                                            Street Address
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.streetAddress}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            City
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.city}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            State
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.state}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Country
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.country}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Pin Code
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.pinCode}
+                                                        </span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <template if:true={combinedRecord.hasCardWarranties}>
+                                                <div class="asset-warranty-mini-section">
+                                                    <div class="asset-warranty-mini-header">
+                                                        Asset Warranties
+                                                        <span class="asset-warranty-mini-count">
+                                                            {combinedRecord.warrantyCount}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="asset-warranty-mini-list">
+                                                        <template for:each={combinedRecord.cardWarranties}
+                                                            for:item="warrantyRecord">
+
+                                                            <div key={warrantyRecord.assetWarrantyId}
+                                                                class="asset-warranty-mini-card">
+
+                                                                <div class="asset-warranty-mini-top">
+                                                                    <a class="asset-warranty-mini-link"
+                                                                        href={warrantyRecord.assetWarrantyUrl}
+                                                                        target="_blank" onclick={handleRecordLinkClick}>
+                                                                        {warrantyRecord.assetWarrantyNumber}
+                                                                    </a>
+
+                                                                    <span class="asset-warranty-mini-type">
+                                                                        {warrantyRecord.warrantyType}
+                                                                    </span>
+                                                                </div>
+
+                                                                <div class="asset-warranty-mini-meta">
+                                                                    <span>
+                                                                        {warrantyRecord.type}
+                                                                    </span>
+
+                                                                    <span>
+                                                                        {warrantyRecord.approvalStatus}
+                                                                    </span>
+
+                                                                    <span>
+                                                                        Active:
+                                                                        {warrantyRecord.active}
+                                                                    </span>
+                                                                </div>
+
+                                                                <div class="asset-warranty-mini-dates">
+                                                                    <span class="asset-warranty-mini-date-item">
+                                                                        Start:
+                                                                        <lightning-formatted-date-time
+                                                                            value={warrantyRecord.startDate}
+                                                                            year="numeric" month="short" day="2-digit"
+                                                                            time-zone="UTC">
+                                                                        </lightning-formatted-date-time>
+                                                                    </span>
+
+                                                                    <span class="asset-warranty-mini-date-item">
+                                                                        End:
+                                                                        <lightning-formatted-date-time
+                                                                            value={warrantyRecord.endDate}
+                                                                            year="numeric" month="short" day="2-digit"
+                                                                            time-zone="UTC">
+                                                                        </lightning-formatted-date-time>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasCombinedAssetSerialCards}>
+                            <div class="no-result-panel">
+                                <lightning-icon icon-name="utility:info" size="small"
+                                    alternative-text="No Asset Serial Numbers">
+                                </lightning-icon>
+
+                                <span>
+                                    No Asset Serial Number records are linked to the related Assets.
+                                </span>
+                            </div>
+                        </template>
+
+                    </template>
+
+                    <!-- Next -->
+                    <div class="result-footer">
+                        <div class="selection-information">
+
+                            <template if:true={hasSelectedAssetSerialNumber}>
+                                <strong>{selectedAssetSerialNumberCount}</strong>
+                                Asset Serial Number(s) selected across
+                                <strong>{selectedAssetCount}</strong>
+                                Asset(s).
+                            </template>
+
+                            <template if:false={hasSelectedAssetSerialNumber}>
+                                Asset Serial Number selection is optional. Click Next to continue without selecting an
+                                Asset.
+                            </template>
+
+                        </div>
+
+                        <lightning-button label="Next" title="Continue to Case Form" variant="brand"
+                            icon-name="utility:chevronright" icon-position="right" onclick={handleNext}
+                            disabled={isNextDisabled}>
+                        </lightning-button>
+                    </div>
+
+                </div>
+            </template>
+
+        </template>
+
+
+        <!-- ====================================================== -->
+        <!-- NEW CUSTOMER FALLBACK: ACCOUNT + CONTACT + CASE        -->
+        <!-- ====================================================== -->
+        <template if:true={isNewCustomerCaseStep}>
+            <div class="case-form-panel">
+
+                <div class="case-form-header">
+                    <div>
+                        <h2 class="case-form-title">
+                            Create New Customer and Case
+                        </h2>
+
+                        <p class="case-form-subtitle">
+                            Enter the Account, Contact and Case details. All three records will be created together.
+                        </p>
+                    </div>
+
+                    <div class="step-indicator">
+                        New Customer
+                    </div>
+                </div>
+
+                <div class="case-form-body new-customer-form-body">
+
+                    <template if:true={isSaving}>
+                        <div class="form-spinner">
+                            <lightning-spinner alternative-text="Creating Account, Contact and Case" size="medium">
+                            </lightning-spinner>
+                        </div>
+                    </template>
+
+                    <lightning-record-edit-form object-api-name={caseObjectApiName} density="comfy"
+                        onsubmit={handleNewCustomerCaseSubmit}>
+
+                        <lightning-messages>
+                        </lightning-messages>
+
+                        <div class="new-customer-container">
+
+                            <!-- ACCOUNT DETAILS -->
+                            <section class="new-record-section">
+                                <div class="new-record-section-header">
+                                    <lightning-icon icon-name="standard:account" size="small"
+                                        alternative-text="Account">
+                                    </lightning-icon>
+
+                                    <div>
+                                        <h2 class="section-title">Account Details</h2>
+                                        <p class="section-subtitle">
+                                            Enter the customer’s account information
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="new-record-grid">
+                                    <lightning-input data-new-customer-input name="newAccountName" label="Account Name"
+                                        value={newAccountName} onchange={handleNewCustomerInputChange} required>
+                                    </lightning-input>
+
+                                    <lightning-input data-new-customer-input type="email" name="newAccountEmail"
+                                        label="Email Address" value={newAccountEmail}
+                                        message-when-type-mismatch="Enter a valid email address."
+                                        onchange={handleNewCustomerInputChange}>
+                                    </lightning-input>
+
+
+                                    <lightning-input data-new-customer-input type="tel" name="newAccountPhone"
+                                        label="Primary Mobile Number" value={newAccountPhone} pattern="[0-9]{10}"
+                                        minlength="10" maxlength="10"
+                                        message-when-pattern-mismatch="Enter a valid 10-digit mobile number."
+                                        message-when-too-short="Mobile number must contain exactly 10 digits."
+                                        onchange={handleNewCustomerInputChange} required>
+                                    </lightning-input>
+
+                                    <lightning-input data-new-customer-input type="tel" name="newAccountMobile"
+                                        label="Alternate Mobile Number" value={newAccountMobile} pattern="[0-9]{10}"
+                                        minlength="10" maxlength="10"
+                                        message-when-pattern-mismatch="Enter a valid 10-digit mobile number."
+                                        message-when-too-short="Mobile number must contain exactly 10 digits."
+                                        onchange={handleNewCustomerInputChange}>
+                                    </lightning-input>
+
+
+
+                                </div>
+
+
+
+                                <div class="new-record-grid">
+                                    <lightning-input data-new-customer-input name="newContactFirstName"
+                                        label="First Name" value={newContactFirstName}
+                                        onchange={handleNewCustomerInputChange} required>
+                                    </lightning-input>
+
+                                    <lightning-input data-new-customer-input name="newContactLastName" label="Last Name"
+                                        value={newContactLastName} onchange={handleNewCustomerInputChange} required>
+                                    </lightning-input>
+                                </div>
+
+
+
+
+                                <div class="new-record-grid">
+
+                                    <!-- Building Street -->
+                                    <lightning-textarea data-new-customer-input class="new-record-full-width"
+                                        name="newBuildingStreet" label="Building Street" value={newBuildingStreet}
+                                        onchange={handleNewCustomerInputChange} required>
+                                    </lightning-textarea>
+
+                                    <!-- Postal Code -->
+                                    <lightning-input data-new-customer-input name="newBillingPostalCode"
+                                        label="Postal Code" value={newBillingPostalCode}
+                                        onchange={handleNewCustomerInputChange} required>
+                                    </lightning-input>
+
+                                    <!-- District -->
+                                    <lightning-input data-new-customer-input name="newDistrict" label="District"
+                                        value={newDistrict} onchange={handleNewCustomerInputChange} required>
+                                    </lightning-input>
+
+
+                                    <!-- City -->
+                                    <lightning-input data-new-customer-input name="newBillingCity" label="City"
+                                        value={newBillingCity} onchange={handleNewCustomerInputChange} required>
+                                    </lightning-input>
+
+
+                                    <!-- State -->
+                                    <lightning-combobox class="state-combobox" data-new-customer-input name="newBillingState" label="State"
+                                        value={newBillingState} options={stateOptions}
+                                        placeholder="Select State" onchange={handleNewCustomerInputChange} required>
+                                    </lightning-combobox>
+
+                                </div>
+                            </section>
+
+                        </div>
+
+
+                        <section class="new-record-section">
+                            <div class="new-record-section-header">
+                                <lightning-icon icon-name="standard:case" size="small" alternative-text="Case">
+                                </lightning-icon>
+                                <span>Case Details</span>
+                            </div>
+
+                            <div class="case-field-grid">
+
+                                <!-- Product -->
+                                <div class="case-field">
+                                    <lightning-input-field field-name={productField} required>
+                                    </lightning-input-field>
+                                </div>
+
+                                <!-- Product Category - dependent on Product -->
+                                <div class="case-field">
+                                    <lightning-input-field field-name={productCategoriesField} required>
+                                    </lightning-input-field>
+                                </div>
+
+                                <div class="case-field">
+                                    <lightning-input-field field-name={originField} required>
+                                    </lightning-input-field>
+                                </div>
+
+                                <!-- <div class="case-field">
+                                <lightning-input-field field-name={statusField} value="New" required>
+                                </lightning-input-field>
+                            </div>-->
+
+                                <div class="case-field">
+                                    <lightning-input-field field-name={priorityField} required>
+                                    </lightning-input-field>
+                                </div>
+
+                                <!--Customer Type-->
+                                <div>
+                                    <lightning-combobox data-new-customer-input name="newCustomerType"
+                                        label="Customer Type" value={newCustomerType} placeholder="Select Customer Type"
+                                        options={customerTypeOptions} onchange={handleNewCustomerInputChange} required>
+                                    </lightning-combobox>
+                                </div>
+
+                                <template if:true={isNewCustomerDealer}>
+
+                                    <!-- Dealer Name -->
+                                    <div class="case-field">
+
+                                        <lightning-input data-new-customer-input type="text" name="dealerName"
+                                            label="Dealer Name" value={dealerName}
+                                            onchange={handleNewCustomerInputChange}>
+                                        </lightning-input>
+
+                                    </div>
+
+
+                                    <!-- Dealer Contact No. -->
+                                    <div class="case-field">
+
+                                        <lightning-input data-new-customer-input type="tel" name="dealerContactNo"
+                                            label="Dealer Contact No." value={dealerContactNo} pattern="[0-9]{10}"
+                                            minlength="10" maxlength="10"
+                                            message-when-pattern-mismatch="Enter a valid 10-digit Dealer Contact Number."
+                                            message-when-too-short="Dealer Contact Number must contain exactly 10 digits."
+                                            onchange={handleNewCustomerInputChange}>
+                                        </lightning-input>
+
+                                    </div>
+
+                                </template>
+
+                                <!--Stock Type-->
+
+                                <div>
+                                    <lightning-combobox data-new-customer-input name="newStockType" label="Stock Type"
+                                        value={newStockType} placeholder="Select Stock Type" options={stockTypeOptions}
+                                        onchange={handleNewCustomerInputChange} disabled={isStockTypeDisabled} required>
+                                    </lightning-combobox>
+                                </div>
+
+
+                                <!-- Complaint Type -->
+                                <div class="case-field">
+                                    <lightning-input-field field-name={complaintTypeSrtField} required>
+                                    </lightning-input-field>
+                                </div>
+
+
+                                <!--Complaint Sub Type 
+                                <div class="case-field">
+                                    <lightning-input-field field-name={complaintSubTypeSrtField}>
+                                    </lightning-input-field>
+                                </div>-->
+
+                                <!-- Complaint Reason -->
+                                <div class="case-field">
+                                    <lightning-input-field field-name={complaintReasonField}>
+                                    </lightning-input-field>
+                                </div>
+
+                                <!-- Failure Category 
+                            <div class="case-field">
+                                <lightning-input-field field-name={failureCategoryField}>
+                                </lightning-input-field>
+                            </div>
+
+                             Closure Reason 
+                            <div class="case-field">
+                                <lightning-input-field field-name={closureReasonField}>
+                                </lightning-input-field>
+                            </div>-->
+
+                                <div class="case-field full-width">
+                                    <lightning-input-field field-name={descriptionField} required>
+                                    </lightning-input-field>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <div class="case-form-actions">
+                            <lightning-button label="Back to Search" title="Back to Search" variant="neutral"
+                                icon-name="utility:chevronleft" onclick={handleBackFromNewCustomerCase}
+                                disabled={isSaving}>
+                            </lightning-button>
+
+                            <lightning-button type="submit" label="Save Account, Contact & Case"
+                                title="Save Account, Contact and Case" variant="brand" icon-name="utility:save"
+                                disabled={isSaving}>
+                            </lightning-button>
+                        </div>
+
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </template>
+
+        <!-- ====================================================== -->
+        <!-- STEP 2: CASE CREATION FORM                             -->
+        <!-- ====================================================== -->
+        <template if:true={isCaseFormStep}>
+            <div class="case-form-panel">
+
+                <div class="case-form-header">
+                    <div>
+                        <h2 class="case-form-title">
+                            Create Case
+                        </h2>
+
+                        <p class="case-form-subtitle">
+                            Enter the Case details, then review the selected records below.
+                        </p>
+                    </div>
+
+                    <div class="step-indicator">
+                        Step 2 of 2
+                    </div>
+                </div>
+
+                <div class="case-form-body">
+
+                    <template if:true={isSaving}>
+                        <div class="form-spinner">
+                            <lightning-spinner alternative-text="Creating Case" size="medium">
+                            </lightning-spinner>
+                        </div>
+                    </template>
+
+                    <lightning-record-edit-form object-api-name={caseObjectApiName} density="comfy"
+                        onsubmit={handleCaseSubmit}>
+
+                        <lightning-messages>
+                        </lightning-messages>
+
+                        <!-- ================================================== -->
+                        <!-- CASE DETAILS - EXISTING CUSTOMER                   -->
+                        <!-- Same field structure as New Customer Case form     -->
+                        <!-- ================================================== -->
+
+                        <section class="new-record-section">
+
+                            <div class="new-record-section-header">
+
+                                <lightning-icon icon-name="standard:case" size="small" alternative-text="Case">
+                                </lightning-icon>
+
+                                <span>
+                                    Case Details
+                                </span>
+
+                            </div>
+
+
+                            <div class="case-field-grid">
+
+                                <!-- Product -->
+                                <div class="case-field">
+
+                                    <lightning-input-field field-name={productField} required>
+                                    </lightning-input-field>
+
+                                </div>
+
+
+                                <!-- Product Category -->
+                                <div class="case-field">
+
+                                    <lightning-input-field field-name={productCategoriesField} required>
+                                    </lightning-input-field>
+
+                                </div>
+
+
+                                <!-- Case Origin -->
+                                <div class="case-field">
+
+                                    <lightning-input-field field-name={originField} required>
+                                    </lightning-input-field>
+
+                                </div>
+
+
+                                <!-- Priority -->
+                                <div class="case-field">
+
+                                    <lightning-input-field field-name={priorityField} required>
+                                    </lightning-input-field>
+
+                                </div>
+
+
+                                <!-- Customer Type -->
+                                <div class="case-field">
+
+                                    <lightning-combobox data-existing-case-input name="caseCustomerType"
+                                        label="Customer Type" value={caseCustomerType}
+                                        placeholder="Select Customer Type" options={customerTypeOptions}
+                                        onchange={handleExistingCaseInputChange} required>
+                                    </lightning-combobox>
+
+                                </div>
+
+
+                                <template if:true={isExistingCaseDealer}>
+
+                                    <!-- Dealer Name -->
+                                    <div class="case-field">
+
+                                        <lightning-input data-existing-case-input type="text" name="caseDealerName"
+                                            label="Dealer Name" value={caseDealerName}
+                                            onchange={handleExistingCaseInputChange}>
+                                        </lightning-input>
+
+                                    </div>
+
+
+                                    <!-- Dealer Contact No. -->
+                                    <div class="case-field">
+
+                                        <lightning-input data-existing-case-input type="tel" name="caseDealerContactNo"
+                                            label="Dealer Contact No." value={caseDealerContactNo} pattern="[0-9]{10}"
+                                            minlength="10" maxlength="10"
+                                            message-when-pattern-mismatch="Enter a valid 10-digit Dealer Contact Number."
+                                            message-when-too-short="Dealer Contact Number must contain exactly 10 digits."
+                                            onchange={handleExistingCaseInputChange}>
+                                        </lightning-input>
+
+                                    </div>
+
+                                </template>
+
+
+                                <!-- Stock Type -->
+                                <div class="case-field">
+
+                                    <lightning-combobox data-existing-case-input name="caseStockType" label="Stock Type"
+                                        value={caseStockType} placeholder="Select Stock Type" options={stockTypeOptions}
+                                        onchange={handleExistingCaseInputChange}
+                                        disabled={isExistingCaseStockTypeDisabled} required>
+                                    </lightning-combobox>
+
+                                </div>
+
+
+                                <!-- Complaint Type -->
+                                <div class="case-field">
+
+                                    <lightning-input-field field-name={complaintTypeSrtField} required>
+                                    </lightning-input-field>
+
+                                </div>
+
+
+                                <!-- Complaint Sub Type 
+                                <div class="case-field">
+
+                                    <lightning-input-field field-name={complaintSubTypeSrtField}>
+                                    </lightning-input-field>
+
+                                </div>-->
+
+
+                                <!-- Complaint Reason -->
+                                <div class="case-field">
+
+                                    <lightning-input-field field-name={complaintReasonField}>
+                                    </lightning-input-field>
+
+                                </div>
+
+
+                                <!-- Description -->
+                                <div class="case-field full-width">
+
+                                    <lightning-input-field field-name={descriptionField} required>
+                                    </lightning-input-field>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <!-- Selected Records Review -->
+                        <div class="case-review-container">
+
+                            <div class="case-review-title">
+                                Selected Records
+                            </div>
+
+                            <!-- Selected Account -->
+                            <div class="result-header review-result-header">
+                                <div>
+                                    <span class="result-title">
+                                        Account Details
+                                    </span>
+                                </div>
+                            </div>
+
+                            <template if:true={account}>
+                                <div class="selected-item-summary review-account-card">
+
+                                    <lightning-icon class="summary-icon" icon-name="standard:account" size="small"
+                                        alternative-text="Account">
+                                    </lightning-icon>
+
+                                    <div class="summary-grid">
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                Account Name
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.accountName}
+                                            </span>
+                                        </div>
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                Salesforce Account Number
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.salesforceAccountNumber}
+                                            </span>
+                                        </div>
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                SAP Account Number
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.sapAccountNumber}
+                                            </span>
+                                        </div>
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                Phone
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.phone}
+                                            </span>
+                                        </div>
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                Email
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.email}
+                                            </span>
+                                        </div>
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                Customer Type
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.customerType}
+                                            </span>
+                                        </div>
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                Status
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.status}
+                                            </span>
+                                        </div>
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                Active Status
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.activeStatus}
+                                            </span>
+                                        </div>
+
+                                        <div class="summary-item">
+                                            <span class="summary-label">
+                                                Billing Address
+                                            </span>
+
+                                            <span class="summary-value">
+                                                {account.billingAddress}
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Selected Contact -->
+                            <div class="result-header review-result-header">
+                                <div>
+                                    <span class="result-title">
+                                        Selected Contact
+                                    </span>
+                                </div>
+
+                                <template if:true={selectedContact}>
+                                    <span class="result-count">
+                                        1 Contact
+                                    </span>
+                                </template>
+                            </div>
+
+                            <template if:true={selectedContact}>
+                                <div class="contact-card-list review-contact-card-list">
+
+                                    <div
+                                        class="selected-item-summary contact-summary-card contact-summary-card_selected review-contact-card">
+
+                                        <lightning-icon class="summary-icon" icon-name="standard:contact" size="small"
+                                            alternative-text="Contact">
+                                        </lightning-icon>
+
+                                        <div class="summary-grid">
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Contact Name
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    <a class="contact-record-link" href={selectedContact.contactUrl}
+                                                        target="_blank">
+                                                        {selectedContact.contactName}
+                                                    </a>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Phone
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    <lightning-formatted-phone value={selectedContact.phone}>
+                                                    </lightning-formatted-phone>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Mobile
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    <lightning-formatted-phone value={selectedContact.mobilePhone}>
+                                                    </lightning-formatted-phone>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Email
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    <lightning-formatted-email value={selectedContact.email}>
+                                                    </lightning-formatted-email>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Title
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    {selectedContact.title}
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item">
+                                                <span class="summary-label">
+                                                    Department
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    {selectedContact.department}
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-item contact-address-item">
+                                                <span class="summary-label">
+                                                    Mailing Address
+                                                </span>
+
+                                                <span class="summary-value">
+                                                    {selectedContact.mailingAddress}
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:false={selectedContact}>
+                                <div class="no-result-panel review-no-result">
+                                    <lightning-icon icon-name="utility:info" size="small"
+                                        alternative-text="No Contact Selected">
+                                    </lightning-icon>
+
+                                    <span>
+                                        No Contact was selected.
+                                    </span>
+                                </div>
+                            </template>
+
+                            <!-- Selected Asset, Serial Number and Warranty Cards -->
+                            <div class="result-header review-result-header">
+                                <div>
+                                    <span class="result-title">
+                                        Selected Assets and Asset Serial Numbers
+                                    </span>
+                                </div>
+
+                                <span class="result-count">
+                                    {selectedAssetSerialNumberCount} Record(s)
+                                </span>
+                            </div>
+
+                            <template if:true={hasSelectedAssetSerialCards}>
+                                <div class="asset-serial-card-list review-asset-card-list">
+
+                                    <template for:each={selectedAssetSerialCards} for:item="combinedRecord">
+
+                                        <div key={combinedRecord.assetSerialNumberId} class={combinedRecord.cardClass}>
+
+                                            <lightning-icon class="asset-serial-card-icon"
+                                                icon-name="standard:asset_object" size="small"
+                                                alternative-text="Asset and Serial Number">
+                                            </lightning-icon>
+
+                                            <div class="asset-serial-card-content">
+
+                                                <div class="asset-serial-card-heading">
+                                                    <div>
+                                                        <span class="asset-serial-card-title">
+                                                            <a href={combinedRecord.assetUrl} target="_blank">
+                                                                {combinedRecord.assetName}
+                                                            </a>
+                                                        </span>
+
+                                                        <span class="asset-serial-card-subtitle">
+                                                            Asset
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="asset-serial-number-heading">
+                                                        <span class="asset-serial-number-label">
+                                                            Asset Serial No
+                                                        </span>
+
+                                                        <a class="asset-serial-number-link"
+                                                            href={combinedRecord.assetSerialNumberUrl} target="_blank">
+                                                            {combinedRecord.serialNumber}
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="asset-serial-detail-grid">
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            PV Module Rating / Model No
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.pvModuleRatingModelNo}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Status
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.status}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Purchase Date
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            <lightning-formatted-date-time
+                                                                value={combinedRecord.purchaseDate} year="numeric"
+                                                                month="short" day="2-digit" time-zone="UTC">
+                                                            </lightning-formatted-date-time>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Install Date
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            <lightning-formatted-date-time
+                                                                value={combinedRecord.installDate} year="numeric"
+                                                                month="short" day="2-digit" time-zone="UTC">
+                                                            </lightning-formatted-date-time>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Invoice Number
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            {combinedRecord.invoiceNumber}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Invoice Date
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            <lightning-formatted-date-time
+                                                                value={combinedRecord.invoiceDate} year="numeric"
+                                                                month="short" day="2-digit" time-zone="UTC">
+                                                            </lightning-formatted-date-time>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="summary-item">
+                                                        <span class="summary-label">
+                                                            Quantity
+                                                        </span>
+
+                                                        <span class="summary-value">
+                                                            <lightning-formatted-number value={combinedRecord.quantity}
+                                                                maximum-fraction-digits="2">
+                                                            </lightning-formatted-number>
+                                                        </span>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="asset-site-details-section">
+                                                    <div class="asset-site-details-title">
+                                                        Site Details
+                                                    </div>
+
+                                                    <div class="asset-site-details-grid">
+
+                                                        <div class="summary-item">
+                                                            <span class="summary-label">
+                                                                Site Name
+                                                            </span>
+
+                                                            <span class="summary-value">
+                                                                {combinedRecord.siteName}
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="summary-item asset-site-address">
+                                                            <span class="summary-label">
+                                                                Street Address
+                                                            </span>
+
+                                                            <span class="summary-value">
+                                                                {combinedRecord.streetAddress}
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="summary-item">
+                                                            <span class="summary-label">
+                                                                City
+                                                            </span>
+
+                                                            <span class="summary-value">
+                                                                {combinedRecord.city}
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="summary-item">
+                                                            <span class="summary-label">
+                                                                State
+                                                            </span>
+
+                                                            <span class="summary-value">
+                                                                {combinedRecord.state}
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="summary-item">
+                                                            <span class="summary-label">
+                                                                Country
+                                                            </span>
+
+                                                            <span class="summary-value">
+                                                                {combinedRecord.country}
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="summary-item">
+                                                            <span class="summary-label">
+                                                                Pin Code
+                                                            </span>
+
+                                                            <span class="summary-value">
+                                                                {combinedRecord.pinCode}
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <template if:true={combinedRecord.hasCardWarranties}>
+                                                    <div class="asset-warranty-mini-section">
+                                                        <div class="asset-warranty-mini-header">
+                                                            Asset Warranties
+
+                                                            <span class="asset-warranty-mini-count">
+                                                                {combinedRecord.warrantyCount}
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="asset-warranty-mini-list">
+
+                                                            <template for:each={combinedRecord.cardWarranties}
+                                                                for:item="warrantyRecord">
+
+                                                                <div key={warrantyRecord.assetWarrantyId}
+                                                                    class="asset-warranty-mini-card">
+
+                                                                    <div class="asset-warranty-mini-top">
+                                                                        <a class="asset-warranty-mini-link"
+                                                                            href={warrantyRecord.assetWarrantyUrl}
+                                                                            target="_blank">
+                                                                            {warrantyRecord.assetWarrantyNumber}
+                                                                        </a>
+
+                                                                        <span class="asset-warranty-mini-type">
+                                                                            {warrantyRecord.warrantyType}
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <div class="asset-warranty-mini-meta">
+                                                                        <span>
+                                                                            {warrantyRecord.type}
+                                                                        </span>
+
+                                                                        <span>
+                                                                            {warrantyRecord.approvalStatus}
+                                                                        </span>
+
+                                                                        <span>
+                                                                            Active:
+                                                                            {warrantyRecord.active}
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <div class="asset-warranty-mini-dates">
+                                                                        <span class="asset-warranty-mini-date-item">
+                                                                            Start:
+
+                                                                            <lightning-formatted-date-time
+                                                                                value={warrantyRecord.startDate}
+                                                                                year="numeric" month="short"
+                                                                                day="2-digit" time-zone="UTC">
+                                                                            </lightning-formatted-date-time>
+                                                                        </span>
+
+                                                                        <span class="asset-warranty-mini-date-item">
+                                                                            End:
+
+                                                                            <lightning-formatted-date-time
+                                                                                value={warrantyRecord.endDate}
+                                                                                year="numeric" month="short"
+                                                                                day="2-digit" time-zone="UTC">
+                                                                            </lightning-formatted-date-time>
+                                                                        </span>
+                                                                    </div>
+
+                                                                </div>
+                                                            </template>
+
+                                                        </div>
+                                                    </div>
+                                                </template>
+
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                </div>
+                            </template>
+
+                            <template if:false={hasSelectedAssetSerialCards}>
+                                <div class="no-result-panel review-no-result">
+                                    <lightning-icon icon-name="utility:info" size="small"
+                                        alternative-text="No Assets Selected">
+                                    </lightning-icon>
+
+                                    <span>
+                                        No Asset Serial Number records were selected.
+                                    </span>
+                                </div>
+                            </template>
+
+                        </div>
+
+                        <div class="case-form-actions">
+                            <lightning-button label="Back" title="Back to Asset Details" variant="neutral"
+                                icon-name="utility:chevronleft" onclick={handleBack} disabled={isSaving}>
+                            </lightning-button>
+
+                            <lightning-button type="submit" label="Save Case" title="Save Case" variant="brand"
+                                icon-name="utility:save" disabled={isSaving}>
+                            </lightning-button>
+                        </div>
+
+                    </lightning-record-edit-form>
+                </div>
+
+            </div>
+        </template>
+
+    </div>
+</template>

@@ -1,0 +1,241 @@
+<apex:page standardController="Customer_Product_Request__c"
+           extensions="CustomerProductRequestPDF_Ctrl"
+           renderAs="pdf"
+           applyBodyTag="false">
+
+<head>
+    <style>
+        @page {
+            size: A4;
+            margin: 20px;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page {
+            padding: 15px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #ADD8E6;
+            text-align: center;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            background-color: #ADD8E6;
+            padding: 6px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-block {
+            margin-bottom: 10px;
+            page-break-inside: avoid;
+        }
+
+        /* ---------- FIXED DETAIL TABLE ---------- */
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .detail-table td {
+            padding: 5px;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        .label {
+            width: 220px;
+            font-weight: bold;
+        }
+
+        .value {
+            width: auto;
+        }
+
+        /* ---------- MAIN TABLE ---------- */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 8px;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        .data-table th {
+            background-color: #E0FFFF;
+            font-weight: bold;
+        }
+
+        /* ---------- COLUMN WIDTH FIX ---------- */
+        .line-table col.code { width: 20%; }
+        .line-table col.desc { width: 30%; }
+        .line-table col.qty { width: 15%; }
+        .line-table col.uom { width: 15%; }
+        .line-table col.price { width: 20%; }
+
+        .resource-table col.name { width: 25%; }
+        .resource-table col.type { width: 15%; }
+        .resource-table col.phone { width: 25%; }
+        .resource-table col.email { width: 35%; }
+
+        .final-cost {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+
+    <h2>Product Request Feedback Report</h2>
+
+    <!-- ================= CASE INFO ================= -->
+    <div class="info-block">
+        <h3>Case Basic Info</h3>
+        <table class="detail-table">
+            <tr><td class="label">Account Name:</td><td class="value">{!accountName}</td></tr>
+            <tr><td class="label">Contact Name:</td><td class="value">{!contactName}</td></tr>
+            <tr><td class="label">Contact Phone:</td><td class="value">{!contactPhone}</td></tr>
+            <tr><td class="label">Contact Email:</td><td class="value">{!contactEmail}</td></tr>
+            <tr><td class="label">Case Number:</td><td class="value">{!caseNumber}</td></tr>
+            <tr><td class="label">Complaint Type:</td><td class="value">{!complaintType}</td></tr>
+        </table>
+    </div>
+
+    <!-- ================= WORK ORDER ================= -->
+    <div class="info-block">
+        <h3>Work Order Details</h3>
+        <table class="detail-table">
+            <tr><td class="label">Work Order Number:</td><td class="value">{!workOrderNumber}</td></tr>
+        </table>
+    </div>
+
+    <!-- ================= PRODUCT REQUEST ================= -->
+    <div class="info-block">
+        <h3>Product Request Details</h3>
+        <table class="detail-table">
+            <tr><td class="label">Product Request Number:</td><td>{!productRequestNumber}</td></tr>
+            <tr><td class="label">Final Expected Delivery Date:</td><td>{!IF(ISBLANK(needByDateText), 'N/A', LEFT(needByDateText, 10))}</td></tr>
+            <tr><td class="label">Ship To Address:</td><td>{!shipToAddressText}</td></tr>
+            <tr><td class="label">Final Amount to be Paid:</td><td>{!finalAmountText}</td></tr>
+        </table>
+    </div>
+
+    <!-- ================= LINE ITEMS ================= -->
+    <div class="info-block">
+        <h3>Line Item Details</h3>
+        <table class="data-table line-table">
+            <colgroup>
+                <col class="code"/>
+                <col class="desc"/>
+                <col class="qty"/>
+                <col class="uom"/>
+                <col class="price"/>
+            </colgroup>
+            <tr>
+                <th>Material Code</th>
+                <th>Material Description</th>
+                <th>Quantity Requested</th>
+                <th>Quantity UOM</th>
+                <th>Price</th>
+            </tr>
+            <apex:repeat value="{!lineItemRows}" var="li">
+                <tr>
+                    <td>{!li.materialCode}</td>
+                    <td>{!li.materialDescription}</td>
+                    <td>{!li.quantityRequested}</td>
+                    <td>{!li.quantityUom}</td>
+                    <td>{!li.priceText}</td>
+                </tr>
+            </apex:repeat>
+        </table>
+    </div>
+
+    <!-- ================= RESOURCES ================= -->
+    <div class="info-block">
+        <h3>Assigned Resource Information</h3>
+        <table class="data-table resource-table">
+            <colgroup>
+                <col class="name"/>
+                <col class="type"/>
+                <col class="phone"/>
+                <col class="email"/>
+            </colgroup>
+            <tr>
+                <th>Name</th>
+                <th>Resource Type</th>
+                <th>Phone Number</th>
+                <th>Email ID</th>
+            </tr>
+            <apex:repeat value="{!resourceInfoList}" var="res">
+                <tr>
+                    <td>{!res.resourceName}</td>
+                    <td>{!res.resourceType}</td>
+                    <td>{!res.phone}</td>
+                    <td>{!res.email}</td>
+                </tr>
+            </apex:repeat>
+        </table>
+    </div>
+
+    <!-- ================= COST ================= -->
+    <div class="info-block">
+        <h3>Service Estimation Cost Details</h3>
+        <table class="data-table">
+            <tr>
+                <th>Estimation Cost</th>
+                <th>Description</th>
+            </tr>
+            <apex:repeat value="{!costDetails}" var="cost">
+                <tr>
+                    <td>{!cost.Estimated_Cost__c}</td>
+                    <td>{!cost.Description__c}</td>
+                </tr>
+            </apex:repeat>
+        </table>
+
+        <div class="final-cost">
+            Final Service Estimation Cost: {!woRecord.Final_Service_Estimation_Cost__c}
+        </div>
+    </div>
+
+    <!-- ================= FEEDBACK ================= -->
+    <div class="info-block">
+        <h3>Customer Feedback</h3>
+        <table class="detail-table">
+            <tr>
+                <td class="label">Customer Feedback:</td>
+                <td>{!cprRecord.Customar_Feedback__c}</td>
+            </tr>
+            <tr>
+                <td class="label">Remarks:</td>
+                <td>{!cprRecord.Remarks__c}</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+</body>
+</apex:page>

@@ -1,0 +1,243 @@
+<template>
+
+    <!-- ================= SUCCESS MESSAGE ================= -->
+    <template if:true={isSubmitted}>
+        <div class="success-wrapper">
+            <lightning-card>
+                <div class="success-container">
+                    <h2>You have been successfully registered!</h2>
+                    <p>Our team will review your details and get back to you shortly.</p>
+                </div>
+            </lightning-card>
+        </div>
+    </template>
+
+    <!-- ================= FORM ================= -->
+    <template if:false={isSubmitted}>
+        <div class="form-wrapper">
+
+            <lightning-card title="Jakson SRT Value Plus Partners - Registration Form">
+
+                <!-- ================= Applicant Details ================= -->
+                <div class="section">
+                    <h2 class="section-title">Applicant Details</h2>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Full Name"
+                                data-field="Full_Name__c"
+                                value={reg.Full_Name__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Designation / Role"
+                                data-field="Designation__c"
+                                value={reg.Designation__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Organization / Firm Name"
+                                data-field="Organization_Name__c"
+                                value={reg.Organization_Name__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Mobile Number"
+                                data-field="Mobile_Number__c"
+                                value={reg.Mobile_Number__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input type="email"
+                                label="Email ID"
+                                data-field="Email_ID__c"
+                                value={reg.Email_ID__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-textarea label="Address"
+                                data-field="Address__c"
+                                value={reg.Address__c}
+                                onchange={handleChange}>
+                            </lightning-textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= Business & Identification ================= -->
+                <div class="section">
+                    <h2 class="section-title">Business & Identification Details</h2>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="PAN Number"
+                                data-field="PAN_Number__c"
+                                value={reg.PAN_Number__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="GST Number"
+                                data-field="GST_Number__c"
+                                value={reg.GST_Number__c}
+                                onchange={handleChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2 slds-p-right_small slds-m-bottom_medium">
+                            <lightning-combobox label="Type of Entity"
+                                data-field="Type_Of_Entity__c"
+                                value={reg.Type_Of_Entity__c}
+                                options={entityOptions}
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2 slds-p-left_small slds-m-bottom_medium">
+                            <lightning-combobox label="MSME/UDYAM Status"
+                                data-field="MSME_Status__c"
+                                value={reg.MSME_Status__c}
+                                options={msmeOptions}
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-textarea label="Experience"
+                                data-field="Experience__c"
+                                value={reg.Experience__c}
+                                onchange={handleChange}>
+                            </lightning-textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= Bank Details ================= -->
+                <div class="section">
+                    <h2 class="section-title">Bank Details</h2>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Account Holder Name"
+                                data-field="Bank_Account_Name__c"
+                                value={reg.Bank_Account_Name__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Bank Name"
+                                data-field="Bank_Name__c"
+                                value={reg.Bank_Name__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Account Number"
+                                data-field="Account_Number__c"
+                                value={reg.Account_Number__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="IFSC Code"
+                                data-field="IFSC_Code__c"
+                                value={reg.IFSC_Code__c}
+                                onchange={handleChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= Declaration ================= -->
+                <div class="section">
+                    <lightning-input label="Type Full Name as Digital Signature"
+                        data-field="Form_Details__c"
+                        value={reg.Form_Details__c}
+                        onchange={handleChange}
+                        required>
+                    </lightning-input>
+                </div>
+
+                <!-- ================= Terms ================= -->
+                <div class="section">
+                    <lightning-input type="checkbox"
+                        label="I Agree to the Program Terms"
+                        checked={termsAccepted}
+                        onchange={handleCheckbox}>
+                    </lightning-input>
+                </div>
+
+                <!-- ================= File Upload ================= -->
+                <div class="section">
+                    <h2>Upload Mandatory Documents</h2>
+
+                    <lightning-input type="file"
+                        label="Upload Documents"
+                        multiple
+                        onchange={handleDocSelection}>
+                    </lightning-input>
+
+                    <template if:true={docFileNames}>
+                        <ul>
+                            <template for:each={docFileNames} for:item="name">
+                                <li key={name}>{name}</li>
+                            </template>
+                        </ul>
+                    </template>
+                </div>
+
+                <div class="section">
+                    <h2>Upload Signature File</h2>
+
+                    <lightning-input type="file"
+                        label="Upload Signature"
+                        onchange={handleSignatureSelection}>
+                    </lightning-input>
+
+                    <template if:true={signatureFileName}>
+                        <p>{signatureFileName}</p>
+                    </template>
+                </div>
+
+                <!-- ================= Submit ================= -->
+                <div class="submit-section">
+                    <lightning-button label="Submit Registration"
+                        variant="brand"
+                        onclick={handleSave}>
+                    </lightning-button>
+                </div>
+
+            </lightning-card>
+        </div>
+    </template>
+
+</template>

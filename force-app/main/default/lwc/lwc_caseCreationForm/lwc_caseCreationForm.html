@@ -1,0 +1,185 @@
+<template>
+    <lightning-card title="Search & Create Case" icon-name="standard:case">
+        <div class="slds-p-around_medium">
+      
+
+            <!-- Search Row -->
+            <div class="slds-grid slds-gutters slds-wrap slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                    <lightning-input
+                        type="search"
+                        label="Search"
+                        placeholder="Account Name / Contact Mobile/Phone / Asset Serial No / Invoice No"
+                        value={searchKey}
+                        onchange={handleChange}
+                        onkeyup={handleKeyUp}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-align_absolute-center">
+                    <lightning-button variant="brand" label="Search" onclick={handleSearch} class="slds-m-right_small"></lightning-button>
+                    <lightning-button variant="neutral" label="Clear" onclick={handleClear}></lightning-button>
+                </div>
+            </div>
+
+            <!-- Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </template>
+
+            <!-- No Result -->
+            <template if:true={showNoResult}>
+                <div class="slds-text-color_weak slds-m-top_small">
+                    No matching Account/Contact/Asset found.
+                </div>
+            </template>
+
+            <!-- Account selection list -->
+            <template if:true={showAccountPicklist}>
+                <div class="slds-m-top_small slds-m-bottom_small">
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">Select Account</div>
+                    <lightning-datatable
+                        key-field="id"
+                        data={accountResults}
+                        columns={accountColumns}
+                        max-row-selection="1"
+                        selected-rows={selectedAccountRows}
+                        onrowselection={handleAccountRowSelect}>
+                    </lightning-datatable>
+                </div>
+            </template>
+
+            <!-- Main content -->
+            <template if:true={hasAccount}>
+
+                <!-- Account summary -->
+                <div class="slds-box slds-theme_default slds-m-top_small">
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">{accountSectionLabel}</div>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <p><b>Account:</b> {account.name}</p>
+                            <p><b>Phone:</b> {account.phone}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <p><b>City:</b> {account.billingCity}</p>
+                            <p><b>State:</b> {account.billingState}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contacts select (MANDATORY) -->
+                <div class="slds-m-top_medium">
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">{contactSectionLabel} (Select one - Mandatory)</div>
+                    <lightning-datatable
+                        key-field="id"
+                        data={contacts}
+                        columns={contactColumns}
+                        hide-checkbox-column
+                        onrowaction={handleContactRowAction}>
+                    </lightning-datatable>
+
+                    <template if:true={showContactRequiredMsg}>
+                        <div class="slds-text-color_error slds-m-top_x-small">
+                            Please select a Contact.
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Assets select (Optional) -->
+                <div class="slds-m-top_medium">
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">{assetSectionLabel} (Select one - optional)</div>
+                    <lightning-datatable
+                        key-field="id"
+                        data={assets}
+                        columns={assetColumns}
+                        hide-checkbox-column
+                        onrowaction={handleAssetRowAction}>
+                    </lightning-datatable>
+                </div>
+
+                <!-- Case Form -->
+                <div class="slds-m-top_medium slds-box slds-theme_default">
+                    <div class="slds-text-heading_small slds-m-bottom_small"><b>Case Creation</b></div>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <!-- MANDATORY -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-input label="Case Subject" value={subject} onchange={handleSubject} required></lightning-input>
+                        </div>
+
+                        <!-- MANDATORY -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox
+                                label="Case Origin"
+                                value={originVal}
+                                options={originOptions}
+                                onchange={handleOrigin}
+                                required>
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- OPTIONAL -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Case Type" value={typeVal} options={typeOptions} onchange={handleType}></lightning-combobox>
+                        </div>
+
+                        <!-- OPTIONAL -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Case Status" value={statusVal} options={statusOptions} onchange={handleStatus}></lightning-combobox>
+                        </div>
+
+                        <!-- OPTIONAL -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Case Reason" value={reasonVal} options={reasonOptions} onchange={handleReason}></lightning-combobox>
+                        </div>
+
+                        <!-- MANDATORY -->
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-textarea
+                                label="Description"
+                                value={description}
+                                onchange={handleDescription}
+                                required>
+                            </lightning-textarea>
+                        </div>
+
+                        <!-- Custom (Picklists = selection-only) -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Product Category" value={productCategoryVal} options={productCategoryOptions} onchange={handleProductCategory}></lightning-combobox>
+                        </div>
+
+                        <!-- VOC = LONG TEXT AREA -->
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-textarea
+                                label="Voice of Customer (VOC)"
+                                value={vocText}
+                                onchange={handleVocText}>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Installer Type" value={installerTypeVal} options={installerTypeOptions} onchange={handleInstallerType}></lightning-combobox>
+                        </div>
+
+                        <template if:true={showOtherInstaller}>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                <lightning-input label="Other Installer Type" value={otherInstallerVal} onchange={handleOtherInstaller} required></lightning-input>
+                            </div>
+                        </template>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                            <lightning-combobox label="Customer Persona" value={customerPersonaVal} options={customerPersonaOptions} onchange={handleCustomerPersona}></lightning-combobox>
+                        </div>
+
+                    </div>
+
+                    <div class="slds-m-top_medium slds-align_absolute-center">
+                        <lightning-button variant="brand" label="Create Case" onclick={handleCreateCase} disabled={disableCreateCase}></lightning-button>
+                    </div>
+                </div>
+
+            </template>
+        </div>
+    </lightning-card>
+</template>

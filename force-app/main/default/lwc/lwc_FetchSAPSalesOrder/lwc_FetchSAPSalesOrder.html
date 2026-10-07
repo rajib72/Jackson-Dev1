@@ -1,0 +1,133 @@
+<template>
+    <div class="sync-wrapper">
+
+        <div class="header-section">
+            <div class="header-content">
+                <h1>SAP Sales Order Sync</h1>
+                <p>Fetch sales order records from SAP and create them in Salesforce</p>
+            </div>
+        </div>
+
+        <div class="filter-card">
+            <h2>Filter Criteria</h2>
+
+            <div class="filter-row">
+                <div class="input-box">
+                    <lightning-input
+                        type="date"
+                        label="From Date"
+                        value={fromDate}
+                        onchange={handleFromDateChange}
+                        required>
+                    </lightning-input>
+                </div>
+
+                <div class="input-box">
+                    <lightning-input
+                        type="date"
+                        label="To Date"
+                        value={toDate}
+                        onchange={handleToDateChange}
+                        required>
+                    </lightning-input>
+                </div>
+
+                <div class="button-box">
+                    <lightning-button
+                        label="Fetch Data"
+                        variant="brand"
+                        onclick={handleFetchData}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+
+                <div class="button-box refresh-box">
+                    <lightning-button
+                        label="Refresh"
+                        variant="neutral"
+                        onclick={handleRefresh}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="loading-box">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                <p>Fetching data from SAP. Please wait...</p>
+            </div>
+        </template>
+
+        <template if:true={hasResult}>
+            <div class="result-card">
+                <h2>Sync Summary</h2>
+
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-number">{result.totalFromApi}</div>
+                        <div class="summary-label">Records From SAP</div>
+                    </div>
+
+                    <div class="summary-item success">
+                        <div class="summary-number">{result.insertedOrders}</div>
+                        <div class="summary-label">Orders Created</div>
+                    </div>
+
+                    <div class="summary-item success">
+                        <div class="summary-number">{result.insertedOrderItems}</div>
+                        <div class="summary-label">Order Products Created</div>
+                    </div>
+
+                    <div class="summary-item warning">
+                        <div class="summary-number">{result.duplicateOrders}</div>
+                        <div class="summary-label">Duplicate Orders</div>
+                    </div>
+
+                    <div class="summary-item">
+                        <div class="summary-number">{result.materialMatched}</div>
+                        <div class="summary-label">Materials Matched</div>
+                    </div>
+
+                    <div class="summary-item warning">
+                        <div class="summary-number">{result.materialNotFound}</div>
+                        <div class="summary-label">Materials Not Found</div>
+                    </div>
+
+                    <div class="summary-item error">
+                        <div class="summary-number">{result.failedOrders}</div>
+                        <div class="summary-label">Failed Orders</div>
+                    </div>
+
+                    <div class="summary-item error">
+                        <div class="summary-number">{result.failedOrderItems}</div>
+                        <div class="summary-label">Failed Order Products</div>
+                    </div>
+                </div>
+
+                <template if:true={result.message}>
+                    <div class="message-box">
+                        {result.message}
+                    </div>
+                </template>
+
+                <template if:true={hasTableData}>
+                    <div class="table-section">
+                        <h2>Sales Order Details</h2>
+
+                        <div class="table-wrapper">
+                            <lightning-datatable
+                                key-field="rowKey"
+                                data={tableData}
+                                columns={columns}
+                                hide-checkbox-column
+                                show-row-number-column>
+                            </lightning-datatable>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+    </div>
+</template>

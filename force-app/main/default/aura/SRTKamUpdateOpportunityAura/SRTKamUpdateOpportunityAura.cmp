@@ -1,0 +1,49 @@
+<aura:component
+    implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader"
+    access="global">
+ 
+    <aura:html tag="style">
+    .slds-modal {
+    position: fixed !important;
+    inset: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Modal container */
+.slds-modal__container{
+    width: 80vw !important;
+    max-width: 80vw !important;
+    min-width: 40rem !important;
+
+    height: 88vh !important;
+    max-height: 95vh !important;
+
+    margin: 0 !important;
+    transform: none !important;
+}
+
+/* Modal content takes full height */
+.slds-modal__content{
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+}
+
+.cuf-content,
+.slds-p-around--medium{
+    height: 100% !important;
+    padding: 0 !important;
+}
+
+.slds-modal__content:focus{
+    outline: none !important;
+}
+</aura:html>
+    
+ 
+    <c:updateKamSRTOpportunityStage
+        recordId="{!v.recordId}"
+        onclosequickaction="{!c.handleClose}" />
+</aura:component>

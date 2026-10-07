@@ -1,0 +1,413 @@
+<template>
+    <lightning-quick-action-panel header="Revise Quote">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={quoteRecord}>
+            <div class="content-wrap">
+                <div class="quote-summary-banner">
+                    <div class="quote-summary-title">Revise Quote</div>
+                    <div class="quote-summary-subtitle">
+                        A new quote will be created from this quote with the next version number.
+                    </div>
+                    <div class="preview-pill">{revisedQuoteName}</div>
+                </div>
+
+                <!-- Quote Details -->
+                <div class="section-box">
+                    <div class="section-title">Quote Details</div>
+
+                    <div class="slds-grid slds-wrap slds-gutters field-grid">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="New Quote Name" value={revisedQuoteName} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Next Version" value={revisedVersionNumber} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Account Name" value={accountName} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Opportunity Name" value={opportunityName} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input type="date" label="Expiration Date" value={quoteRecord.ExpirationDate}
+                                data-field="ExpirationDate" min={todayDate} required onchange={handleQuoteChange}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Internal Business Team"
+                                value={quoteRecord.Internal_Business_Team__c} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Business Segment" value={quoteRecord.Business_Segment__c} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Description" value={quoteRecord.Description}
+                                data-field="Description" onchange={handleQuoteChange}>
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <!--<div class="section-box">
+                    <div class="section-title">Terms & Conditions</div>
+
+                    <div class="slds-grid slds-wrap slds-gutters field-grid">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="GST" value={quoteRecord.GST__c} data-field="GST__c"
+                                onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Payment Terms" value={quoteRecord.Payment_Terms__c}
+                                data-field="Payment_Terms__c" onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Change in Tax Rate / Law"
+                                value={quoteRecord.Change_in_Tax_Rate_Law__c} data-field="Change_in_Tax_Rate_Law__c"
+                                onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="In Co-terms" value={quoteRecord.In_Co_terms__c}
+                                data-field="In_Co_terms__c" onchange={handleQuoteChange} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Third Party Insurance" value={quoteRecord.Third_Party_Insurance__c}
+                                data-field="Third_Party_Insurance__c" onchange={handleQuoteChange} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Packing & Forwarding" value={quoteRecord.Packing_Forwarding__c}
+                                data-field="Packing_Forwarding__c" onchange={handleQuoteChange} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Unloading" value={quoteRecord.Unloading__c}
+                                data-field="Unloading__c" onchange={handleQuoteChange} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Claims & Damages" value={quoteRecord.Claims_Damages__c}
+                                data-field="Claims_Damages__c" onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="QAP" value={quoteRecord.QAP__c} data-field="QAP__c"
+                                onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Limitation of Liability"
+                                value={quoteRecord.Limitation_of_Liability__c} data-field="Limitation_of_Liability__c"
+                                onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Offer Validity" value={quoteRecord.Offer_Validity__c}
+                                data-field="Offer_Validity__c" onchange={handleQuoteChange} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Cable Length" value={quoteRecord.Cable_Length__c}
+                                data-field="Cable_Length__c" onchange={handleQuoteChange} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Warranty" value={quoteRecord.Warranty__c} data-field="Warranty__c"
+                                onchange={handleQuoteChange} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Storage Charges" value={quoteRecord.Storage_Charges__c}
+                                data-field="Storage_Charges__c" onchange={handleQuoteChange} disabled>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Deemed MDCC" value={quoteRecord.Deemed_MDCC__c}
+                                data-field="Deemed_MDCC__c" onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Governing Law & Jurisdiction"
+                                value={quoteRecord.Governing_Law_Jurisdiction__c}
+                                data-field="Governing_Law_Jurisdiction__c" onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </div>-->
+
+                <!-- Certificates -->
+                <!--<div class="section-box">
+                    <div class="section-title">Certificates</div>
+
+                    <div class="slds-grid slds-wrap slds-gutters field-grid">
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-textarea label="Certificates" value={quoteRecord.Certificates__c}
+                                data-field="Certificates__c" onchange={handleQuoteChange} disabled>
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </div>-->
+
+                <!-- Quotation Pdf Related Informations -->
+                <div class="section-box">
+                    <div class="section-title">Quotation Pdf Related Informations</div>
+
+                    <div class="slds-grid slds-wrap slds-gutters field-grid">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Commercial Offer For" value={quoteRecord.Commercial_offer_for__c}
+                                data-field="Commercial_offer_for__c" onchange={handleQuoteChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Subject" value={quoteRecord.Project_Capacity__c}
+                                data-field="Project_Capacity__c" onchange={handleQuoteChange} required>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="section-box">
+                    <div class="section-title">Totals</div>
+
+                    <div class="slds-grid slds-wrap slds-gutters field-grid">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Quote Currency" value={quoteRecord.CurrencyIsoCode} >
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Tax" value={quoteRecord.Tax} >
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Subtotal" value={quoteRecord.Subtotal} >
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Shipping and Handling" value={quoteRecord.ShippingHandling}
+                                >
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Discount" value={quoteRecord.Discount} >
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Grand Total" value={quoteRecord.GrandTotal} >
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Total Price" value={quoteRecord.TotalPrice} >
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>-->
+
+                <div class="section-box">
+                    <div class="section-title">Prepared For</div>
+
+                    <div class="slds-grid slds-wrap slds-gutters field-grid">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-combobox label="Contact Name" value={selectedContactId} options={contactOptions}
+                                onchange={handleContactChange}>
+                            </lightning-combobox>
+                        </div>
+
+                        <!--<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Phone" value={contactPhone} >
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Email" value={contactEmail} >
+                            </lightning-input>
+                        </div>-->
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">Address Information</div>
+
+                    <div class="slds-grid slds-wrap slds-gutters field-grid">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Bill To Name" value={quoteRecord.BillingName}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input label="Ship To Name" value={quoteRecord.ShippingName}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Bill To" value={billToAddress}>
+                            </lightning-textarea>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-textarea label="Ship To" value={shipToAddress}>
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quote Line Items -->
+                <div class="section-box">
+                    <div class="section-title">Quote Line Items</div>
+
+                    <template if:true={lineItems.length}>
+                        <div class="table-wrapper">
+                            <table class="custom-table quote-items-table">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Material Description</th>
+                                        <th>Nos</th>
+                                        <th>Project Capacity</th>
+                                        <th>UOM</th>
+                                        <th>Price/Wp</th>
+                                        <th>Total</th>
+                                        <th>GST</th>
+                                        <th>Grand Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={lineItems} for:item="item">
+                                        <tr key={item.rowKey} class={item.rowClass}>
+                                            <td class="cell-center">
+                                                <lightning-input type="checkbox" variant="label-hidden"
+                                                    data-rowkey={item.rowKey} checked={item.selected}
+                                                    disabled={item.disableSelection} onchange={handleLineItemSelect}>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td class="material-cell">
+                                                <div class="material-text">{item.materialDescription}</div>
+
+                                                <template if:true={item.alreadyAdded}>
+                                                    <div class="helper-msg helper-warning">
+                                                        Already added in quote
+                                                    </div>
+                                                </template>
+
+                                                <template if:true={item.missingPricebookEntry}>
+                                                    <div class="helper-msg helper-error">
+                                                        Not in Quote Price Book
+                                                    </div>
+                                                </template>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    value={item.quantity} disabled>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    data-rowkey={item.rowKey} value={item.projectCapacity}
+                                                    min="0.01" step="0.01"
+                                                    onchange={handleProjectCapacityChange}>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <div class="uom-text">{item.uom}</div>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    data-rowkey={item.rowKey} value={item.unitPrice} step="0.01" min="0"
+                                                    onchange={handleUnitPriceChange}>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden" value={item.total}
+                                                    disabled>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input variant="label-hidden" value={item.gstDisplay}
+                                                    disabled>
+                                                </lightning-input>
+                                            </td>
+
+                                            <td>
+                                                <lightning-input type="number" variant="label-hidden"
+                                                    value={item.grandTotal} disabled>
+                                                </lightning-input>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+
+                    <template if:false={lineItems.length}>
+                        <div class="slds-text-color_weak">No quote line items found.</div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={quoteRecord}>
+            <template if:false={isLoading}>
+                <div class="slds-p-around_medium slds-text-color_error">
+                    Quote data could not be loaded.
+                </div>
+            </template>
+        </template>
+
+        <div slot="footer" class="footer-actions">
+            <lightning-button label="Cancel" onclick={handleCancel}>
+            </lightning-button>
+
+            <lightning-button variant="brand" label="Revise Quote" onclick={handleReviseQuote} disabled={isLoading}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

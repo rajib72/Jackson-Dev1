@@ -1,0 +1,50 @@
+<template>
+    <lightning-card title="SAP Employee Selection" icon-name="standard:people">
+        <div class="slds-p-around_medium">
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning-combobox
+                        name="employee"
+                        label="Select SAP Employee"
+                        placeholder="Select Employee"
+                        value={selectedEmployeeCode}
+                        options={employeeOptions}
+                        onchange={handleEmployeeChange}
+                        disabled={isLoading}>
+                    </lightning-combobox>
+                </div>
+            </div>
+
+            <template if:true={selectedEmployeeCode}>
+                <div class="slds-m-top_medium slds-box slds-theme_default">
+                    <p><strong>Selected Employee Code:</strong> {selectedEmployeeCode}</p>
+                    <p><strong>Selected Employee Name:</strong> {selectedEmployeeName}</p>
+                </div>
+            </template>
+
+            <div class="slds-m-top_medium slds-align_absolute-center">
+                <lightning-button
+                    label="Refresh"
+                    variant="neutral"
+                    onclick={handleRefresh}
+                    class="slds-m-right_small"
+                    disabled={isLoading}>
+                </lightning-button>
+
+                <lightning-button
+                    label="Save"
+                    variant="brand"
+                    onclick={handleSave}
+                    disabled={isSaveDisabled}>
+                </lightning-button>
+
+            </div>
+
+        </div>
+    </lightning-card>
+</template>

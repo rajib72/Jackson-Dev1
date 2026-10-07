@@ -1,0 +1,63 @@
+<template>
+    <lightning-card>
+
+        <div class="slds-p-horizontal_medium">
+
+            <lightning-record-view-form record-id={recordId} object-api-name="OpportunityLineItem">
+
+                <div class="slds-grid slds-wrap">
+
+                    <!-- LEFT COLUMN -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                        <p class="slds-text-title slds-text-color_weak">Opportunity</p>
+                        <lightning-output-field field-name="OpportunityId" variant="label-hidden">
+                        </lightning-output-field>
+                        <lightning-output-field field-name="Module_Type__c"></lightning-output-field>
+                        <lightning-output-field field-name="Module_Technology__c"></lightning-output-field>
+                        <p class="slds-text-title slds-text-color_weak">Product-Sub Type</p>
+                        <lightning-output-field field-name="Product_Module_Sub_Type__c" variant="label-hidden">
+                        </lightning-output-field>
+                        <lightning-output-field field-name="Project_Capacity__c"></lightning-output-field>
+                        <lightning-output-field field-name="SRT_Product__c"></lightning-output-field>
+                        <lightning-output-field field-name="Sub_Module__c"></lightning-output-field>
+
+
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                        <p class="slds-text-title slds-text-color_weak">Product</p>
+                        <lightning-output-field field-name="Product2Id" variant="label-hidden"></lightning-output-field>
+                        <lightning-output-field field-name="Cell_Type__c"></lightning-output-field>
+                        <lightning-output-field field-name="Product_Rating_BIN__c"></lightning-output-field>
+                        <lightning-output-field field-name="Warranty__c"></lightning-output-field>
+                        <lightning-output-field field-name="UOM__c"></lightning-output-field>
+                        <lightning-output-field field-name="Cable_Length__c"></lightning-output-field>
+
+                    </div>
+
+                </div>
+
+                <!--  BOTTOM ROW-->
+                <div class="slds-grid slds-wrap slds-m-top_medium slds-border_top slds-p-top_small">
+
+                    <!-- Created By -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                        <p class="slds-form-element__label">Created By</p>
+                        <lightning-output-field field-name="CreatedById" variant="label-hidden">
+                        </lightning-output-field>
+                    </div>
+
+                    <!-- Last Modified By -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                        <p class="slds-form-element__label">Last Modified By</p>
+                        <lightning-output-field field-name="LastModifiedById" variant="label-hidden">
+                        </lightning-output-field>
+                    </div>
+
+                </div>
+            </lightning-record-view-form>
+
+        </div>
+    </lightning-card>
+</template>

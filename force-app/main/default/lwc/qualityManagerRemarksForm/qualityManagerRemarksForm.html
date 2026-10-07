@@ -1,0 +1,91 @@
+<template>
+    <lightning-card>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+
+        <div class="sheet">
+            <div class="top-row">
+                <div class="title-cell">QUALITY MANAGER REMARKS FORM</div>
+                <div class="logo-cell">
+                    <!-- <div class="logo-main">JAKSON</div> -->
+                    <div class="logo-sub">DISTRIBUTED ENERGY</div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-field">
+                    <div class="info-label">Project Name:</div>
+                    <lightning-input variant="label-hidden" value={headerInfo.projectName} readonly></lightning-input>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">Client Name:</div>
+                    <lightning-input variant="label-hidden" value={headerInfo.clientName} readonly></lightning-input>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th class="sn-col">S.No.</th>
+                            <th class="hoto-col">HOTO Checklists</th>
+                            <th class="status-col">QM Status</th>
+                            <th class="remark-col">QM Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={pagedRows} for:item="row">
+                            <tr key={row.globalIndex}>
+                                <td class="sn-col">{row.rowNumber}</td>
+
+                                <td class="hoto-col">
+                                    <div class="row-label-cell">
+                                        <lightning-input
+                                            type="checkbox"
+                                            checked={row.hotoChecked}
+                                            disabled
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                        <span class="row-label">{row.label}</span>
+                                    </div>
+                                </td>
+
+                                <td class="status-col">
+                                    <lightning-combobox
+                                        variant="label-hidden"
+                                        options={qmStatusOptions}
+                                        value={row.qmStatus}
+                                        data-index={row.globalIndex}
+                                        onchange={handleStatusChange}>
+                                    </lightning-combobox>
+                                </td>
+
+                                <td class="remark-col">
+                                    <lightning-textarea
+                                        variant="label-hidden"
+                                        value={row.qmRemark}
+                                        required={row.isRemarkRequired}
+                                        data-index={row.globalIndex}
+                                        onchange={handleRemarkChange}
+                                        message-when-value-missing="Remarks are mandatory when QM Status is No.">
+                                    </lightning-textarea>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="footer-actions">
+                <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}></lightning-button>
+                <template if:true={showNextButton}>
+                    <lightning-button label="Next" variant="brand" onclick={handleNext}></lightning-button>
+                </template>
+                <template if:false={showNextButton}>
+                    <lightning-button label="Save" variant="brand" onclick={handleSave}></lightning-button>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>
